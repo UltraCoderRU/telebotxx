@@ -1,0 +1,3 @@
+[submodule "ext/curlpp"]
+	path = ext/curlpp
+	url = https://github.com/jpbarrette/curlpp.git
