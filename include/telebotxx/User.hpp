@@ -47,7 +47,6 @@ namespace telebotxx
 		void swap(User&) noexcept;
 
 		const User& operator=(User other);
-		User& operator=(User&& other);
 
 	private:
 		int id_;

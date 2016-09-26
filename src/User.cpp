@@ -68,5 +68,3 @@ const User& User::operator=(User other)
 	swap(other);
 	return *this;
 }
-
-User& User::operator=(User&& other) = default;
