@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake)
 
-project(tetebotxx CXX)
+project(telebotxx CXX)
 
 option (TELEBOTXX_BUILD_TESTS   "Build unit tests using Boost.Test" ON)
 option (TELEBOTXX_GENERATE_DOC  "Generate API documentation with Doxygen" ON)

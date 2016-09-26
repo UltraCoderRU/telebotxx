@@ -2,6 +2,9 @@ cmake_minimum_required(VERSION 2.8)
 
 message(STATUS "Configuring telebotxx")
 
+find_package(Boost 1.54 REQUIRED log system)
+include_directories(${Boost_INCLUDE_DIRS})
+
 find_package(CURLpp REQUIRED)
 include_directories(${CURLPP_INCLUDE_DIRS})
 
@@ -22,4 +25,5 @@ set(SOURCE_FILES BotApi.cpp
 )
 
 add_library(telebotxx SHARED ${SOURCE_FILES})
-target_link_libraries(telebotxx curlpp ${CURL_LIBRARIES})
+target_link_libraries(telebotxx curlpp ${Boost_LIBRARIES} ${CURL_LIBRARIES})
+set_property(TARGET telebotxx APPEND PROPERTY COMPILE_DEFINITIONS BOOST_LOG_DYN_LINK)

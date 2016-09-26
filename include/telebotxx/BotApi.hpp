@@ -1,6 +1,8 @@
 #ifndef TELEBOTXX_BOTAPI_H
 #define TELEBOTXX_BOTAPI_H
 
+#include "User.hpp"
+
 #include <string>
 #include <memory>
 
@@ -13,6 +15,10 @@ namespace telebotxx
 		BotApi(const std::string& token);
 
 		~BotApi();
+
+		/// \brief Get basic information about the bot
+		/// \return User object with information about the bot
+		User getMe();
 
 		/// \brief Send text message
 		/// \param [in] chat chat identifier
