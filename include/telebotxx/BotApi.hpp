@@ -2,6 +2,7 @@
 #define TELEBOTXX_BOTAPI_H
 
 #include <string>
+#include <memory>
 
 namespace telebotxx
 {
@@ -10,6 +11,8 @@ namespace telebotxx
 	public:
 		/// \param [in] token bot's secret token
 		BotApi(const std::string& token);
+
+		~BotApi();
 
 		/// \brief Send text message
 		/// \param [in] chat chat identifier
@@ -24,8 +27,8 @@ namespace telebotxx
 
 
 	private:
-		std::string token_;
-		std::string telegramMainUrl_;
+		class Impl;
+		std::unique_ptr<Impl> impl_;
 	};
 }
 
