@@ -27,9 +27,9 @@ namespace telebotxx
 
 		/// \brief Send image
 		/// \param [in] chat chat identifier
-		/// \param [in] file opened image stream
+		/// \param [in] filename image location
 		/// \param [in] caption optional photo caption
-		void sendPhoto(const std::string& chat, const std::istream& file, const std::string& caption = "");
+		void sendPhoto(const std::string& chat, const std::string& filename, const std::string& caption = "");
 
 
 	private:

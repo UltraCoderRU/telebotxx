@@ -164,34 +164,41 @@ public:
 		parseResponse(doc);
 	}
 
-	inline void sendPhoto(const std::string& chat, const std::istream& file, const std::string& caption)
+	inline void sendPhoto(const std::string& chat, const std::string& filename, const std::string& caption)
 	{
 		// Construct HTTP request
 		curlpp::Easy request;
-		std::list<std::string> headers;
+		std::stringstream responseStream;
 
 		{
 			// Forms takes ownership of pointers!
 			curlpp::Forms formParts;
 			formParts.push_back(new curlpp::FormParts::Content("chat_id", chat));
-			formParts.push_back(new curlpp::FormParts::Content("photo", "value2"));
-
+			formParts.push_back(new curlpp::FormParts::File("photo", filename));
+			formParts.push_back(new curlpp::FormParts::Content("caption", caption));
 			request.setOpt(new curlpp::options::HttpPost(formParts));
 		}
 
 		// Set options
 		request.setOpt(new curlpp::Options::Url(telegramMainUrl_ + "/sendPhoto"));
 		request.setOpt(new curlpp::Options::Verbose(false));
-		request.setOpt(new curlpp::options::HttpHeader(headers));
-		request.setOpt(new curlpp::Options::Post(true));
+		request.setOpt(new curlpp::options::WriteStream(&responseStream));
 
 		// Perform request
 		request.perform();
+
+		BOOST_LOG_TRIVIAL(debug) << responseStream.str();
+
+		using namespace rapidjson;
+		IStreamWrapper isw(responseStream);
+		Document doc;
+		doc.ParseStream(isw);
+
+		/// \todo Parse message
+		parseResponse(doc);
 	}
 
-
 private:
-
 
 	std::string token_;
 	std::string telegramMainUrl_;
@@ -215,7 +222,7 @@ void BotApi::sendMessage(const std::string& chat, const std::string& text)
 	return impl_->sendMessage(chat, text);
 }
 
-void BotApi::sendPhoto(const std::string& chat, const std::istream& file, const std::string& caption)
+void BotApi::sendPhoto(const std::string& chat, const std::string& filename, const std::string& caption)
 {
-	return impl_->sendPhoto(chat, file, caption);
+	return impl_->sendPhoto(chat, filename, caption);
 }

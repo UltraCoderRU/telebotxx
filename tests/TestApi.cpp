@@ -86,4 +86,11 @@ BOOST_AUTO_TEST_SUITE(TestBotApi)
 		BOOST_REQUIRE_NO_THROW(bot->sendMessage(chat, "Hello from C++!"));
 	}
 
+	BOOST_AUTO_TEST_CASE(SendPhoto)
+	{
+		PRINT_TESTNAME;
+		BOOST_REQUIRE(bot);
+		BOOST_REQUIRE_NO_THROW(bot->sendPhoto(chat, photoFile, "Sample caption"));
+	}
+
 BOOST_AUTO_TEST_SUITE_END()
