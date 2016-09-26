@@ -21,7 +21,7 @@ public:
 		/// \todo run getMe command to check token
 	}
 
-	void sendMessage(const std::string& chat, const std::string& text)
+	inline void sendMessage(const std::string& chat, const std::string& text)
 	{
 		// Construct JSON body and istream
 		using namespace rapidjson;
@@ -63,7 +63,7 @@ public:
 		request.perform();
 	}
 
-	void sendPhoto(const std::string& chat, const std::istream& file, const std::string& caption)
+	inline void sendPhoto(const std::string& chat, const std::istream& file, const std::string& caption)
 	{
 		// Construct HTTP request
 		curlpp::Easy request;
