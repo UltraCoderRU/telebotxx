@@ -18,6 +18,7 @@ set(LIBRARY_OUTPUT_PATH "../lib")
 
 
 set(SOURCE_FILES BotApi.cpp
+                 User.cpp
 )
 
 add_library(telebotxx SHARED ${SOURCE_FILES})

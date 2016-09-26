@@ -19,7 +19,7 @@ endif(NOT WIN32)
 
 set(EXECUTABLE_OUTPUT_PATH "${PROJECT_SOURCE_DIR}/tests")
 
-set(SOURCE_FILES Dummy.cpp main.cpp)
+set(SOURCE_FILES Dummy.cpp TestTypes.cpp TestApi.cpp)
 add_executable(telebotxx-test ${SOURCE_FILES})
 target_link_libraries(telebotxx-test telebotxx stdc++ ${Boost_LIBRARIES})
 
