@@ -143,13 +143,15 @@ public:
 			headers.push_back(ss.str());
 		}
 
+		headers.push_back("Expect:");
+
 		// Set options
 		request.setOpt(new curlpp::Options::Url(telegramMainUrl_ + "/sendMessage"));
-		request.setOpt(new curlpp::Options::Verbose(false));
+		request.setOpt(new curlpp::Options::Verbose(true));
 		request.setOpt(new curlpp::Options::ReadStream(&requestStream));
-		request.setOpt(new curlpp::options::WriteStream(&responseStream));
+		request.setOpt(new curlpp::Options::WriteStream(&responseStream));
 		request.setOpt(new curlpp::Options::InfileSize(size));
-		request.setOpt(new curlpp::options::HttpHeader(headers));
+		request.setOpt(new curlpp::Options::HttpHeader(headers));
 		request.setOpt(new curlpp::Options::Post(true));
 
 		// Perform request
@@ -172,6 +174,10 @@ public:
 		curlpp::Easy request;
 		std::stringstream responseStream;
 
+		std::list<std::string> headers;
+		headers.push_back("Expect:");
+		request.setOpt(new curlpp::Options::HttpHeader(headers));
+
 		{
 			// Forms takes ownership of pointers!
 			curlpp::Forms formParts;
@@ -183,7 +189,7 @@ public:
 
 		// Set options
 		request.setOpt(new curlpp::Options::Url(telegramMainUrl_ + "/sendPhoto"));
-		request.setOpt(new curlpp::Options::Verbose(false));
+		request.setOpt(new curlpp::Options::Verbose(true));
 		request.setOpt(new curlpp::options::WriteStream(&responseStream));
 
 		// Perform request
