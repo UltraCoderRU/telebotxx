@@ -5,11 +5,8 @@
 
 #include <rapidjson/document.h>
 #include <rapidjson/writer.h>
-#include <rapidjson/istreamwrapper.h>
 
-#include <curlpp/cURLpp.hpp>
-#include <curlpp/Easy.hpp>
-#include <curlpp/Options.hpp>
+#include <cpr/cpr.h>
 
 #include <boost/log/trivial.hpp>
 
@@ -91,27 +88,21 @@ public:
 
 	inline User getMe()
 	{
-		curlpp::Easy request;
-		std::stringstream ss;
+		auto r = cpr::Get(cpr::Url{telegramMainUrl_ + "/getMe"});
+		auto& response = r.text;
 
-		request.setOpt(new curlpp::Options::Url(telegramMainUrl_ + "/getMe"));
-		request.setOpt(new curlpp::Options::Verbose(false));
-		request.setOpt(new curlpp::options::WriteStream(&ss));
-		request.perform();
-
-		BOOST_LOG_TRIVIAL(debug) << ss.str();
+		BOOST_LOG_TRIVIAL(debug) << response;
 
 		using namespace rapidjson;
-		IStreamWrapper isw(ss);
 		Document doc;
-		doc.ParseStream(isw);
+		doc.Parse(response.c_str());
 
 		return parseUser(parseResponse(doc));
 	}
 
 	inline void sendMessage(const std::string& chat, const std::string& text)
 	{
-		// Construct JSON body and istream
+		// Construct JSON body
 		using namespace rapidjson;
 		StringBuffer s;
 		Writer<StringBuffer> writer(s);
@@ -123,46 +114,19 @@ public:
 		writer.String(text.c_str());
 		writer.EndObject();
 
-		std::istringstream requestStream(s.GetString());
-		BOOST_LOG_TRIVIAL(debug) << requestStream.str();
-		auto size = requestStream.str().size();
+		std::string request = s.GetString();
 
-		std::stringstream responseStream;
+		auto r = cpr::Post(cpr::Url{telegramMainUrl_ + "/sendMessage"},
+						   cpr::Header{{"Content-Type", "application/json"}},
+						   cpr::Body{request}
+		);
+		auto& response = r.text;
 
-		// Construct HTTP request
-		curlpp::Easy request;
-		std::list<std::string> headers;
-
-		// Content-Type
-		headers.push_back("Content-Type: application/json");
-
-		// Content-Length
-		{
-			std::ostringstream ss;
-			ss << "Content-Length: " << size;
-			headers.push_back(ss.str());
-		}
-
-		headers.push_back("Expect:");
-
-		// Set options
-		request.setOpt(new curlpp::Options::Url(telegramMainUrl_ + "/sendMessage"));
-		request.setOpt(new curlpp::Options::Verbose(true));
-		request.setOpt(new curlpp::Options::ReadStream(&requestStream));
-		request.setOpt(new curlpp::Options::WriteStream(&responseStream));
-		request.setOpt(new curlpp::Options::InfileSize(size));
-		request.setOpt(new curlpp::Options::HttpHeader(headers));
-		request.setOpt(new curlpp::Options::Post(true));
-
-		// Perform request
-		request.perform();
-
-		BOOST_LOG_TRIVIAL(debug) << responseStream.str();
+		BOOST_LOG_TRIVIAL(debug) << response;
 
 		using namespace rapidjson;
-		IStreamWrapper isw(responseStream);
 		Document doc;
-		doc.ParseStream(isw);
+		doc.Parse(response.c_str());
 
 		/// \todo Parse message
 		parseResponse(doc);
@@ -170,37 +134,19 @@ public:
 
 	inline void sendPhoto(const std::string& chat, const std::string& filename, const std::string& caption)
 	{
-		// Construct HTTP request
-		curlpp::Easy request;
-		std::stringstream responseStream;
+		auto r = cpr::Post(cpr::Url{telegramMainUrl_ + "/sendPhoto"},
+						   cpr::Multipart{{"chat_id", chat},
+										  {"photo", cpr::File{filename}},
+										  {"caption", caption}
+						   }
+		);
+		auto& response = r.text;
 
-		std::list<std::string> headers;
-		headers.push_back("Expect:");
-		request.setOpt(new curlpp::Options::HttpHeader(headers));
-
-		{
-			// Forms takes ownership of pointers!
-			curlpp::Forms formParts;
-			formParts.push_back(new curlpp::FormParts::Content("chat_id", chat));
-			formParts.push_back(new curlpp::FormParts::File("photo", filename));
-			formParts.push_back(new curlpp::FormParts::Content("caption", caption));
-			request.setOpt(new curlpp::options::HttpPost(formParts));
-		}
-
-		// Set options
-		request.setOpt(new curlpp::Options::Url(telegramMainUrl_ + "/sendPhoto"));
-		request.setOpt(new curlpp::Options::Verbose(true));
-		request.setOpt(new curlpp::options::WriteStream(&responseStream));
-
-		// Perform request
-		request.perform();
-
-		BOOST_LOG_TRIVIAL(debug) << responseStream.str();
+		BOOST_LOG_TRIVIAL(debug) << response;
 
 		using namespace rapidjson;
-		IStreamWrapper isw(responseStream);
 		Document doc;
-		doc.ParseStream(isw);
+		doc.Parse(response.c_str());
 
 		/// \todo Parse message
 		parseResponse(doc);
