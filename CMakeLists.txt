@@ -30,13 +30,15 @@ endif()
 option (TELEBOTXX_BUILD_TESTS   "Build unit tests using Boost.Test" ON)
 option (TELEBOTXX_GENERATE_DOC  "Generate API documentation with Doxygen" ON)
 
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/ext)
-
+# Build and include Curl for People
 set(BUILD_CPR_TESTS OFF CACHE BOOL "Do not build cpr tests")
 set(USE_SYSTEM_CURL ON CACHE BOOL "Use system libcurl")
 set(BUILD_SHARED_LIBS ON)
 add_subdirectory(${PROJECT_SOURCE_DIR}/ext/cpr)
 include_directories(${CPR_INCLUDE_DIRS})
+
+# Include RapidJSON headers
+include_directories(${PROJECT_SOURCE_DIR}/ext/rapidjson/include)
 
 # Build library
 include_directories(include)
