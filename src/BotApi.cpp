@@ -1,14 +1,14 @@
 #include <telebotxx/BotApi.hpp>
 #include <telebotxx/Exception.hpp>
+#include <telebotxx/Logging.hpp>
 
+#include <iostream>
 #include <sstream>
 
 #include <rapidjson/document.h>
 #include <rapidjson/writer.h>
 
 #include <cpr/cpr.h>
-
-#include <boost/log/trivial.hpp>
 
 namespace telebotxx
 {
@@ -91,7 +91,8 @@ public:
 		auto r = cpr::Get(cpr::Url{telegramMainUrl_ + "/getMe"});
 		auto& response = r.text;
 
-		BOOST_LOG_TRIVIAL(debug) << response;
+		if (debugMode)
+			std::cout << "Response: " << response << std::endl;
 
 		using namespace rapidjson;
 		Document doc;
@@ -122,7 +123,8 @@ public:
 		);
 		auto& response = r.text;
 
-		BOOST_LOG_TRIVIAL(debug) << response;
+		if (debugMode)
+			std::cout << "Response: " << response << std::endl;
 
 		using namespace rapidjson;
 		Document doc;
@@ -142,7 +144,8 @@ public:
 		);
 		auto& response = r.text;
 
-		BOOST_LOG_TRIVIAL(debug) << response;
+		if (debugMode)
+			std::cout << "Response: " << response << std::endl;
 
 		using namespace rapidjson;
 		Document doc;

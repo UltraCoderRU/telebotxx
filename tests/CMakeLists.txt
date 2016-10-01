@@ -25,4 +25,4 @@ target_link_libraries(telebotxx-test telebotxx stdc++ ${Boost_LIBRARIES})
 
 add_custom_target(test COMMAND telebotxx-test WORKING_DIRECTORY ".." DEPENDS telebotxx-test)
 
-message(STATUS "Configuring telebotxx-test done")
+message(STATUS "Configuring telebotxx-test - done")

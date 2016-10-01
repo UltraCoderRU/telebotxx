@@ -1,6 +1,7 @@
 #include "TestGlobal.hpp"
 
 #include <telebotxx/BotApi.hpp>
+#include <telebotxx/Logging.hpp>
 
 #include <memory>
 #include <fstream>
@@ -61,6 +62,8 @@ struct TestConfig
 				throw std::invalid_argument("Config error: 'photo' must be unsigned int value.");
 		else
 			throw std::invalid_argument("Config error: 'photo' not set.");
+
+		telebotxx::setDebugMode(true);
 	}
 
 	~TestConfig()
