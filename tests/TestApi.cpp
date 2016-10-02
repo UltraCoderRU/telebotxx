@@ -86,7 +86,25 @@ BOOST_AUTO_TEST_SUITE(TestBotApi)
 	{
 		PRINT_TESTNAME;
 		BOOST_REQUIRE(bot);
-		BOOST_REQUIRE_NO_THROW(bot->sendMessage(chat, "Hello from C++!"));
+		BOOST_REQUIRE_NO_THROW(bot->sendMessage(chat, "Sample text"));
+	}
+
+	BOOST_AUTO_TEST_CASE(SendMessageWithMarkdown)
+	{
+		PRINT_TESTNAME;
+		BOOST_REQUIRE(bot);
+		BOOST_REQUIRE_NO_THROW(bot->sendMessage(chat,
+												"[Sample text in markdown](http://google.com/)",
+												telebotxx::BotApi::ParseMode::Markdown));
+	}
+
+	BOOST_AUTO_TEST_CASE(SendMessageWithHtml)
+	{
+		PRINT_TESTNAME;
+		BOOST_REQUIRE(bot);
+		BOOST_REQUIRE_NO_THROW(bot->sendMessage(chat,
+												"<a href=\"http://google.com/\">Sample text in HTML</a>",
+												telebotxx::BotApi::ParseMode::Html));
 	}
 
 	BOOST_AUTO_TEST_CASE(SendPhoto)

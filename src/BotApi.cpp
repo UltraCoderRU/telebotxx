@@ -101,7 +101,7 @@ public:
 		return parseUser(parseResponse(doc));
 	}
 
-	inline void sendMessage(const std::string& chat, const std::string& text)
+	inline void sendMessage(const std::string& chat, const std::string& text, ParseMode parseMode)
 	{
 		// Construct JSON body
 		using namespace rapidjson;
@@ -113,6 +113,11 @@ public:
 		writer.String(chat.c_str());
 		writer.String("text");
 		writer.String(text.c_str());
+		if (parseMode != ParseMode::Plain)
+		{
+			writer.String("parse_mode");
+			writer.String((parseMode == ParseMode::Markdown) ? "Markdown" : "HTML");
+		}
 		writer.EndObject();
 
 		std::string request = s.GetString();
@@ -174,9 +179,9 @@ User BotApi::getMe()
 	return impl_->getMe();
 }
 
-void BotApi::sendMessage(const std::string& chat, const std::string& text)
+void BotApi::sendMessage(const std::string& chat, const std::string& text, ParseMode parseMode)
 {
-	return impl_->sendMessage(chat, text);
+	return impl_->sendMessage(chat, text, parseMode);
 }
 
 void BotApi::sendPhoto(const std::string& chat, const std::string& filename, const std::string& caption)

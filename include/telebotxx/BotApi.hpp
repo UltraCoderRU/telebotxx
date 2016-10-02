@@ -11,6 +11,13 @@ namespace telebotxx
 	class BotApi
 	{
 	public:
+		enum class ParseMode
+		{
+			Plain,
+			Markdown,
+			Html
+		};
+
 		/// \param [in] token bot's secret token
 		BotApi(const std::string& token);
 
@@ -23,7 +30,8 @@ namespace telebotxx
 		/// \brief Send text message
 		/// \param [in] chat chat identifier
 		/// \param [in] text message text
-		void sendMessage(const std::string& chat, const std::string& text);
+		/// \param [in] parseMode parse mode
+		void sendMessage(const std::string& chat, const std::string& text, ParseMode parseMode = ParseMode::Plain);
 
 		/// \brief Send image
 		/// \param [in] chat chat identifier
