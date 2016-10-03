@@ -6,3 +6,11 @@ In development, so you are welcome to contribute.
 * C++14-compatible compiler
 * CMake 2.8 or newer
 * Boost Unit Test Framework (only for tests)
+
+## Building
+*You can set available options in CMakeLists.txt before running configure script.*
+```bash
+git submodule update --init --recursive
+./configure
+make
+```
