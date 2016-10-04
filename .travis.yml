@@ -3,9 +3,7 @@ language: cpp
 sudo: false
 cache: ccache
 
-compiler:
-  - gcc  
-  - clang
+compiler: clang
 
 # gcc 4.9 default
 addons: &addons
