@@ -14,12 +14,11 @@ addons: &addons
       - g++-4.9
       - clang-format-3.7
       - python-pip
+      - libboost-test-dev
+      - libcurl4-openssl-dev
     sources: &sources
       - ubuntu-toolchain-r-test
       - llvm-toolchain-precise-3.5
-      - llvm-toolchain-precise-3.6
-      - llvm-toolchain-precise-3.7
-      - llvm-toolchain-precise-3.8
 
 env:
   global:
@@ -30,11 +29,18 @@ env:
 
 matrix:
   include:
-    # Clang 3.7
-    - env: COMPILER=clang++-3.7 CCOMPILER=clang-3.7
+    # gcc 4.9
+    - env: COMPILER=g++-4.9 CCOMPILER=gcc-4.9
       addons:
         apt:
-          packages: clang-3.7
+          packages: g++-4.9
+          sources: *sources
+
+    # Clang 3.5
+    - env: COMPILER=clang++-3.5 CCOMPILER=clang-3.5
+      addons:
+        apt:
+          packages: clang-3.5
           sources: *sources
 
 before_script:
