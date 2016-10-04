@@ -43,6 +43,7 @@ matrix:
           sources: *sources
 
 before_script:
+  - export CXX=$COMPILER CC=$CCOMPILER
   - ./configure
 
 script:
