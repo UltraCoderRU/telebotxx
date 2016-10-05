@@ -39,19 +39,13 @@ matrix:
             - clang-3.7
       env: COMPILER=clang++-3.7
 
-addons:
-  apt:
-    packages:
-      - libboost-test-dev
-      - libboost-system-dev
-      - libcurl4-openssl-dev
-
 env:
   global:
     - TELEBOTXX_BUILD_TESTS=ON
     - TELEBOTXX_GENERATE_DOC=OFF
 
 before_script:
+  - sudo apt-get install -y libboost-test-dev libboost-system-dev libcurl4-openssl-dev
   - export CXX=$COMPILER
   - ./configure
 
