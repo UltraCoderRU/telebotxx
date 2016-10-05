@@ -1,4 +1,6 @@
 # telebotxx
+[![Build Status](https://travis-ci.org/UltraCoderRU/telebotxx.svg?branch=master)](https://travis-ci.org/UltraCoderRU/telebotxx)
+
 Telegram Bot API 2.0 for C++14. It uses [Curl for People](https://github.com/whoshuu/cpr) library to perform HTTP requests and [RapidJSON](https://github.com/miloyip/rapidjson) to work with JSON data.
 In development, so you are welcome to contribute.
 
