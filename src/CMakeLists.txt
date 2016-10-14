@@ -13,7 +13,8 @@ endif(NOT WIN32)
 # Put compiled library to 'lib' directory
 set(LIBRARY_OUTPUT_PATH "../lib")
 
-set(SOURCE_FILES BotApi.cpp
+set(SOURCE_FILES Attachment.cpp
+                 BotApi.cpp
                  Chat.cpp
                  Logging.cpp
                  User.cpp
