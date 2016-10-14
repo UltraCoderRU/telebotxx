@@ -14,6 +14,7 @@ endif(NOT WIN32)
 set(LIBRARY_OUTPUT_PATH "../lib")
 
 set(SOURCE_FILES BotApi.cpp
+                 Chat.cpp
                  Logging.cpp
                  User.cpp
 )
