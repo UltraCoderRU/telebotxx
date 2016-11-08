@@ -9,12 +9,12 @@ add_definitions(-DBOOST_TEST_DYN_LINK)
 find_package(Boost REQUIRED COMPONENTS unit_test_framework system)
 include_directories(${Boost_INCLUDE_DIRS})
 
-# Add required gcc flags
+# Add required compiler flags
 # For Windows we suppress all warnings because of Boost garbage :(
 if(NOT WIN32)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1y -Wall")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 else(NOT WIN32)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1y -w")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -w")
 endif(NOT WIN32)
 
 set(EXECUTABLE_OUTPUT_PATH "${PROJECT_SOURCE_DIR}/tests")
