@@ -39,6 +39,11 @@ namespace telebotxx
 		/// \param [in] caption optional photo caption
 		void sendPhoto(const std::string& chat, const std::string& filename, const std::string& caption = "");
 
+		/// \brief Send image by URL
+		/// \param [in] chat chat identifier
+		/// \param [in] url image URL
+		/// \param [in] caption optional photo caption
+		void sendPhotoUrl(const std::string& chat, const std::string& url, const std::string& caption = "");
 
 	private:
 		class Impl;

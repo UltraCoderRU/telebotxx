@@ -160,6 +160,41 @@ public:
 		parseResponse(doc);
 	}
 
+	inline void sendPhotoUrl(const std::string& chat, const std::string& url, const std::string& caption)
+	{
+		// Construct JSON body
+		using namespace rapidjson;
+		StringBuffer s;
+		Writer<StringBuffer> writer(s);
+
+		writer.StartObject();
+		writer.String("chat_id");
+		writer.String(chat.c_str());
+		writer.String("photo");
+		writer.String(url.c_str());
+		writer.String("caption");
+		writer.String(caption.c_str());
+		writer.EndObject();
+
+		std::string request = s.GetString();
+
+		auto r = cpr::Post(cpr::Url{telegramMainUrl_ + "/sendPhoto"},
+						   cpr::Header{{"Content-Type", "application/json"}},
+						   cpr::Body{request}
+		);
+		auto& response = r.text;
+
+		if (debugMode)
+			std::cout << "Response: " << response << std::endl;
+
+		using namespace rapidjson;
+		Document doc;
+		doc.Parse(response.c_str());
+
+		/// \todo Parse message
+		parseResponse(doc);
+	}
+
 private:
 
 	std::string token_;
@@ -187,4 +222,9 @@ void BotApi::sendMessage(const std::string& chat, const std::string& text, Parse
 void BotApi::sendPhoto(const std::string& chat, const std::string& filename, const std::string& caption)
 {
 	return impl_->sendPhoto(chat, filename, caption);
+}
+
+void BotApi::sendPhotoUrl(const std::string& chat, const std::string& url, const std::string& caption)
+{
+	return impl_->sendPhotoUrl(chat, url, caption);
 }

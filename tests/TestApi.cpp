@@ -16,6 +16,7 @@ const std::string CONFIG_FILE_NAME = "config.json";
 std::string token;
 std::string chat;
 std::string photoFile;
+std::string photoUrl;
 
 struct TestConfig
 {
@@ -62,6 +63,15 @@ struct TestConfig
 				throw std::invalid_argument("Config error: 'photo' must be unsigned int value.");
 		else
 			throw std::invalid_argument("Config error: 'photo' not set.");
+
+		// Read photo URL
+		if (document.HasMember("photoURL"))
+			if (document["photoURL"].IsString())
+				photoUrl = document["photoURL"].GetString();
+			else
+				throw std::invalid_argument("Config error: 'photoURL' must be unsigned int value.");
+		else
+			throw std::invalid_argument("Config error: 'photoURL' not set.");
 
 		telebotxx::setDebugMode(true);
 	}
@@ -112,6 +122,13 @@ BOOST_AUTO_TEST_SUITE(TestBotApi)
 		PRINT_TESTNAME;
 		BOOST_REQUIRE(bot);
 		BOOST_REQUIRE_NO_THROW(bot->sendPhoto(chat, photoFile, "Sample caption"));
+	}
+
+	BOOST_AUTO_TEST_CASE(SendPhotoUrl)
+	{
+		PRINT_TESTNAME;
+		BOOST_REQUIRE(bot);
+		BOOST_REQUIRE_NO_THROW(bot->sendPhotoUrl(chat, photoUrl, "Sample caption"));
 	}
 
 BOOST_AUTO_TEST_SUITE_END()
