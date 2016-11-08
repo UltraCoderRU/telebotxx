@@ -14,12 +14,12 @@ Chat::Chat(const Chat&) = default;
 Chat::Chat(Chat&&) = default;
 Chat::~Chat() = default;
 
-int Chat::getId() const
+std::int64_t Chat::getId() const
 {
 	return id_;
 }
 
-void Chat::setId(int id)
+void Chat::setId(std::int64_t id)
 {
 	id_ = id;
 }

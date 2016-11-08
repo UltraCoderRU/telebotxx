@@ -16,7 +16,7 @@ namespace telebotxx
 			Audio,
 			Document,
 			Game,
-			PhotoSize,
+			PhotoSizeArray,
 			Sticker,
 			Video,
 			Voice,
@@ -40,7 +40,7 @@ namespace telebotxx
 
 	using AttachmentPtr = std::shared_ptr<Attachment>;
 
-	class PhotoSize : public Attachment
+	class PhotoSize
 	{
 	public:
 		PhotoSize();
@@ -72,6 +72,27 @@ namespace telebotxx
 	};
 
 	using PhotoSizePtr = std::shared_ptr<PhotoSize>;
+
+	class PhotoSizeArray : public Attachment
+	{
+	public:
+		PhotoSizeArray();
+		PhotoSizeArray(const PhotoSizeArray&);
+		PhotoSizeArray(PhotoSizeArray&&);
+		~PhotoSizeArray();
+
+		const std::vector<PhotoSize>& getArray() const;
+		void setArray(const std::vector<PhotoSize>& array);
+
+		void swap(PhotoSizeArray& other) noexcept;
+
+		const PhotoSizeArray& operator=(PhotoSizeArray other) noexcept;
+
+	private:
+		std::vector<PhotoSize> array_;
+	};
+
+	using PhotoSizeArrayPtr = std::shared_ptr<PhotoSizeArray>;
 
 	class Audio : public Attachment
 	{

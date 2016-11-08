@@ -2,6 +2,7 @@
 #define TELEBOTXX_USER_H
 
 #include <string>
+#include <memory>
 
 namespace telebotxx
 {
@@ -54,6 +55,8 @@ namespace telebotxx
 		std::string lastName_;
 		std::string username_;
 	};
+
+	using UserPtr = std::shared_ptr<User>;
 }
 
 #endif // TELEBOTXX_USER_H

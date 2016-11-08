@@ -2,6 +2,8 @@
 #define TELEBOTXX_CHAT_HPP
 
 #include <string>
+#include <memory>
+#include <cstdint>
 
 namespace telebotxx
 {
@@ -21,8 +23,8 @@ namespace telebotxx
 		Chat(Chat&&);
 		~Chat();
 
-		int getId() const;
-		void setId(int id);
+		std::int64_t getId() const;
+		void setId(std::int64_t id);
 
 		Type getType() const;
 		void setType(Type type);
@@ -47,7 +49,7 @@ namespace telebotxx
 		const Chat& operator=(Chat other) noexcept;
 
 	private:
-		int id_;
+		std::int64_t id_;
 		Type type_;
 		std::string title_;
 		std::string username_;
@@ -55,6 +57,8 @@ namespace telebotxx
 		std::string lastName_;
 		bool allAdmins_;
 	};
+
+	using ChatPtr = std::shared_ptr<Chat>;
 
 	void swap(Chat& lhs, Chat& rhs);
 

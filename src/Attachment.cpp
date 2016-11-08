@@ -24,8 +24,7 @@ void Attachment::swap(Attachment& other) noexcept
 ////////////////////////////////////////////////////////////////
 
 PhotoSize::PhotoSize()
-    : Attachment(Type::PhotoSize),
-      width_(-1),
+    : width_(-1),
       height_(-1),
       fileSize_(-1)
 {
@@ -77,7 +76,6 @@ void PhotoSize::setFileSize(int fileSize)
 
 void PhotoSize::swap(PhotoSize& other) noexcept
 {
-	Attachment::swap(other);
 	using std::swap;
 	swap(fileId_, other.fileId_);
 	swap(width_, other.width_);
@@ -86,6 +84,39 @@ void PhotoSize::swap(PhotoSize& other) noexcept
 }
 
 const PhotoSize& PhotoSize::operator=(PhotoSize other) noexcept
+{
+	swap(other);
+	return *this;
+}
+
+////////////////////////////////////////////////////////////////
+
+PhotoSizeArray::PhotoSizeArray()
+	: Attachment(Attachment::Type::PhotoSizeArray)
+{
+}
+
+PhotoSizeArray::PhotoSizeArray(const PhotoSizeArray&) = default;
+PhotoSizeArray::PhotoSizeArray(PhotoSizeArray&&) = default;
+PhotoSizeArray::~PhotoSizeArray() = default;
+
+const std::vector<PhotoSize>& PhotoSizeArray::getArray() const
+{
+	return array_;
+}
+
+void PhotoSizeArray::setArray(const std::vector<PhotoSize>& array)
+{
+	array_ = array;
+}
+
+void PhotoSizeArray::swap(PhotoSizeArray& other) noexcept
+{
+	using std::swap;
+	swap(array_, other.array_);
+}
+
+const PhotoSizeArray& PhotoSizeArray::operator=(PhotoSizeArray other) noexcept
 {
 	swap(other);
 	return *this;

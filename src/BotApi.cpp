@@ -1,78 +1,14 @@
 #include <telebotxx/BotApi.hpp>
 #include <telebotxx/Exception.hpp>
 #include <telebotxx/Logging.hpp>
+#include "JsonObjects.hpp"
 
 #include <iostream>
 #include <sstream>
 
-#include <rapidjson/document.h>
 #include <rapidjson/writer.h>
 
 #include <cpr/cpr.h>
-
-namespace telebotxx
-{
-	const rapidjson::Value& parseResponse(const rapidjson::Document& doc)
-	{
-		using namespace rapidjson;
-		if (!doc.IsObject())
-			throw ParseError("Object expected");
-
-		// Get status
-		if (!doc.HasMember("ok") || !doc["ok"].IsBool())
-			throw ParseError("Field 'ok' not found or has invalid type");
-		bool ok = doc["ok"].GetBool();
-
-		if (ok)
-		{
-			if (!doc.HasMember("result") || !doc["result"].IsObject())
-				throw ParseError("Field 'result' not found or has invalid type");
-			return doc["result"];
-		} else
-		{
-			if (!doc.HasMember("error_code") || !doc["error_code"].IsInt())
-				throw ParseError("Field 'error_code' not found or has invalid type");
-			int code = doc["error_code"].GetInt();
-
-			if (!doc.HasMember("description") || !doc["description"].IsString())
-				throw ParseError("Field 'description' not found or has invalid type");
-			std::string description(doc["description"].GetString());
-
-			throw ApiError(code, description);
-		}
-	}
-
-	User parseUser(const rapidjson::Value& obj)
-	{
-		if (!obj.HasMember("id") || !obj["id"].IsInt())
-			throw ParseError("Field 'id' not found or has invalid type");
-		int id = obj["id"].GetInt();
-
-		if (!obj.HasMember("first_name") || !obj["first_name"].IsString())
-			throw ParseError("Field 'first_name' not found or has invalid type");
-		std::string firstName(obj["first_name"].GetString());
-
-		std::string lastName;
-		if (obj.HasMember("last_name"))
-		{
-			if (obj["last_name"].IsString())
-				lastName = obj["last_name"].GetString();
-			else
-				throw ParseError("Field 'last_name' has invalid type");
-		}
-
-		std::string username;
-		if (obj.HasMember("username"))
-		{
-			if (obj["username"].IsString())
-				username = obj["username"].GetString();
-			else
-				throw ParseError("Field 'username' has invalid type");
-		}
-
-		return User(id, firstName, lastName, username);
-	}
-}
 
 using namespace telebotxx;
 
@@ -94,11 +30,11 @@ public:
 		if (debugMode)
 			std::cout << "Response: " << response << std::endl;
 
-		using namespace rapidjson;
-		Document doc;
+		rapidjson::Document doc;
 		doc.Parse(response.c_str());
 
-		return parseUser(parseResponse(doc));
+		parseResponse(doc);
+		return *parseUser(doc, "result", REQUIRED);
 	}
 
 	inline void sendMessage(const std::string& chat, const std::string& text, ParseMode parseMode)
@@ -131,12 +67,12 @@ public:
 		if (debugMode)
 			std::cout << "Response: " << response << std::endl;
 
-		using namespace rapidjson;
-		Document doc;
+		rapidjson::Document doc;
 		doc.Parse(response.c_str());
 
 		/// \todo Parse message
 		parseResponse(doc);
+		MessagePtr message = parseMessage(doc, "result", REQUIRED);
 	}
 
 	inline void sendPhoto(const std::string& chat, const std::string& filename, const std::string& caption)
@@ -152,12 +88,12 @@ public:
 		if (debugMode)
 			std::cout << "Response: " << response << std::endl;
 
-		using namespace rapidjson;
-		Document doc;
+		rapidjson::Document doc;
 		doc.Parse(response.c_str());
 
 		/// \todo Parse message
 		parseResponse(doc);
+		MessagePtr message = parseMessage(doc, "result", REQUIRED);
 	}
 
 	inline void sendPhotoUrl(const std::string& chat, const std::string& url, const std::string& caption)
@@ -187,12 +123,12 @@ public:
 		if (debugMode)
 			std::cout << "Response: " << response << std::endl;
 
-		using namespace rapidjson;
-		Document doc;
+		rapidjson::Document doc;
 		doc.Parse(response.c_str());
 
 		/// \todo Parse message
 		parseResponse(doc);
+		MessagePtr message = parseMessage(doc, "result", REQUIRED);
 	}
 
 private:

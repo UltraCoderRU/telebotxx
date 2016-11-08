@@ -11,7 +11,9 @@ set(LIBRARY_OUTPUT_PATH "../lib")
 set(SOURCE_FILES Attachment.cpp
                  BotApi.cpp
                  Chat.cpp
+                 JsonObjects.cpp
                  Logging.cpp
+                 Message.cpp
                  User.cpp
 )
 
