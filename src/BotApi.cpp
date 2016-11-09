@@ -131,6 +131,49 @@ public:
 		return *parseMessage(doc, "result", REQUIRED);
 	}
 
+	Updates getUpdates(int offset, unsigned short limit, unsigned timeout)
+	{
+		// Construct JSON body
+		using namespace rapidjson;
+		StringBuffer s;
+		Writer<StringBuffer> writer(s);
+
+		writer.StartObject();
+		if (offset != 0)
+		{
+			writer.String("offset");
+			writer.Int(offset);
+		}
+		if (limit != 0)
+		{
+			writer.String("limit");
+			writer.Uint(limit);
+		}
+		if (timeout != 0)
+		{
+			writer.String("timeout");
+			writer.Uint(timeout);
+		}
+		writer.EndObject();
+
+		std::string request = s.GetString();
+
+		auto r = cpr::Post(cpr::Url{telegramMainUrl_ + "/getUpdates"},
+						   cpr::Header{{"Content-Type", "application/json"}},
+						   cpr::Body{request}
+		);
+		auto& response = r.text;
+
+		if (debugMode)
+			std::cout << "Response: " << response << std::endl;
+
+		rapidjson::Document doc;
+		doc.Parse(response.c_str());
+
+		checkResponse(doc);
+		return *parseUpdates(doc, "result", REQUIRED);
+	}
+
 private:
 
 	std::string token_;
@@ -163,4 +206,9 @@ Message BotApi::sendPhoto(const std::string& chat, const std::string& filename, 
 Message BotApi::sendPhotoUrl(const std::string& chat, const std::string& url, const std::string& caption)
 {
 	return impl_->sendPhotoUrl(chat, url, caption);
+}
+
+Updates BotApi::getUpdates(int offset, unsigned short limit, unsigned int timeout)
+{
+	return impl_->getUpdates(offset, limit, timeout);
 }

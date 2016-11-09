@@ -3,6 +3,7 @@
 
 #include "User.hpp"
 #include "Message.hpp"
+#include "Update.hpp"
 
 #include <string>
 #include <memory>
@@ -48,6 +49,13 @@ namespace telebotxx
 		/// \param [in] caption optional photo caption
 		/// \return Message object, recieved from the server
 		Message sendPhotoUrl(const std::string& chat, const std::string& url, const std::string& caption = "");
+
+		/// \brief Get updates using long polling
+		/// \param offset identifier of the first update to be returned
+		/// \param limit maximum number of updates to be retrieved
+		/// \param timeout timeout in seconds for long polling
+		/// \return Updates (vector of Update)
+		Updates getUpdates(int offset = 0, unsigned short limit = 0, unsigned timeout = 0);
 
 	private:
 		class Impl;

@@ -14,6 +14,7 @@ set(SOURCE_FILES Attachment.cpp
                  JsonObjects.cpp
                  Logging.cpp
                  Message.cpp
+                 Update.cpp
                  User.cpp
 )
 

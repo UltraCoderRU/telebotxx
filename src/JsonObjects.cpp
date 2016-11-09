@@ -249,6 +249,38 @@ namespace telebotxx
 			return nullptr;
 	}
 
+	std::unique_ptr<Update> parseUpdate(const rapidjson::Value& obj)
+	{
+		int id = parse<int>(obj, "update_id", REQUIRED);
+
+		std::unique_ptr<Message> message;
+		if (message = parseMessage(obj, "message", OPTIONAL))
+			return std::make_unique<MessageUpdate>(id, *message);
+		else if (message = parseMessage(obj, "edited_message", OPTIONAL))
+			return std::make_unique<EditedMessageUpdate>(id, *message);
+			/// \todo: other updates
+		else
+			throw ParseError("Unknown update type");
+	}
+
+	std::unique_ptr<Updates> parseUpdates(const rapidjson::Value& parent, const char* name, bool required)
+	{
+		bool found;
+		auto& obj = parseArray(parent, name, required, found);
+		if (found)
+		{
+			std::vector<UpdatePtr> updates;
+			for (auto& elem : obj.GetArray())
+			{
+				auto update = parseUpdate(elem);
+				updates.emplace_back(std::move(update));
+			}
+			return std::make_unique<Updates>(std::move(updates));
+		}
+		else
+			return nullptr;
+	}
+
 	std::unique_ptr<User> parseUser(const rapidjson::Value& parent, const char* name, bool required)
 	{
 		bool found;

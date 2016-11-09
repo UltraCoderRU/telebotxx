@@ -3,6 +3,7 @@
 
 #include <telebotxx/Attachment.hpp>
 #include <telebotxx/Message.hpp>
+#include <telebotxx/Update.hpp>
 #include <telebotxx/User.hpp>
 
 #include <memory>
@@ -34,6 +35,13 @@ namespace telebotxx
 	/// \param required REQUIRED or OPTIONAL
 	/// \return pointer to Message
 	std::unique_ptr<Message> parseMessage(const rapidjson::Value& parent, const char* name, bool required);
+
+	/// \brief Parse JSON array of Update
+	/// \param parent reference to parent JSON object
+	/// \param name field with array of Update objects
+	/// \param required REQUIRED or OPTIONAL
+	/// \return Updates (vector of UpdatePtr>
+	std::unique_ptr<Updates> parseUpdates(const rapidjson::Value& parent, const char* name, bool required);
 
 	/// \brief Check JSON response
 	///

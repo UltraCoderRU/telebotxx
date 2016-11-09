@@ -131,4 +131,24 @@ BOOST_AUTO_TEST_SUITE(TestBotApi)
 		BOOST_REQUIRE_NO_THROW(bot->sendPhotoUrl(chat, photoUrl, "Sample caption"));
 	}
 
+	BOOST_AUTO_TEST_CASE(GetUpdates)
+	{
+		using namespace telebotxx;
+		PRINT_TESTNAME;
+		BOOST_REQUIRE(bot);
+		Updates updates;
+		BOOST_REQUIRE_NO_THROW(updates = bot->getUpdates());
+		for (auto update : updates)
+		{
+			if (update->getType() == Update::Type::Message)
+			{
+				auto& message = std::dynamic_pointer_cast<MessageUpdate>(update)->getMessage();
+				if (message.getFrom())
+					std::cout << *message.getFrom() << ": ";
+				std::cout << message.getText() << std::endl;
+			}
+		}
+	}
+
+
 BOOST_AUTO_TEST_SUITE_END()
