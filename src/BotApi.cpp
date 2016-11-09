@@ -37,7 +37,7 @@ public:
 		return *parseUser(doc, "result", REQUIRED);
 	}
 
-	inline void sendMessage(const std::string& chat, const std::string& text, ParseMode parseMode)
+	inline Message sendMessage(const std::string& chat, const std::string& text, ParseMode parseMode)
 	{
 		// Construct JSON body
 		using namespace rapidjson;
@@ -72,10 +72,10 @@ public:
 
 		/// \todo Parse message
 		checkResponse(doc);
-		MessagePtr message = parseMessage(doc, "result", REQUIRED);
+		return *parseMessage(doc, "result", REQUIRED);
 	}
 
-	inline void sendPhoto(const std::string& chat, const std::string& filename, const std::string& caption)
+	inline Message sendPhoto(const std::string& chat, const std::string& filename, const std::string& caption)
 	{
 		auto r = cpr::Post(cpr::Url{telegramMainUrl_ + "/sendPhoto"},
 						   cpr::Multipart{{"chat_id", chat},
@@ -93,10 +93,10 @@ public:
 
 		/// \todo Parse message
 		checkResponse(doc);
-		MessagePtr message = parseMessage(doc, "result", REQUIRED);
+		return *parseMessage(doc, "result", REQUIRED);
 	}
 
-	inline void sendPhotoUrl(const std::string& chat, const std::string& url, const std::string& caption)
+	inline Message sendPhotoUrl(const std::string& chat, const std::string& url, const std::string& caption)
 	{
 		// Construct JSON body
 		using namespace rapidjson;
@@ -128,7 +128,7 @@ public:
 
 		/// \todo Parse message
 		checkResponse(doc);
-		MessagePtr message = parseMessage(doc, "result", REQUIRED);
+		return *parseMessage(doc, "result", REQUIRED);
 	}
 
 private:
@@ -150,17 +150,17 @@ User BotApi::getMe()
 	return impl_->getMe();
 }
 
-void BotApi::sendMessage(const std::string& chat, const std::string& text, ParseMode parseMode)
+Message BotApi::sendMessage(const std::string& chat, const std::string& text, ParseMode parseMode)
 {
 	return impl_->sendMessage(chat, text, parseMode);
 }
 
-void BotApi::sendPhoto(const std::string& chat, const std::string& filename, const std::string& caption)
+Message BotApi::sendPhoto(const std::string& chat, const std::string& filename, const std::string& caption)
 {
 	return impl_->sendPhoto(chat, filename, caption);
 }
 
-void BotApi::sendPhotoUrl(const std::string& chat, const std::string& url, const std::string& caption)
+Message BotApi::sendPhotoUrl(const std::string& chat, const std::string& url, const std::string& caption)
 {
 	return impl_->sendPhotoUrl(chat, url, caption);
 }

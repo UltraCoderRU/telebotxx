@@ -2,6 +2,7 @@
 #define TELEBOTXX_BOTAPI_H
 
 #include "User.hpp"
+#include "Message.hpp"
 
 #include <string>
 #include <memory>
@@ -31,19 +32,22 @@ namespace telebotxx
 		/// \param [in] chat chat identifier
 		/// \param [in] text message text
 		/// \param [in] parseMode parse mode
-		void sendMessage(const std::string& chat, const std::string& text, ParseMode parseMode = ParseMode::Plain);
+		/// \return Message object, recieved from the server
+		Message sendMessage(const std::string& chat, const std::string& text, ParseMode parseMode = ParseMode::Plain);
 
 		/// \brief Send image
 		/// \param [in] chat chat identifier
 		/// \param [in] filename image location
 		/// \param [in] caption optional photo caption
-		void sendPhoto(const std::string& chat, const std::string& filename, const std::string& caption = "");
+		/// \return Message object, recieved from the server
+		Message sendPhoto(const std::string& chat, const std::string& filename, const std::string& caption = "");
 
 		/// \brief Send image by URL
 		/// \param [in] chat chat identifier
 		/// \param [in] url image URL
 		/// \param [in] caption optional photo caption
-		void sendPhotoUrl(const std::string& chat, const std::string& url, const std::string& caption = "");
+		/// \return Message object, recieved from the server
+		Message sendPhotoUrl(const std::string& chat, const std::string& url, const std::string& caption = "");
 
 	private:
 		class Impl;
