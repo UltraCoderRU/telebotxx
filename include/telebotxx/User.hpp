@@ -10,16 +10,9 @@ namespace telebotxx
 	{
 	public:
 		User();
-
-		/// \brief Full constructor
-		/// \param id id
-		/// \param firstName first name
-		/// \param lastName last name
-		/// \param username username
-		User(int id, const std::string& firstName, const std::string& lastName, const std::string& username);
-
 		User(const User&);
 		User(User&&);
+		~User();
 
 		/// \brief Get id
 		int getId() const;
@@ -45,6 +38,9 @@ namespace telebotxx
 		/// \brief Set username
 		void setUsername(const std::string& username);
 
+		/// \brief Get string representation of user
+		const std::string toString() const;
+
 		void swap(User&) noexcept;
 
 		const User& operator=(User other);
@@ -57,6 +53,8 @@ namespace telebotxx
 	};
 
 	using UserPtr = std::shared_ptr<User>;
+
+	std::ostream& operator<<(std::ostream& os, const User& user);
 }
 
 #endif // TELEBOTXX_USER_H

@@ -255,11 +255,12 @@ namespace telebotxx
 		auto& obj = parseObject(parent, name, required, found);
 		if (found)
 		{
-			int id = parse<int>(obj, "id", REQUIRED);
-			auto firstName = parse<std::string>(obj, "first_name", REQUIRED);
-			auto lastName = parse<std::string>(obj, "last_name", OPTIONAL);
-			auto username = parse<std::string>(obj, "username", OPTIONAL);
-			return std::make_unique<User>(id, firstName, lastName, username);
+			auto user = std::make_unique<User>();
+			user->setId(parse<int>(obj, "id", REQUIRED));
+			user->setFirstName(parse<std::string>(obj, "first_name", REQUIRED));
+			user->setLastName(parse<std::string>(obj, "last_name", OPTIONAL));
+			user->setUsername(parse<std::string>(obj, "username", OPTIONAL));
+			return user;
 		}
 		else
 			return nullptr;
