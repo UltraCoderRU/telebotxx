@@ -33,7 +33,7 @@ public:
 		rapidjson::Document doc;
 		doc.Parse(response.c_str());
 
-		parseResponse(doc);
+		checkResponse(doc);
 		return *parseUser(doc, "result", REQUIRED);
 	}
 
@@ -71,7 +71,7 @@ public:
 		doc.Parse(response.c_str());
 
 		/// \todo Parse message
-		parseResponse(doc);
+		checkResponse(doc);
 		MessagePtr message = parseMessage(doc, "result", REQUIRED);
 	}
 
@@ -92,7 +92,7 @@ public:
 		doc.Parse(response.c_str());
 
 		/// \todo Parse message
-		parseResponse(doc);
+		checkResponse(doc);
 		MessagePtr message = parseMessage(doc, "result", REQUIRED);
 	}
 
@@ -127,7 +127,7 @@ public:
 		doc.Parse(response.c_str());
 
 		/// \todo Parse message
-		parseResponse(doc);
+		checkResponse(doc);
 		MessagePtr message = parseMessage(doc, "result", REQUIRED);
 	}
 

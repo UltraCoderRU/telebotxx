@@ -266,19 +266,14 @@ namespace telebotxx
 			return nullptr;
 	}
 
-	const rapidjson::Value& parseResponse(const rapidjson::Document& doc)
+	void checkResponse(const rapidjson::Document& doc)
 	{
 		if (!doc.IsObject())
 			throw ParseError("Object expected");
 
 		// Get status
 		bool ok = parse<bool>(doc, "ok", REQUIRED);
-		if (ok)
-		{
-			bool found;
-			return parseObject(doc, "result", REQUIRED, found);
-		}
-		else
+		if (!ok)
 		{
 			int code = parse<int>(doc, "error_code", REQUIRED);
 			std::string description(parse<std::string>(doc, "description", REQUIRED));

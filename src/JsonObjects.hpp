@@ -63,10 +63,11 @@ namespace telebotxx
 	/// \return pointer to Message
 	std::unique_ptr<Message> parseMessage(const rapidjson::Value& parent, const char* name, bool required);
 
-	/// \brief Parse JSON response
+	/// \brief Check JSON response
+	///
+	/// Throws an exception if error code recieved.
 	/// \param doc reference to JSON document
-	/// \return reference to 'result' value
-	const rapidjson::Value& parseResponse(const rapidjson::Document& doc);
+	void checkResponse(const rapidjson::Document& doc);
 }
 
 #endif // TELEBOTXX_JSON_OBJECTS_HPP
