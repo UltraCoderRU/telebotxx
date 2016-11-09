@@ -14,34 +14,6 @@ namespace telebotxx
 	const bool REQUIRED = true;
 	const bool OPTIONAL = false;
 
-	/// \brief Parse JSON object to PhotoSize
-	/// \param parent reference to parent JSON object
-	/// \param name field with PhotoSize object
-	/// \param required REQUIRED or OPTIONAL
-	/// \return pointer to PhotoSize
-	std::unique_ptr<PhotoSize> parsePhotoSize(const rapidjson::Value& parent, const char* name, bool required);
-
-	/// \brief Parse JSON object to Audio
-	/// \param parent reference to parent JSON object
-	/// \param name field with Audio object
-	/// \param required REQUIRED or OPTIONAL
-	/// \return pointer to Audio
-	std::unique_ptr<Audio> parseAudio(const rapidjson::Value& parent, const char* name, bool required);
-
-	/// \brief Parse JSON object to Document
-	/// \param parent reference to parent JSON object
-	/// \param name field with Document object
-	/// \param required REQUIRED or OPTIONAL
-	/// \return pointer to Document
-	std::unique_ptr<Document> parseDocument(const rapidjson::Value& parent, const char* name, bool required);
-
-	/// \brief Parse JSON object to Sticker
-	/// \param parent reference to parent JSON object
-	/// \param name field with Sticker object
-	/// \param required REQUIRED or OPTIONAL
-	/// \return pointer to Sticker
-	std::unique_ptr<Document> parseDocument(const rapidjson::Value& parent, const char* name, bool required);
-
 	/// \brief Parse JSON object to Chat
 	/// \param parent reference to parent JSON object
 	/// \param name field with Chat object
