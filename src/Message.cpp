@@ -369,6 +369,20 @@ void Message::swap(Message& other) noexcept
 	swap(replyToMessage_, other.replyToMessage_);
 	swap(editDate_, other.editDate_);
 	swap(text_, other.text_);
+	swap(entities_, other.entities_);
+	swap(attachment_, other.attachment_);
+	swap(caption_, other.caption_);
+	swap(newChatMember_, other.newChatMember_);
+	swap(leftChatMember_, other.leftChatMember_);
+	swap(newChatTitle_, other.newChatTitle_);
+	swap(newChatPhoto_, other.newChatPhoto_);
+	swap(deleteChatPhoto_, other.deleteChatPhoto_);
+	swap(groupChatCreated_, other.groupChatCreated_);
+	swap(superGroupChatCreated_, other.superGroupChatCreated_);
+	swap(channelChatCreated_, other.channelChatCreated_);
+	swap(migrateToChatId_, other.migrateToChatId_);
+	swap(migrateFromChatId_, other.migrateFromChatId_);
+	swap(pinnedMessage_, other.pinnedMessage_);
 }
 
 const Message& Message::operator=(Message other) noexcept
