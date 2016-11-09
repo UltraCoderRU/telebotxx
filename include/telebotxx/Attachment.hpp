@@ -208,6 +208,7 @@ namespace telebotxx
 	};
 
 	void swap(PhotoSize& lhs, PhotoSize& rhs);
+	void swap(PhotoSizeArray& lhs, PhotoSizeArray& rhs);
 	void swap(Audio& lhs, Audio& rhs);
 	void swap(Document& lhs, Document& rhs);
 	void swap(Sticker& lhs, Sticker& rhs);

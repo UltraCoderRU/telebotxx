@@ -389,6 +389,11 @@ void telebotxx::swap(PhotoSize& lhs, PhotoSize& rhs)
 	lhs.swap(rhs);
 }
 
+void telebotxx::swap(PhotoSizeArray& lhs, PhotoSizeArray& rhs)
+{
+	lhs.swap(rhs);
+}
+
 void telebotxx::swap(Audio& lhs, Audio& rhs)
 {
 	lhs.swap(rhs);
