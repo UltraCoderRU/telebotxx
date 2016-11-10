@@ -4,21 +4,30 @@
 #include "User.hpp"
 #include "Message.hpp"
 #include "Update.hpp"
+#include "SendMessageRequest.hpp"
+#include "SendPhotoRequest.hpp"
 
 #include <string>
 #include <memory>
 
 namespace telebotxx
 {
+	template <typename RequestType, typename T>
+	void setRequestOption(RequestType& request, T t)
+	{
+		request.setOption(t);
+	}
+
+	template <typename RequestType, typename T, typename... Ts>
+	void setRequestOption(RequestType& request, T&& t, Ts&&... ts)
+	{
+		setRequestOption(request, std::forward<T>(t));
+		setRequestOption(request, std::forward<Ts>(ts)...);
+	};
+
 	class BotApi
 	{
 	public:
-		enum class ParseMode
-		{
-			Plain,
-			Markdown,
-			Html
-		};
 
 		/// \param [in] token bot's secret token
 		BotApi(const std::string& token);
@@ -30,11 +39,23 @@ namespace telebotxx
 		User getMe();
 
 		/// \brief Send text message
-		/// \param [in] chat chat identifier
-		/// \param [in] text message text
-		/// \param [in] parseMode parse mode
+		/// \param chatId chat identifier
+		/// \param text text
 		/// \return Message object, recieved from the server
-		Message sendMessage(const std::string& chat, const std::string& text, ParseMode parseMode = ParseMode::Plain);
+		Message sendMessage(ChatId&& chatId, Text&& text);
+
+		/// \brief Send text message
+		/// \param chatId chat identifier
+		/// \param text text
+		/// \param args parameters
+		/// \return Message object, recieved from the server
+		template<typename... Ts>
+		Message sendMessage(ChatId&& chatId, Text&& text, Ts&&... args)
+		{
+			SendMessageRequest request(getTelegramMainUrl(), std::forward<ChatId>(chatId), std::forward<Text>(text));
+			setRequestOption(request, std::forward<Ts>(args)...);
+			return request.execute();
+		}
 
 		/// \brief Send image
 		/// \param [in] chat chat identifier
@@ -58,6 +79,8 @@ namespace telebotxx
 		Updates getUpdates(int offset = 0, unsigned short limit = 0, unsigned timeout = 0);
 
 	private:
+		std::string getTelegramMainUrl() const;
+
 		class Impl;
 		std::unique_ptr<Impl> impl_;
 	};

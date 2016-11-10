@@ -37,44 +37,6 @@ public:
 		return *parseUser(doc, "result", REQUIRED);
 	}
 
-	inline Message sendMessage(const std::string& chat, const std::string& text, ParseMode parseMode)
-	{
-		// Construct JSON body
-		using namespace rapidjson;
-		StringBuffer s;
-		Writer<StringBuffer> writer(s);
-
-		writer.StartObject();
-		writer.String("chat_id");
-		writer.String(chat.c_str());
-		writer.String("text");
-		writer.String(text.c_str());
-		if (parseMode != ParseMode::Plain)
-		{
-			writer.String("parse_mode");
-			writer.String((parseMode == ParseMode::Markdown) ? "Markdown" : "HTML");
-		}
-		writer.EndObject();
-
-		std::string request = s.GetString();
-
-		auto r = cpr::Post(cpr::Url{telegramMainUrl_ + "/sendMessage"},
-						   cpr::Header{{"Content-Type", "application/json"}},
-						   cpr::Body{request}
-		);
-		auto& response = r.text;
-
-		if (debugMode)
-			std::cout << "Response: " << response << std::endl;
-
-		rapidjson::Document doc;
-		doc.Parse(response.c_str());
-
-		/// \todo Parse message
-		checkResponse(doc);
-		return *parseMessage(doc, "result", REQUIRED);
-	}
-
 	inline Message sendPhoto(const std::string& chat, const std::string& filename, const std::string& caption)
 	{
 		auto r = cpr::Post(cpr::Url{telegramMainUrl_ + "/sendPhoto"},
@@ -174,6 +136,11 @@ public:
 		return *parseUpdates(doc, "result", REQUIRED);
 	}
 
+	std::string getTelegramMainUrl() const
+	{
+		return telegramMainUrl_;
+	}
+
 private:
 
 	std::string token_;
@@ -193,9 +160,10 @@ User BotApi::getMe()
 	return impl_->getMe();
 }
 
-Message BotApi::sendMessage(const std::string& chat, const std::string& text, ParseMode parseMode)
+Message BotApi::sendMessage(ChatId&& chatId, Text&& text)
 {
-	return impl_->sendMessage(chat, text, parseMode);
+	SendMessageRequest request(getTelegramMainUrl(), std::forward<ChatId>(chatId), std::forward<Text>(text));
+	return request.execute();
 }
 
 Message BotApi::sendPhoto(const std::string& chat, const std::string& filename, const std::string& caption)
@@ -211,4 +179,9 @@ Message BotApi::sendPhotoUrl(const std::string& chat, const std::string& url, co
 Updates BotApi::getUpdates(int offset, unsigned short limit, unsigned int timeout)
 {
 	return impl_->getUpdates(offset, limit, timeout);
+}
+
+std::string BotApi::getTelegramMainUrl() const
+{
+	return impl_->getTelegramMainUrl();
 }

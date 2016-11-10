@@ -2,6 +2,9 @@ cmake_minimum_required(VERSION 2.8)
 
 message(STATUS "Configuring telebotxx")
 
+find_package(Boost REQUIRED)
+include_directories(${Boost_INCLUDE_DIRS})
+
 # Add required compiler flags
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 
@@ -16,6 +19,8 @@ set(SOURCE_FILES Attachment.cpp
                  Message.cpp
                  Update.cpp
                  User.cpp
+                 RequestOptions.cpp
+                 SendMessageRequest.cpp
 )
 
 add_library(telebotxx SHARED ${SOURCE_FILES})

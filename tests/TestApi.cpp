@@ -13,6 +13,8 @@ std::unique_ptr<telebotxx::BotApi> bot;
 
 const std::string CONFIG_FILE_NAME = "config.json";
 
+using namespace telebotxx;
+
 std::string token;
 std::string chat;
 std::string photoFile;
@@ -31,7 +33,7 @@ struct TestConfig
 
 		char buffer[2048];
 		FileReadStream is(pFile, buffer, sizeof(buffer));
-		Document document;
+		rapidjson::Document document;
 		document.ParseStream<0, UTF8<>, FileReadStream>(is);
 
 		if (!document.IsObject() && document.HasParseError())
@@ -89,32 +91,56 @@ BOOST_AUTO_TEST_SUITE(TestBotApi)
 	BOOST_AUTO_TEST_CASE(DefaultConstructor)
 	{
 		PRINT_TESTNAME;
-		BOOST_REQUIRE_NO_THROW(bot.reset(new telebotxx::BotApi(token)));
+		BOOST_REQUIRE_NO_THROW(bot.reset(new BotApi(token)));
 	}
 
 	BOOST_AUTO_TEST_CASE(SendMessage)
 	{
 		PRINT_TESTNAME;
 		BOOST_REQUIRE(bot);
-		BOOST_REQUIRE_NO_THROW(bot->sendMessage(chat, "Sample text"));
+		BOOST_REQUIRE_NO_THROW(bot->sendMessage(ChatId{chat},
+										        Text{"Sample text"}
+		));
 	}
 
 	BOOST_AUTO_TEST_CASE(SendMessageWithMarkdown)
 	{
 		PRINT_TESTNAME;
 		BOOST_REQUIRE(bot);
-		BOOST_REQUIRE_NO_THROW(bot->sendMessage(chat,
-												"[Sample text in markdown](http://google.com/)",
-												telebotxx::BotApi::ParseMode::Markdown));
+		BOOST_REQUIRE_NO_THROW(bot->sendMessage(ChatId{chat},
+										        Text{"[Sample text in markdown](http://google.com/)"},
+										        ParseMode::Markdown
+		));
 	}
 
 	BOOST_AUTO_TEST_CASE(SendMessageWithHtml)
 	{
 		PRINT_TESTNAME;
 		BOOST_REQUIRE(bot);
-		BOOST_REQUIRE_NO_THROW(bot->sendMessage(chat,
-												"<a href=\"http://google.com/\">Sample text in HTML</a>",
-												telebotxx::BotApi::ParseMode::Html));
+		BOOST_REQUIRE_NO_THROW(bot->sendMessage(ChatId{chat},
+										        Text{"<a href=\"http://google.com/\">Sample text in HTML</a>"},
+										        ParseMode::Html
+		));
+	}
+
+	BOOST_AUTO_TEST_CASE(SendMessageWithoutPreview)
+	{
+		PRINT_TESTNAME;
+		BOOST_REQUIRE(bot);
+		BOOST_REQUIRE_NO_THROW(bot->sendMessage(ChatId{chat},
+										        Text{"http://google.com/"},
+										        DisableWebPagePreview()
+		));
+	}
+
+	BOOST_AUTO_TEST_CASE(SendMessageWithoutNotification)
+	{
+		PRINT_TESTNAME;
+		BOOST_REQUIRE(bot);
+		BOOST_REQUIRE_NO_THROW(bot->sendMessage(ChatId{chat},
+										        Text{"Message without notification"},
+										        DisableNotification()
+		));
 	}
 
 	BOOST_AUTO_TEST_CASE(SendPhoto)
@@ -133,7 +159,6 @@ BOOST_AUTO_TEST_SUITE(TestBotApi)
 
 	BOOST_AUTO_TEST_CASE(GetUpdates)
 	{
-		using namespace telebotxx;
 		PRINT_TESTNAME;
 		BOOST_REQUIRE(bot);
 		Updates updates;
