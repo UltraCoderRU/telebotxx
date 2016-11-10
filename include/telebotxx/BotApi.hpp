@@ -5,7 +5,6 @@
 #include "Message.hpp"
 #include "Update.hpp"
 #include "SendMessageRequest.hpp"
-#include "SendPhotoRequest.hpp"
 
 #include <string>
 #include <memory>
