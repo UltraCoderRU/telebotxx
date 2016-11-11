@@ -21,6 +21,7 @@ set(SOURCE_FILES Attachment.cpp
                  User.cpp
                  RequestOptions.cpp
                  SendMessageRequest.cpp
+                 SendPhotoRequest.cpp
 )
 
 add_library(telebotxx SHARED ${SOURCE_FILES})

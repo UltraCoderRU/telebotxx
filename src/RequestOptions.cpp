@@ -95,6 +95,33 @@ int ReplyTo::value() const
 
 ////////////////////////////////////////////////////////////////
 
+Buffer::Buffer(const char *buffer, std::size_t size, const std::string& filename)
+	: data_(buffer), size_(size), filename_(filename)
+{
+}
+
+Buffer::Buffer(const std::vector<char>& data, const std::string& filename)
+	: data_(data.data()), size_(data.size()), filename_(filename)
+{
+}
+
+const char* Buffer::data() const
+{
+	return data_;
+}
+
+const std::size_t Buffer::size() const
+{
+	return size_;
+}
+
+const std::string Buffer::filename() const
+{
+	return filename_;
+}
+
+////////////////////////////////////////////////////////////////
+
 File::File(const std::string& filename)
 	: filename_(filename)
 {
@@ -124,6 +151,11 @@ Photo::Photo(int id)
 {
 }
 
+Photo::Photo(const Buffer& buffer)
+	: type_(Type::Buffer), buffer_(buffer)
+{
+}
+
 Photo::Photo(const File& file)
 	: type_(Type::File), file_(file)
 {
@@ -139,10 +171,36 @@ Photo::Photo(const Photo& other)
 {
 	if (type_ == Type::Id)
 		id_ = other.id_;
+	else if (type_ == Type::Buffer)
+		new(&buffer_) Buffer(other.buffer_);
 	else if (type_ == Type::File)
 		new(&file_) File(other.file_);
 	else
 		new(&url_) Url(other.url_);
+}
+
+Photo::Photo(Photo&& other)
+{
+	if (type_ == Type::Id)
+	{
+		id_ = other.id_;
+		other.id_ = 0;
+	}
+	else if (type_ == Type::Buffer)
+	{
+		new(&buffer_) Buffer(std::move(other.buffer_));
+		other.buffer_.~Buffer();
+	}
+	else if (type_ == Type::File)
+	{
+		new(&file_) File(std::move(other.file_));
+		other.file_.~File();
+	}
+	else
+	{
+		new(&url_) Url(std::move(other.url_));
+		other.url_.~Url();
+	}
 }
 
 Photo::~Photo()
@@ -156,4 +214,24 @@ Photo::~Photo()
 Photo::Type Photo::getType() const
 {
 	return type_;
+}
+
+int Photo::getId() const
+{
+	return id_;
+}
+
+const Buffer& Photo::getBuffer() const
+{
+	return buffer_;
+}
+
+const File& Photo::getFile() const
+{
+	return file_;
+}
+
+const Url& Photo::getUrl() const
+{
+	return url_;
 }

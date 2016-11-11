@@ -2,6 +2,7 @@
 #define TELEBOTXX_REQUEST_OPTIONS_HPP
 
 #include <string>
+#include <vector>
 
 namespace telebotxx
 {
@@ -64,6 +65,20 @@ namespace telebotxx
 		int id_;
 	};
 
+	class Buffer
+	{
+	public:
+		Buffer(const char* buffer, std::size_t size, const std::string& filename);
+		explicit Buffer(const std::vector<char>& data, const std::string& filename);
+		const char* data() const;
+		const std::size_t size() const;
+		const std::string filename() const;
+	private:
+		const char* data_;
+		std::size_t size_;
+		std::string filename_;
+	};
+
 	class File
 	{
 	public:
@@ -86,20 +101,27 @@ namespace telebotxx
 	{
 	public:
 		explicit Photo(int id);
+		explicit Photo(const Buffer&);
 		explicit Photo(const File&);
 		explicit Photo(const Url&);
 		Photo(const Photo&);
 		Photo(Photo&&);
 		~Photo();
 
-		enum class Type { File, Url, Id };
+		enum class Type { Id, Buffer, File, Url};
 		Type getType() const;
+
+		int getId() const;
+		const Buffer& getBuffer() const;
+		const File& getFile() const;
+		const Url& getUrl() const;
 
 	private:
 		Type type_;
 		union
 		{
 			int id_;
+			Buffer buffer_;
 			File file_;
 			Url url_;
 		};

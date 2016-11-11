@@ -143,18 +143,59 @@ BOOST_AUTO_TEST_SUITE(TestBotApi)
 		));
 	}
 
-	BOOST_AUTO_TEST_CASE(SendPhoto)
+	BOOST_AUTO_TEST_CASE(SendPhotoFile)
 	{
 		PRINT_TESTNAME;
 		BOOST_REQUIRE(bot);
-		BOOST_REQUIRE_NO_THROW(bot->sendPhoto(chat, photoFile, "Sample caption"));
+		BOOST_REQUIRE_NO_THROW(bot->sendPhoto(chat,
+											  Photo{File{photoFile}}
+		));
+	}
+
+	BOOST_AUTO_TEST_CASE(SendPhotoFileWithCaption)
+	{
+		PRINT_TESTNAME;
+		BOOST_REQUIRE(bot);
+		BOOST_REQUIRE_NO_THROW(bot->sendPhoto(chat,
+											  Photo{File{photoFile}},
+											  Caption{"Photo with caption"}
+		));
+	}
+
+	BOOST_AUTO_TEST_CASE(SendPhotoInMemory)
+	{
+		PRINT_TESTNAME;
+		BOOST_REQUIRE(bot);
+		std::ifstream file(photoFile, std::ios::binary | std::ios::ate);
+		std::size_t size = static_cast<std::size_t>(file.tellg());
+		file.seekg(0, std::ios::beg);
+		std::vector<char> buffer(size);
+		BOOST_REQUIRE(file.read(buffer.data(), size));
+		BOOST_REQUIRE_NO_THROW(bot->sendPhoto(chat,
+											  Photo{Buffer{buffer.data(), size, photoFile}},
+											  Caption{"Photo sent in-memory"}
+		));
 	}
 
 	BOOST_AUTO_TEST_CASE(SendPhotoUrl)
 	{
 		PRINT_TESTNAME;
 		BOOST_REQUIRE(bot);
-		BOOST_REQUIRE_NO_THROW(bot->sendPhotoUrl(chat, photoUrl, "Sample caption"));
+		BOOST_REQUIRE_NO_THROW(bot->sendPhoto(chat,
+											  Photo{Url{photoUrl}},
+											  Caption{"Photo sent by URL"}
+		));
+	}
+
+	BOOST_AUTO_TEST_CASE(SendPhotoWithoutNotification)
+	{
+		PRINT_TESTNAME;
+		BOOST_REQUIRE(bot);
+		BOOST_REQUIRE_NO_THROW(bot->sendPhoto(chat,
+											  Photo{File{photoFile}},
+											  Caption{"Photo without notification"},
+											  DisableNotification()
+		));
 	}
 
 	BOOST_AUTO_TEST_CASE(GetUpdates)

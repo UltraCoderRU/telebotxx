@@ -5,6 +5,7 @@
 #include "Message.hpp"
 #include "Update.hpp"
 #include "SendMessageRequest.hpp"
+#include "SendPhotoRequest.hpp"
 
 #include <string>
 #include <memory>
@@ -57,18 +58,23 @@ namespace telebotxx
 		}
 
 		/// \brief Send image
-		/// \param [in] chat chat identifier
-		/// \param [in] filename image location
-		/// \param [in] caption optional photo caption
+		/// \param [in] chatId chat identifier
+		/// \param [in] photo photo
 		/// \return Message object, recieved from the server
-		Message sendPhoto(const std::string& chat, const std::string& filename, const std::string& caption = "");
+		Message sendPhoto(ChatId&& chatId, Photo&& photo);
 
-		/// \brief Send image by URL
-		/// \param [in] chat chat identifier
-		/// \param [in] url image URL
-		/// \param [in] caption optional photo caption
+		/// \brief Send image
+		/// \param [in] chatId chat identifier
+		/// \param [in] photo photo
+		/// \param [in] args parameters
 		/// \return Message object, recieved from the server
-		Message sendPhotoUrl(const std::string& chat, const std::string& url, const std::string& caption = "");
+		template<typename... Ts>
+		Message sendPhoto(ChatId&& chatId, Photo&& photo, Ts&&... args)
+		{
+			SendPhotoRequest request(getTelegramMainUrl(), std::forward<ChatId>(chatId), std::forward<Photo>(photo));
+			setRequestOption(request, std::forward<Ts>(args)...);
+			return request.execute();
+		}
 
 		/// \brief Get updates using long polling
 		/// \param offset identifier of the first update to be returned

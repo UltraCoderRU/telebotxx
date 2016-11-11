@@ -166,14 +166,10 @@ Message BotApi::sendMessage(ChatId&& chatId, Text&& text)
 	return request.execute();
 }
 
-Message BotApi::sendPhoto(const std::string& chat, const std::string& filename, const std::string& caption)
+Message BotApi::sendPhoto(ChatId&& chatId, Photo&& photo)
 {
-	return impl_->sendPhoto(chat, filename, caption);
-}
-
-Message BotApi::sendPhotoUrl(const std::string& chat, const std::string& url, const std::string& caption)
-{
-	return impl_->sendPhotoUrl(chat, url, caption);
+	SendPhotoRequest request(getTelegramMainUrl(), std::forward<ChatId>(chatId), std::forward<Photo>(photo));
+	return request.execute();
 }
 
 Updates BotApi::getUpdates(int offset, unsigned short limit, unsigned int timeout)
