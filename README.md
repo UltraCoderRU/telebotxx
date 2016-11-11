@@ -7,6 +7,7 @@ In development, so you are welcome to contribute.
 ## Requirements
 * C++14-compatible compiler
 * CMake 2.8 or newer
+* Boost 1.54+
 * Boost Unit Test Framework (only for tests)
 
 ## Building
