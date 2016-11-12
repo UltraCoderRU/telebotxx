@@ -45,11 +45,46 @@ Message answer = bot.sendMessage(ChatId{"@chat_name"},
                                  ReplyTo{messageId},
                                  ParseMode::Markdown,
                                  DisableNotification(),
-                                 DisableWebPagePreview()                                 
+                                 DisableWebPagePreview()
                                 );
 ```
 Note, that ```ChatId``` argument can be specified with its name or id:
 ```cpp
 ChatId{"@chat_name"}
 ChatId{123456}
+```
+
+### Sending images
+To send a photo use any of the folowing variants depending of image source:
+```cpp
+// for local file
+Message answer = bot.sendPhoto(ChatId{"@chat_name"}, Photo{File{"photo.jpg"}});
+
+// for in-memory image stored in std::vector
+std::vector<char> photo = ...;
+Message answer = bot.sendPhoto(ChatId{"@chat_name"},
+                               Photo{Buffer{photo, "photo.jpg"}}
+                              );
+
+// for in-memory image stored in C-array
+Message answer = bot.sendPhoto(ChatId{"@chat_name"},
+                               Photo{Buffer{photo.data(), photo.size(), "photo.jpg"}}
+                              );
+
+// for image available by URL
+Message answer = bot.sendPhoto(ChatId{"@chat_name"},
+                               Photo{Url{"http://sample.com/sample.jpg"}}
+                              );
+
+// for already uploaded photo you can send it by id
+Message answer = bot.sendPhoto(ChatId{"@chat_name"}, Photo{123456});
+```
+As in the case of messages, you can pass additional options:
+```cpp
+Message answer = bot.sendPhoto(ChatId{"@chat_name"},
+                               Photo{File{"photo.jpg"}}
+                               Caption{"Sample photo"},
+                               ReplyTo(messageId),
+                               DisableNotification()
+                              );
 ```
