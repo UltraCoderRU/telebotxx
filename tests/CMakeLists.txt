@@ -10,14 +10,7 @@ find_package(Boost REQUIRED COMPONENTS unit_test_framework system)
 include_directories(${Boost_INCLUDE_DIRS})
 
 # Add required compiler flags
-# For Windows we suppress all warnings because of Boost garbage :(
-if(NOT WIN32)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
-else(NOT WIN32)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -w")
-endif(NOT WIN32)
-
-set(EXECUTABLE_OUTPUT_PATH "${PROJECT_SOURCE_DIR}/tests")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 
 set(SOURCE_FILES Dummy.cpp TestTypes.cpp TestApi.cpp)
 add_executable(telebotxx-test ${SOURCE_FILES})

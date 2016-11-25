@@ -8,9 +8,6 @@ include_directories(${Boost_INCLUDE_DIRS})
 # Add required compiler flags
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 
-# Put compiled library to 'lib' directory
-set(LIBRARY_OUTPUT_PATH "../lib")
-
 set(SOURCE_FILES Attachment.cpp
                  BotApi.cpp
                  Chat.cpp
@@ -24,7 +21,7 @@ set(SOURCE_FILES Attachment.cpp
                  SendPhotoRequest.cpp
 )
 
-add_library(telebotxx SHARED ${SOURCE_FILES})
+add_library(telebotxx ${SOURCE_FILES})
 target_link_libraries(telebotxx ${CPR_LIBRARIES})
 
 message(STATUS "Configuring telebotxx - done")
