@@ -7,6 +7,8 @@
 #include <rapidjson/document.h>
 #include <rapidjson/writer.h>
 
+#include <iostream>
+
 using namespace telebotxx;
 
 class SendPhotoRequest::Impl
