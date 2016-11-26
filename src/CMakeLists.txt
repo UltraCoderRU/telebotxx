@@ -2,6 +2,9 @@ cmake_minimum_required(VERSION 2.8)
 
 message(STATUS "Configuring telebotxx")
 
+include(${CMAKE_SOURCE_DIR}/cmake/RequireCXX14.cmake)
+RequireCXX14()
+
 find_package(Boost REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS})
 
