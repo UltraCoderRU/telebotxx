@@ -47,7 +47,9 @@ env:
 before_script:
   - sudo apt-get install -y libboost-test-dev libboost-system-dev libcurl4-openssl-dev
   - export CXX=$COMPILER
-  - ./configure
+  - mkdir build
+  - cd build
+  - cmake ..
 
 script:
   - make VERBOSE=1
