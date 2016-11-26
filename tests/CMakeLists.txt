@@ -19,6 +19,6 @@ set(SOURCE_FILES Dummy.cpp TestTypes.cpp TestApi.cpp)
 add_executable(telebotxx-test ${SOURCE_FILES})
 target_link_libraries(telebotxx-test telebotxx stdc++ ${Boost_LIBRARIES})
 
-add_custom_target(test COMMAND telebotxx-test WORKING_DIRECTORY ".." DEPENDS telebotxx-test)
+add_custom_target(test COMMAND ${CMAKE_BINARY_DIR}/bin/telebotxx-test WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/tests" DEPENDS telebotxx-test)
 
 message(STATUS "Configuring telebotxx-test - done")
