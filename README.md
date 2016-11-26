@@ -14,7 +14,9 @@ In development, so you are welcome to contribute.
 *You can set available options in CMakeLists.txt before running configure script.*
 ```bash
 git submodule update --init --recursive
-./configure
+mkdir build
+cd build
+cmake ..
 make
 ```
 ## Usage
