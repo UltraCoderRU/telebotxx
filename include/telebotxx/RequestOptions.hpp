@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 
+#include <boost/variant/variant.hpp>
+
 #define TELEBOTXX_DECLARE_BOOL_PARAM_CLASS(Name, DEFAULT) class Name \
 { \
 public: \
@@ -39,11 +41,7 @@ public:
 	const std::string getUsername() const;
 private:
 	Type type_;
-	union
-	{
-		int id_;
-		std::string username_;
-	};
+	boost::variant<int, std::string> value_;
 };
 
 TELEBOTXX_DECLARE_STRING_PARAM_CLASS(Text);
@@ -108,13 +106,7 @@ public:
 
 private:
 	Type type_;
-	union
-	{
-		int id_;
-		Buffer buffer_;
-		File file_;
-		Url url_;
-	};
+	boost::variant<int, Buffer, File, Url> value_;
 };
 
 }
