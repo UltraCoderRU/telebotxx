@@ -3,33 +3,33 @@
 
 #include <stdexcept>
 
-namespace telebotxx
+namespace telebotxx {
+
+class ParseError : public std::invalid_argument
 {
-	class ParseError : public std::invalid_argument
+public:
+	ParseError(const std::string& message)
+		: std::invalid_argument(message)
 	{
-	public:
-		ParseError(const std::string& message)
-			: std::invalid_argument(message)
-		{
-		}
-	};
+	}
+};
 
-	class ApiError : public std::runtime_error
+class ApiError : public std::runtime_error
+{
+public:
+	ApiError(int code, const std::string& message)
+		: std::runtime_error(message), code_(code)
 	{
-	public:
-		ApiError(int code, const std::string& message)
-			: std::runtime_error(message), code_(code)
-		{
-		}
+	}
 
-		int getCode() const
-		{
-			return code_;
-		}
+	int getCode() const
+	{
+		return code_;
+	}
 
-	protected:
-		int code_;
-	};
+protected:
+	int code_;
+};
 
 }
 

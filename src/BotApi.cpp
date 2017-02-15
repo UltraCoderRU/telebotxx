@@ -10,7 +10,7 @@
 
 #include <cpr/cpr.h>
 
-using namespace telebotxx;
+namespace telebotxx {
 
 class BotApi::Impl
 {
@@ -41,7 +41,7 @@ public:
 	{
 		auto r = cpr::Post(cpr::Url{telegramMainUrl_ + "/sendPhoto"},
 						   cpr::Multipart{{"chat_id", chat},
-										  {"photo", cpr::File{filename}},
+										  {"photo",   cpr::File{filename}},
 										  {"caption", caption}
 						   }
 		);
@@ -180,4 +180,6 @@ Updates BotApi::getUpdates(int offset, unsigned short limit, unsigned int timeou
 std::string BotApi::getTelegramMainUrl() const
 {
 	return impl_->getTelegramMainUrl();
+}
+
 }

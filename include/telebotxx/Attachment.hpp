@@ -6,212 +6,213 @@
 #include <memory>
 #include <vector>
 
-namespace telebotxx
+namespace telebotxx {
+
+class Attachment
 {
-	class Attachment
+public:
+	enum class Type
 	{
-	public:
-		enum class Type
-		{
-			Audio,
-			Document,
-			Game,
-			PhotoSizeArray,
-			Sticker,
-			Video,
-			Voice,
-			Contact,
-			Location,
-			Venue
-		};
-
-		Attachment(Type type);
-		Attachment(const Attachment&);
-		Attachment(Attachment&&);
-		virtual ~Attachment() = 0;
-
-		Type getType() const;
-
-		void swap(Attachment& other) noexcept;
-
-	private:
-		Type attachmentType_;
+		Audio,
+		Document,
+		Game,
+		PhotoSizeArray,
+		Sticker,
+		Video,
+		Voice,
+		Contact,
+		Location,
+		Venue
 	};
 
-	using AttachmentPtr = std::shared_ptr<Attachment>;
+	Attachment(Type type);
+	Attachment(const Attachment&);
+	Attachment(Attachment&&);
+	virtual ~Attachment() = 0;
 
-	class PhotoSize
-	{
-	public:
-		PhotoSize();
-		PhotoSize(const PhotoSize&);
-		PhotoSize(PhotoSize&&);
-		~PhotoSize();
+	Type getType() const;
 
-		const std::string& getFileId() const;
-		void setFileId(const std::string& fileId);
+	void swap(Attachment& other) noexcept;
 
-		int getWidth() const;
-		void setWidth(int width);
+private:
+	Type attachmentType_;
+};
 
-		int getHeight() const;
-		void setHeight(int height);
+using AttachmentPtr = std::shared_ptr<Attachment>;
 
-		int getFileSize() const;
-		void setFileSize(int fileSize);
+class PhotoSize
+{
+public:
+	PhotoSize();
+	PhotoSize(const PhotoSize&);
+	PhotoSize(PhotoSize&&);
+	~PhotoSize();
 
-		void swap(PhotoSize& other) noexcept;
+	const std::string& getFileId() const;
+	void setFileId(const std::string& fileId);
 
-		const PhotoSize& operator=(PhotoSize other) noexcept;
+	int getWidth() const;
+	void setWidth(int width);
 
-	private:
-		std::string fileId_;
-		int width_;
-		int height_;
-		int fileSize_;
-	};
+	int getHeight() const;
+	void setHeight(int height);
 
-	using PhotoSizePtr = std::shared_ptr<PhotoSize>;
+	int getFileSize() const;
+	void setFileSize(int fileSize);
 
-	class PhotoSizeArray : public Attachment
-	{
-	public:
-		PhotoSizeArray();
-		PhotoSizeArray(const PhotoSizeArray&);
-		PhotoSizeArray(PhotoSizeArray&&);
-		~PhotoSizeArray();
+	void swap(PhotoSize& other) noexcept;
 
-		const std::vector<PhotoSize>& getArray() const;
-		void setArray(const std::vector<PhotoSize>& array);
+	const PhotoSize& operator=(PhotoSize other) noexcept;
 
-		void swap(PhotoSizeArray& other) noexcept;
+private:
+	std::string fileId_;
+	int width_;
+	int height_;
+	int fileSize_;
+};
 
-		const PhotoSizeArray& operator=(PhotoSizeArray other) noexcept;
+using PhotoSizePtr = std::shared_ptr<PhotoSize>;
 
-	private:
-		std::vector<PhotoSize> array_;
-	};
+class PhotoSizeArray : public Attachment
+{
+public:
+	PhotoSizeArray();
+	PhotoSizeArray(const PhotoSizeArray&);
+	PhotoSizeArray(PhotoSizeArray&&);
+	~PhotoSizeArray();
 
-	using PhotoSizeArrayPtr = std::shared_ptr<PhotoSizeArray>;
+	const std::vector<PhotoSize>& getArray() const;
+	void setArray(const std::vector<PhotoSize>& array);
 
-	class Audio : public Attachment
-	{
-	public:
-		Audio();
-		Audio(const Audio&);
-		Audio(Audio&&);
-		~Audio();
+	void swap(PhotoSizeArray& other) noexcept;
 
-		const std::string& getFileId() const;
-		void setFileId(const std::string& fileId);
+	const PhotoSizeArray& operator=(PhotoSizeArray other) noexcept;
 
-		int getDuration() const;
-		void setDuration(int duration);
+private:
+	std::vector<PhotoSize> array_;
+};
 
-		const std::string& getPerformer() const;
-		void setPerformer(const std::string& performer);
+using PhotoSizeArrayPtr = std::shared_ptr<PhotoSizeArray>;
 
-		const std::string& getTitle() const;
-		void setTitle(const std::string& title);
+class Audio : public Attachment
+{
+public:
+	Audio();
+	Audio(const Audio&);
+	Audio(Audio&&);
+	~Audio();
 
-		const std::string& getMimeType() const;
-		void setMimeType(const std::string& mimeType);
+	const std::string& getFileId() const;
+	void setFileId(const std::string& fileId);
 
-		int getFileSize() const;
-		void setFileSize(int fileSize);
+	int getDuration() const;
+	void setDuration(int duration);
 
-		void swap(Audio& other) noexcept;
+	const std::string& getPerformer() const;
+	void setPerformer(const std::string& performer);
 
-		const Audio& operator=(Audio other) noexcept;
+	const std::string& getTitle() const;
+	void setTitle(const std::string& title);
 
-	private:
-		std::string fileId_;
-		int duration_;
-		std::string performer_;
-		std::string title_;
-		std::string mimeType_;
-		int fileSize_;
-	};
+	const std::string& getMimeType() const;
+	void setMimeType(const std::string& mimeType);
 
-	class Document : public Attachment
-	{
-	public:
-		Document();
-		Document(const Document&);
-		Document(Document&&);
-		~Document();
+	int getFileSize() const;
+	void setFileSize(int fileSize);
 
-		const std::string& getFileId() const;
-		void setFileId(const std::string& fileId);
+	void swap(Audio& other) noexcept;
 
-		const PhotoSizePtr getThumb() const;
-		void setThumb(const PhotoSizePtr& thumb);
+	const Audio& operator=(Audio other) noexcept;
 
-		const std::string& getFileName() const;
-		void setFileName(const std::string& fileName);
+private:
+	std::string fileId_;
+	int duration_;
+	std::string performer_;
+	std::string title_;
+	std::string mimeType_;
+	int fileSize_;
+};
 
-		const std::string& getMimeType() const;
-		void setMimeType(const std::string& mimeType);
+class Document : public Attachment
+{
+public:
+	Document();
+	Document(const Document&);
+	Document(Document&&);
+	~Document();
 
-		int getFileSize() const;
-		void setFileSize(int fileSize);
+	const std::string& getFileId() const;
+	void setFileId(const std::string& fileId);
 
-		void swap(Document& other) noexcept;
+	const PhotoSizePtr getThumb() const;
+	void setThumb(const PhotoSizePtr& thumb);
 
-		const Document& operator=(Document other) noexcept;
+	const std::string& getFileName() const;
+	void setFileName(const std::string& fileName);
 
-	private:
-		std::string fileId_;
-		PhotoSizePtr thumb_;
-		std::string fileName_;
-		std::string mimeType_;
-		int fileSize_;
-	};
+	const std::string& getMimeType() const;
+	void setMimeType(const std::string& mimeType);
 
-	class Sticker : public Attachment
-	{
-	public:
-		Sticker();
-		Sticker(const Sticker&);
-		Sticker(Sticker&&);
-		~Sticker();
+	int getFileSize() const;
+	void setFileSize(int fileSize);
 
-		const std::string& getFileId() const;
-		void setFileId(const std::string& fileId);
+	void swap(Document& other) noexcept;
 
-		int getWidth() const;
-		void setWidth(int width);
+	const Document& operator=(Document other) noexcept;
 
-		int getHeight() const;
-		void setHeight(int height);
+private:
+	std::string fileId_;
+	PhotoSizePtr thumb_;
+	std::string fileName_;
+	std::string mimeType_;
+	int fileSize_;
+};
 
-		const PhotoSizePtr getThumb() const;
-		void setThumb(const PhotoSizePtr& thumb);
+class Sticker : public Attachment
+{
+public:
+	Sticker();
+	Sticker(const Sticker&);
+	Sticker(Sticker&&);
+	~Sticker();
 
-		const std::string& getEmoji() const;
-		void setEmoji(const std::string& emoji);
+	const std::string& getFileId() const;
+	void setFileId(const std::string& fileId);
 
-		int getFileSize() const;
-		void setFileSize(int fileSize);
+	int getWidth() const;
+	void setWidth(int width);
 
-		void swap(Sticker& other) noexcept;
+	int getHeight() const;
+	void setHeight(int height);
 
-		const Sticker& operator=(Sticker other) noexcept;
+	const PhotoSizePtr getThumb() const;
+	void setThumb(const PhotoSizePtr& thumb);
 
-	private:
-		std::string fileId_;
-		int width_;
-		int height_;
-		PhotoSizePtr thumb_;
-		std::string emoji_;
-		int fileSize_;
-	};
+	const std::string& getEmoji() const;
+	void setEmoji(const std::string& emoji);
 
-	void swap(PhotoSize& lhs, PhotoSize& rhs);
-	void swap(PhotoSizeArray& lhs, PhotoSizeArray& rhs);
-	void swap(Audio& lhs, Audio& rhs);
-	void swap(Document& lhs, Document& rhs);
-	void swap(Sticker& lhs, Sticker& rhs);
+	int getFileSize() const;
+	void setFileSize(int fileSize);
+
+	void swap(Sticker& other) noexcept;
+
+	const Sticker& operator=(Sticker other) noexcept;
+
+private:
+	std::string fileId_;
+	int width_;
+	int height_;
+	PhotoSizePtr thumb_;
+	std::string emoji_;
+	int fileSize_;
+};
+
+void swap(PhotoSize& lhs, PhotoSize& rhs);
+void swap(PhotoSizeArray& lhs, PhotoSizeArray& rhs);
+void swap(Audio& lhs, Audio& rhs);
+void swap(Document& lhs, Document& rhs);
+void swap(Sticker& lhs, Sticker& rhs);
+
 }
 
 #endif // TELEBOTXX_ATTACHMENT_HPP

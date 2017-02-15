@@ -1,7 +1,7 @@
 #include <telebotxx/Chat.hpp>
 #include <stdexcept>
 
-using namespace telebotxx;
+namespace telebotxx {
 
 Chat::Chat()
 	: id_(-1),
@@ -11,7 +11,9 @@ Chat::Chat()
 }
 
 Chat::Chat(const Chat&) = default;
+
 Chat::Chat(Chat&&) = default;
+
 Chat::~Chat() = default;
 
 std::int64_t Chat::getId() const
@@ -102,12 +104,12 @@ const Chat& Chat::operator=(Chat other) noexcept
 	return *this;
 }
 
-void telebotxx::swap(Chat& lhs, Chat& rhs)
+void swap(Chat& lhs, Chat& rhs)
 {
 	lhs.swap(rhs);
 }
 
-Chat::Type telebotxx::chatTypeFromString(const std::string& str)
+Chat::Type chatTypeFromString(const std::string& str)
 {
 	if (str == "private")
 		return Chat::Type::Private;
@@ -119,4 +121,6 @@ Chat::Type telebotxx::chatTypeFromString(const std::string& str)
 		return Chat::Type::Channel;
 	else
 		throw std::invalid_argument("Unknown chat type");
+}
+
 }

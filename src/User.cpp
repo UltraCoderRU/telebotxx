@@ -1,7 +1,7 @@
 #include <telebotxx/User.hpp>
 #include <sstream>
 
-using namespace telebotxx;
+namespace telebotxx {
 
 User::User()
 	: id_(-1)
@@ -9,7 +9,9 @@ User::User()
 }
 
 User::User(const User&) = default;
+
 User::User(User&&) = default;
+
 User::~User() = default;
 
 int User::getId() const
@@ -73,8 +75,10 @@ const User& User::operator=(User other)
 	return *this;
 }
 
-std::ostream& telebotxx::operator<<(std::ostream& os, const User& user)
+std::ostream& operator<<(std::ostream& os, const User& user)
 {
 	os << user.toString();
 	return os;
+}
+
 }

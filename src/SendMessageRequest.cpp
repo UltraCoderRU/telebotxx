@@ -7,8 +7,9 @@
 #include <rapidjson/writer.h>
 
 #include <iostream>
+#include <boost/optional.hpp>
 
-using namespace telebotxx;
+namespace telebotxx {
 
 class SendMessageRequest::Impl
 {
@@ -61,7 +62,8 @@ public:
 		if (parseMode_)
 		{
 			writer.String("parse_mode");
-			writer.String((parseMode_ == ParseMode::Markdown) ? "Markdown" : (parseMode_ == ParseMode::Html) ? "HTML" : "Plain");
+			writer.String(
+				(parseMode_ == ParseMode::Markdown) ? "Markdown" : (parseMode_ == ParseMode::Html) ? "HTML" : "Plain");
 		}
 
 		// Add disable_web_page_preview
@@ -172,4 +174,6 @@ void SendMessageRequest::setOption(const ReplyTo& replyToMessageId)
 Message SendMessageRequest::execute()
 {
 	return impl_->execute();
+}
+
 }

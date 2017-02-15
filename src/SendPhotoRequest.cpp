@@ -1,5 +1,4 @@
 #include <telebotxx/SendPhotoRequest.hpp>
-
 #include <telebotxx/Logging.hpp>
 #include "JsonObjects.hpp"
 
@@ -8,8 +7,9 @@
 #include <rapidjson/writer.h>
 
 #include <iostream>
+#include <boost/optional.hpp>
 
-using namespace telebotxx;
+namespace telebotxx {
 
 class SendPhotoRequest::Impl
 {
@@ -136,4 +136,6 @@ void SendPhotoRequest::setOption(const ReplyTo& replyToMessageId)
 Message SendPhotoRequest::execute()
 {
 	return impl_->execute();
+}
+
 }

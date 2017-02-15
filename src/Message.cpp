@@ -1,16 +1,18 @@
 #include <telebotxx/Message.hpp>
 
-using namespace telebotxx;
+namespace telebotxx {
 
 MessageEntity::MessageEntity()
-		: type_(Type::Mention),
-		  offset_(-1),
-		  length_(0)
+	: type_(Type::Mention),
+	  offset_(-1),
+	  length_(0)
 {
 }
 
 MessageEntity::MessageEntity(const MessageEntity&) = default;
+
 MessageEntity::MessageEntity(MessageEntity&&) = default;
+
 MessageEntity::~MessageEntity() = default;
 
 MessageEntity::Type MessageEntity::getType() const
@@ -79,7 +81,7 @@ const MessageEntity& MessageEntity::operator=(MessageEntity other)
 	return *this;
 }
 
-MessageEntity::Type telebotxx::messageEntityTypeFromString(const std::string& str)
+MessageEntity::Type messageEntityTypeFromString(const std::string& str)
 {
 	if (str == "mention")
 		return MessageEntity::Type::Mention;
@@ -108,12 +110,14 @@ MessageEntity::Type telebotxx::messageEntityTypeFromString(const std::string& st
 }
 
 Message::Message()
-		: id_(-1)
+	: id_(-1)
 {
 }
 
 Message::Message(const Message&) = default;
+
 Message::Message(Message&&) = default;
+
 Message::~Message() = default;
 
 int Message::getId() const
@@ -391,7 +395,9 @@ const Message& Message::operator=(Message other) noexcept
 	return *this;
 }
 
-void telebotxx::swap(Message& lhs, Message& rhs)
+void swap(Message& lhs, Message& rhs)
 {
 	lhs.swap(rhs);
+}
+
 }

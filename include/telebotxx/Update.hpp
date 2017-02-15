@@ -6,68 +6,68 @@
 #include <vector>
 #include <memory>
 
-namespace telebotxx
+namespace telebotxx {
+
+class Update
 {
-	class Update
+public:
+	enum class Type
 	{
-	public:
-		enum class Type
-		{
-			Message,
-			EditedMessage,
-			InlineQuery,
-			ChosenInlineResult,
-			CallbackQuery
-		};
-
-		Update(int id, Type type);
-		Update(const Update&);
-		Update(Update&&);
-		virtual ~Update() = 0;
-
-		int getId() const;
-		Type getType() const;
-
-		void swap(Update& other) noexcept;
-
-	private:
-		int id_;
-		Type updateType_;
+		Message,
+		EditedMessage,
+		InlineQuery,
+		ChosenInlineResult,
+		CallbackQuery
 	};
 
-	using UpdatePtr = std::shared_ptr<Update>;
-	using Updates = std::vector<UpdatePtr>;
+	Update(int id, Type type);
+	Update(const Update&);
+	Update(Update&&);
+	virtual ~Update() = 0;
 
-	class MessageUpdate : public Update
-	{
-	public:
-		MessageUpdate(int id, const Message& message);
-		MessageUpdate(const MessageUpdate&);
-		MessageUpdate(MessageUpdate&&);
-		~MessageUpdate();
+	int getId() const;
+	Type getType() const;
 
-		const Message& getMessage() const;
+	void swap(Update& other) noexcept;
 
-		void swap(MessageUpdate& other) noexcept;
+private:
+	int id_;
+	Type updateType_;
+};
 
-		const MessageUpdate& operator=(MessageUpdate other);
+using UpdatePtr = std::shared_ptr<Update>;
+using Updates = std::vector<UpdatePtr>;
 
-	private:
-		Message message_;
-	};
+class MessageUpdate : public Update
+{
+public:
+	MessageUpdate(int id, const Message& message);
+	MessageUpdate(const MessageUpdate&);
+	MessageUpdate(MessageUpdate&&);
+	~MessageUpdate();
 
-	class EditedMessageUpdate: public MessageUpdate
-	{
-	public:
-		EditedMessageUpdate(int id, const Message& message);
-		EditedMessageUpdate(const EditedMessageUpdate&);
-		EditedMessageUpdate(EditedMessageUpdate&&);
-		~EditedMessageUpdate();
+	const Message& getMessage() const;
 
-		void swap(EditedMessageUpdate& other) noexcept;
+	void swap(MessageUpdate& other) noexcept;
 
-		const EditedMessageUpdate& operator=(EditedMessageUpdate other);
-	};
+	const MessageUpdate& operator=(MessageUpdate other);
+
+private:
+	Message message_;
+};
+
+class EditedMessageUpdate : public MessageUpdate
+{
+public:
+	EditedMessageUpdate(int id, const Message& message);
+	EditedMessageUpdate(const EditedMessageUpdate&);
+	EditedMessageUpdate(EditedMessageUpdate&&);
+	~EditedMessageUpdate();
+
+	void swap(EditedMessageUpdate& other) noexcept;
+
+	const EditedMessageUpdate& operator=(EditedMessageUpdate other);
+};
 
 }
 

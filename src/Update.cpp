@@ -1,6 +1,6 @@
 #include <telebotxx/Update.hpp>
 
-using namespace telebotxx;
+namespace telebotxx {
 
 Update::Update(int id, Type type)
 	: id_(id),
@@ -79,4 +79,6 @@ const EditedMessageUpdate& EditedMessageUpdate::operator=(EditedMessageUpdate ot
 {
 	swap(other);
 	return *this;
+}
+
 }

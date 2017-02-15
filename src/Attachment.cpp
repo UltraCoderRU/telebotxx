@@ -1,14 +1,16 @@
 #include <telebotxx/Attachment.hpp>
 
-using namespace telebotxx;
+namespace telebotxx {
 
 Attachment::Attachment(Type type)
-    : attachmentType_(type)
+	: attachmentType_(type)
 {
 }
 
 Attachment::Attachment(const Attachment&) = default;
+
 Attachment::Attachment(Attachment&&) = default;
+
 Attachment::~Attachment() = default;
 
 Attachment::Type Attachment::getType() const
@@ -24,14 +26,16 @@ void Attachment::swap(Attachment& other) noexcept
 ////////////////////////////////////////////////////////////////
 
 PhotoSize::PhotoSize()
-    : width_(-1),
-      height_(-1),
-      fileSize_(-1)
+	: width_(-1),
+	  height_(-1),
+	  fileSize_(-1)
 {
 }
 
 PhotoSize::PhotoSize(const PhotoSize&) = default;
+
 PhotoSize::PhotoSize(PhotoSize&&) = default;
+
 PhotoSize::~PhotoSize() = default;
 
 const std::string& PhotoSize::getFileId() const
@@ -97,7 +101,9 @@ PhotoSizeArray::PhotoSizeArray()
 }
 
 PhotoSizeArray::PhotoSizeArray(const PhotoSizeArray&) = default;
+
 PhotoSizeArray::PhotoSizeArray(PhotoSizeArray&&) = default;
+
 PhotoSizeArray::~PhotoSizeArray() = default;
 
 const std::vector<PhotoSize>& PhotoSizeArray::getArray() const
@@ -125,14 +131,16 @@ const PhotoSizeArray& PhotoSizeArray::operator=(PhotoSizeArray other) noexcept
 ////////////////////////////////////////////////////////////////
 
 Audio::Audio()
-    : Attachment(Type::Audio),
-      duration_(-1),
-      fileSize_(-1)
+	: Attachment(Type::Audio),
+	  duration_(-1),
+	  fileSize_(-1)
 {
 }
 
 Audio::Audio(const Audio&) = default;
+
 Audio::Audio(Audio&&) = default;
+
 Audio::~Audio() = default;
 
 const std::string& Audio::getFileId() const
@@ -216,13 +224,15 @@ const Audio& Audio::operator=(Audio other) noexcept
 ////////////////////////////////////////////////////////////////
 
 Document::Document()
-    : Attachment(Type::Document),
-      fileSize_(-1)
+	: Attachment(Type::Document),
+	  fileSize_(-1)
 {
 }
 
 Document::Document(const Document&) = default;
+
 Document::Document(Document&&) = default;
+
 Document::~Document() = default;
 
 const std::string& Document::getFileId() const
@@ -295,13 +305,15 @@ const Document& Document::operator=(Document other) noexcept
 ////////////////////////////////////////////////////////////////
 
 Sticker::Sticker()
-    : Attachment(Type::Sticker),
-      fileSize_(-1)
+	: Attachment(Type::Sticker),
+	  fileSize_(-1)
 {
 }
 
 Sticker::Sticker(const Sticker&) = default;
+
 Sticker::Sticker(Sticker&&) = default;
+
 Sticker::~Sticker() = default;
 
 const std::string& Sticker::getFileId() const
@@ -384,27 +396,29 @@ const Sticker& Sticker::operator=(Sticker other) noexcept
 
 ////////////////////////////////////////////////////////////////
 
-void telebotxx::swap(PhotoSize& lhs, PhotoSize& rhs)
+void swap(PhotoSize& lhs, PhotoSize& rhs)
 {
 	lhs.swap(rhs);
 }
 
-void telebotxx::swap(PhotoSizeArray& lhs, PhotoSizeArray& rhs)
+void swap(PhotoSizeArray& lhs, PhotoSizeArray& rhs)
 {
 	lhs.swap(rhs);
 }
 
-void telebotxx::swap(Audio& lhs, Audio& rhs)
+void swap(Audio& lhs, Audio& rhs)
 {
 	lhs.swap(rhs);
 }
 
-void telebotxx::swap(Document& lhs, Document& rhs)
+void swap(Document& lhs, Document& rhs)
 {
 	lhs.swap(rhs);
 }
 
-void telebotxx::swap(Sticker& lhs, Sticker& rhs)
+void swap(Sticker& lhs, Sticker& rhs)
 {
 	lhs.swap(rhs);
+}
+
 }

@@ -1,11 +1,12 @@
 #include <telebotxx/Logging.hpp>
 
-namespace telebotxx
-{
-	bool debugMode = false;
+namespace telebotxx {
 
-	void setDebugMode(bool enabled)
-	{
-		debugMode = enabled;
-	}
+bool debugMode = false;
+
+void setDebugMode(bool enabled)
+{
+	debugMode = enabled;
+}
+
 }

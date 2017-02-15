@@ -1,6 +1,6 @@
 #include <telebotxx/RequestOptions.hpp>
 
-using namespace telebotxx;
+namespace telebotxx {
 
 ChatId::ChatId(int id)
 	: type_(Type::Id), id_(id)
@@ -95,7 +95,7 @@ int ReplyTo::value() const
 
 ////////////////////////////////////////////////////////////////
 
-Buffer::Buffer(const char *buffer, std::size_t size, const std::string& filename)
+Buffer::Buffer(const char* buffer, std::size_t size, const std::string& filename)
 	: data_(buffer), size_(size), filename_(filename)
 {
 }
@@ -140,7 +140,7 @@ const std::string& Url::getUrl() const
 }
 
 Url::Url(const std::string& url)
-		: url_(url)
+	: url_(url)
 {
 }
 
@@ -207,7 +207,7 @@ Photo::~Photo()
 {
 	if (type_ == Type::File)
 		file_.~File();
-	else if(type_ == Type::Url)
+	else if (type_ == Type::Url)
 		url_.~Url();
 }
 
@@ -234,4 +234,6 @@ const File& Photo::getFile() const
 const Url& Photo::getUrl() const
 {
 	return url_;
+}
+
 }
