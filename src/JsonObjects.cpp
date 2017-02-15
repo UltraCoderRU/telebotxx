@@ -254,9 +254,9 @@ namespace telebotxx
 		int id = parse<int>(obj, "update_id", REQUIRED);
 
 		std::unique_ptr<Message> message;
-		if (message = parseMessage(obj, "message", OPTIONAL))
+		if ((message = parseMessage(obj, "message", OPTIONAL)))
 			return std::make_unique<MessageUpdate>(id, *message);
-		else if (message = parseMessage(obj, "edited_message", OPTIONAL))
+		else if ((message = parseMessage(obj, "edited_message", OPTIONAL)))
 			return std::make_unique<EditedMessageUpdate>(id, *message);
 			/// \todo: other updates
 		else
