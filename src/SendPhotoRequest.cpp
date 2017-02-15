@@ -55,17 +55,17 @@ public:
 			multipart.parts.push_back({"photo", cpr::Buffer(data, data + size, filename)});
 		}
 		else if (photo_.getType() == Photo::Type::File)
-			multipart.parts.push_back({"photo", cpr::File(photo_.getFile().getFilename())});
+			multipart.parts.push_back({"photo", cpr::File(photo_.getFile().getValue())});
 		else if (photo_.getType() == Photo::Type::Url)
-			multipart.parts.push_back({"photo", photo_.getUrl().getUrl()});
+			multipart.parts.push_back({"photo", photo_.getUrl().getValue()});
 
 		// Add caption
 		if (caption_)
-			multipart.parts.push_back({"caption", *caption_});
+			multipart.parts.push_back({"caption", caption_->getValue()});
 
 		// Add disable_notification
 		if (disableNotification_)
-			multipart.parts.push_back({"disable_notification", disableNotification_->value()});
+			multipart.parts.push_back({"disable_notification", disableNotification_->getValue()});
 
 		// Add reply_to_message_id
 		if (replyToMessageId_)

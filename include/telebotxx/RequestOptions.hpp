@@ -4,6 +4,24 @@
 #include <string>
 #include <vector>
 
+#define TELEBOTXX_DECLARE_BOOL_PARAM_CLASS(Name, DEFAULT) class Name \
+{ \
+public: \
+	explicit Name(bool value = DEFAULT); \
+	bool getValue() const; \
+private: \
+	bool value_; \
+};
+
+#define TELEBOTXX_DECLARE_STRING_PARAM_CLASS(Name) class Name \
+{ \
+public: \
+	explicit Name(const std::string& value); \
+	const std::string& getValue() const; \
+private: \
+	std::string value_; \
+};
+
 namespace telebotxx {
 
 class ChatId
@@ -28,8 +46,8 @@ private:
 	};
 };
 
-using Text = std::string;
-using Caption = std::string;
+TELEBOTXX_DECLARE_STRING_PARAM_CLASS(Text);
+TELEBOTXX_DECLARE_STRING_PARAM_CLASS(Caption);
 
 enum class ParseMode
 {
@@ -38,23 +56,9 @@ enum class ParseMode
 	Html
 };
 
-class DisableWebPagePreview
-{
-public:
-	DisableWebPagePreview(bool disabled = true);
-	bool value() const;
-private:
-	bool disable_;
-};
+TELEBOTXX_DECLARE_BOOL_PARAM_CLASS(DisableWebPagePreview, true)
 
-class DisableNotification
-{
-public:
-	DisableNotification(bool disabled = true);
-	bool value() const;
-private:
-	bool disable_;
-};
+TELEBOTXX_DECLARE_BOOL_PARAM_CLASS(DisableNotification, true)
 
 class ReplyTo
 {
@@ -79,23 +83,9 @@ private:
 	std::string filename_;
 };
 
-class File
-{
-public:
-	explicit File(const std::string& filename);
-	const std::string& getFilename() const;
-private:
-	std::string filename_;
-};
+TELEBOTXX_DECLARE_STRING_PARAM_CLASS(File)
 
-class Url
-{
-public:
-	explicit Url(const std::string& url);
-	const std::string& getUrl() const;
-private:
-	std::string url_;
-};
+TELEBOTXX_DECLARE_STRING_PARAM_CLASS(Url)
 
 class Photo
 {

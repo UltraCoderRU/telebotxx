@@ -1,5 +1,11 @@
 #include <telebotxx/RequestOptions.hpp>
 
+#define TELEBOTXX_DEFINE_BOOL_PARAM_CLASS(Name) Name::Name(bool value) : value_(value) { } \
+bool Name::getValue() const { return value_; }
+
+#define TELEBOTXX_DEFINE_STRING_PARAM_CLASS(Name) Name::Name(const std::string& value) : value_(value) { } \
+const std::string& Name::getValue() const { return value_; }
+
 namespace telebotxx {
 
 ChatId::ChatId(int id)
@@ -59,27 +65,19 @@ const std::string ChatId::getUsername() const
 
 ////////////////////////////////////////////////////////////////
 
-DisableWebPagePreview::DisableWebPagePreview(bool disabled)
-	: disable_(disabled)
-{
-}
-
-bool DisableWebPagePreview::value() const
-{
-	return disable_;
-}
+TELEBOTXX_DEFINE_STRING_PARAM_CLASS(Text)
 
 ////////////////////////////////////////////////////////////////
 
-DisableNotification::DisableNotification(bool disabled)
-	: disable_(disabled)
-{
-}
+TELEBOTXX_DEFINE_STRING_PARAM_CLASS(Caption)
 
-bool DisableNotification::value() const
-{
-	return disable_;
-}
+////////////////////////////////////////////////////////////////
+
+TELEBOTXX_DEFINE_BOOL_PARAM_CLASS(DisableWebPagePreview)
+
+////////////////////////////////////////////////////////////////
+
+TELEBOTXX_DEFINE_BOOL_PARAM_CLASS(DisableNotification)
 
 ////////////////////////////////////////////////////////////////
 
@@ -122,27 +120,11 @@ const std::string Buffer::filename() const
 
 ////////////////////////////////////////////////////////////////
 
-File::File(const std::string& filename)
-	: filename_(filename)
-{
-}
-
-const std::string& File::getFilename() const
-{
-	return filename_;
-}
+TELEBOTXX_DEFINE_STRING_PARAM_CLASS(File)
 
 ////////////////////////////////////////////////////////////////
 
-const std::string& Url::getUrl() const
-{
-	return url_;
-}
-
-Url::Url(const std::string& url)
-	: url_(url)
-{
-}
+TELEBOTXX_DEFINE_STRING_PARAM_CLASS(Url)
 
 ////////////////////////////////////////////////////////////////
 

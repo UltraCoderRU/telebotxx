@@ -56,7 +56,7 @@ public:
 			writer.String(chatId_.getUsername().c_str());
 
 		writer.String("text");
-		writer.String(text_.c_str());
+		writer.String(text_.getValue().c_str());
 
 		// Add parse_mode
 		if (parseMode_)
@@ -70,14 +70,14 @@ public:
 		if (disableWebPagePreview_)
 		{
 			writer.String("disable_web_page_preview");
-			writer.Bool(disableWebPagePreview_->value());
+			writer.Bool(disableWebPagePreview_->getValue());
 		}
 
 		// Add disable_notification
 		if (disableNotification_)
 		{
 			writer.String("disable_notification");
-			writer.Bool(disableNotification_->value());
+			writer.Bool(disableNotification_->getValue());
 		}
 
 		// Add reply_to_message_id
