@@ -143,6 +143,22 @@ BOOST_AUTO_TEST_SUITE(TestBotApi)
 		));
 	}
 
+	BOOST_AUTO_TEST_CASE(SendMessageWithInlineKeyboard)
+	{
+		PRINT_TESTNAME;
+		BOOST_REQUIRE(bot);
+		InlineKeyboardMarkup markup;
+		markup.addRow(InlineKeyboardButtonRow{
+			InlineKeyboardButton("Google", Url{"http://google.com/"}),
+			InlineKeyboardButton("Google", Url{"http://google.com/"})
+		});
+		markup.addRow(InlineKeyboardButtonRow{InlineKeyboardButton("Google", CallbackData{"HELLO"})});
+		BOOST_REQUIRE_NO_THROW(bot->sendMessage(ChatId{chat},
+												Text{"Message with inline keyboard"},
+												ReplyMarkup{markup}
+		));
+	}
+
 	BOOST_AUTO_TEST_CASE(SendPhotoFile)
 	{
 		PRINT_TESTNAME;

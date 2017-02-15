@@ -109,6 +109,79 @@ private:
 	boost::variant<int, Buffer, File, Url> value_;
 };
 
+TELEBOTXX_DECLARE_STRING_PARAM_CLASS(CallbackData)
+
+TELEBOTXX_DECLARE_STRING_PARAM_CLASS(SwitchInlineQuery)
+
+TELEBOTXX_DECLARE_STRING_PARAM_CLASS(SwitchInlineQueryCurrentChat)
+
+class InlineKeyboardButton
+{
+public:
+	explicit InlineKeyboardButton(const std::string& text, const Url& url);
+	explicit InlineKeyboardButton(const std::string& text, const CallbackData&);
+	explicit InlineKeyboardButton(const std::string& text, const SwitchInlineQuery&);
+	explicit InlineKeyboardButton(const std::string& text, const SwitchInlineQueryCurrentChat&);
+	InlineKeyboardButton(const InlineKeyboardButton&);
+	InlineKeyboardButton(InlineKeyboardButton&&);
+	~InlineKeyboardButton();
+
+	enum class ActionType { Url, CallbackData, SwitchInlineQuery, SwitchInlineQueryCurrentChat };
+	ActionType getActionType() const;
+
+	const std::string& getText() const;
+	const Url& getUrl() const;
+	const CallbackData& getCallbackData() const;
+	const SwitchInlineQuery& getSwitchInlineQuery() const;
+	const SwitchInlineQueryCurrentChat& getSwitchInlineQueryCurrentChat() const;
+
+private:
+	ActionType actionType_;
+	std::string text_;
+	boost::variant<Url, CallbackData, SwitchInlineQuery, SwitchInlineQueryCurrentChat> value_;
+	// \todo CallbackGame
+};
+
+using InlineKeyboardButtonRow = std::vector<InlineKeyboardButton>;
+
+class InlineKeyboardMarkup
+{
+public:
+	void addRow(const InlineKeyboardButtonRow& row);
+
+	const std::vector<InlineKeyboardButtonRow>& getRows() const;
+
+private:
+	std::vector<InlineKeyboardButtonRow> rows_;
+};
+
+class ReplyKeyboardMarkup
+{
+
+};
+
+class ReplyMarkup
+{
+public:
+	explicit ReplyMarkup(const InlineKeyboardMarkup&);
+	explicit ReplyMarkup(const ReplyKeyboardMarkup&);
+	ReplyMarkup(const ReplyMarkup&);
+	ReplyMarkup(ReplyMarkup&&);
+	~ReplyMarkup();
+
+	enum class Type { InlineKeyboardMarkup, ReplyKeyboardMarkup, ReplyKeyboardRemove, ForceReply };
+	Type getType() const;
+
+	const InlineKeyboardMarkup& getInlineKeyboardMarkup() const;
+
+	void swap(ReplyMarkup&);
+	const ReplyMarkup& operator=(ReplyMarkup);
+
+private:
+	Type type_;
+	boost::variant<InlineKeyboardMarkup, ReplyKeyboardMarkup> value_;
+};
+
 }
 
 #endif // TELEBOTXX_REQUEST_OPTIONS_HPP

@@ -11,6 +11,44 @@
 
 namespace telebotxx {
 
+void writeInlineKeyboardButton(rapidjson::Writer<rapidjson::StringBuffer>& writer, const InlineKeyboardButton& button)
+{
+	writer.StartObject();
+
+	writer.String("text");
+	writer.String(button.getText().c_str());
+
+	switch (button.getActionType())
+	{
+		case InlineKeyboardButton::ActionType::Url:
+		{
+			writer.String("url");
+			writer.String(button.getUrl().getValue().c_str());
+			break;
+		}
+		case InlineKeyboardButton::ActionType::CallbackData:
+		{
+			writer.String("callback_data");
+			writer.String(button.getCallbackData().getValue().c_str());
+			break;
+		}
+		case InlineKeyboardButton::ActionType::SwitchInlineQuery:
+		{
+			writer.String("switch_inline_query");
+			writer.String(button.getSwitchInlineQuery().getValue().c_str());
+			break;
+		}
+		case InlineKeyboardButton::ActionType::SwitchInlineQueryCurrentChat:
+		{
+			writer.String("switch_inline_query_current_chat");
+			writer.String(button.getSwitchInlineQueryCurrentChat().getValue().c_str());
+			break;
+		}
+	}
+
+	writer.EndObject();
+}
+
 class SendMessageRequest::Impl
 {
 public:
@@ -37,6 +75,11 @@ public:
 	void setReplyToMessageId(const ReplyTo& replyToMessageId)
 	{
 		replyToMessageId_ = replyToMessageId;
+	}
+
+	void setReplyMarkup(const ReplyMarkup& replyMarkup)
+	{
+		replyMarkup_ = replyMarkup;
 	}
 
 	Message execute()
@@ -87,7 +130,31 @@ public:
 			writer.Int(replyToMessageId_->value());
 		}
 
-		/// \todo: Add reply_markup
+		// Add reply_markup
+		if (replyMarkup_)
+		{
+			writer.String("reply_markup");
+			writer.StartObject();
+			writer.String("inline_keyboard");
+			if (replyMarkup_->getType() == ReplyMarkup::Type::InlineKeyboardMarkup)
+			{
+				writer.StartArray();
+				auto rows = replyMarkup_->getInlineKeyboardMarkup().getRows();
+				for (auto& row : rows)
+				{
+					writer.StartArray();
+					for (auto& button : row)
+					{
+						writeInlineKeyboardButton(writer, button);
+					}
+					writer.EndArray();
+				}
+				writer.EndArray();
+			}
+			else
+				writer.String(chatId_.getUsername().c_str());
+			writer.EndObject();
+		}
 
 		writer.EndObject();
 
@@ -120,6 +187,7 @@ private:
 	boost::optional<DisableWebPagePreview> disableWebPagePreview_;
 	boost::optional<DisableNotification> disableNotification_;
 	boost::optional<ReplyTo> replyToMessageId_;
+	boost::optional<ReplyMarkup> replyMarkup_;
 };
 
 SendMessageRequest::SendMessageRequest(const std::string& telegramMainUrl, const ChatId& chat, const Text& text)
@@ -151,6 +219,11 @@ void SendMessageRequest::setReplyToMessageId(const ReplyTo& replyToMessageId)
 	impl_->setReplyToMessageId(replyToMessageId);
 }
 
+void SendMessageRequest::setReplyMarkup(const ReplyMarkup& replyMarkup)
+{
+	impl_->setReplyMarkup(replyMarkup);
+}
+
 void SendMessageRequest::setOption(ParseMode mode)
 {
 	setParseMode(mode);
@@ -169,6 +242,11 @@ void SendMessageRequest::setOption(const DisableNotification& disableNotificatio
 void SendMessageRequest::setOption(const ReplyTo& replyToMessageId)
 {
 	setReplyToMessageId(replyToMessageId);
+}
+
+void SendMessageRequest::setOption(const ReplyMarkup& replyMarkup)
+{
+	setReplyMarkup(replyMarkup);
 }
 
 Message SendMessageRequest::execute()

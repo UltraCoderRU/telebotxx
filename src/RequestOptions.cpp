@@ -21,7 +21,9 @@ ChatId::ChatId(const std::string& str)
 }
 
 ChatId::ChatId(const ChatId& other) = default;
+
 ChatId::ChatId(ChatId&& other) = default;
+
 ChatId::~ChatId() = default;
 
 ChatId::Type ChatId::getType() const
@@ -125,7 +127,9 @@ Photo::Photo(const Url& url)
 }
 
 Photo::Photo(const Photo& other) = default;
+
 Photo::Photo(Photo&& other) = default;
+
 Photo::~Photo() = default;
 
 Photo::Type Photo::getType() const
@@ -151,6 +155,128 @@ const File& Photo::getFile() const
 const Url& Photo::getUrl() const
 {
 	return boost::get<Url>(value_);
+}
+
+////////////////////////////////////////////////////////////////
+
+TELEBOTXX_DEFINE_STRING_PARAM_CLASS(CallbackData)
+
+////////////////////////////////////////////////////////////////
+
+TELEBOTXX_DEFINE_STRING_PARAM_CLASS(SwitchInlineQuery)
+
+////////////////////////////////////////////////////////////////
+
+TELEBOTXX_DEFINE_STRING_PARAM_CLASS(SwitchInlineQueryCurrentChat)
+
+////////////////////////////////////////////////////////////////
+
+InlineKeyboardButton::InlineKeyboardButton(const std::string& text, const Url& url)
+	: actionType_(ActionType::Url), text_(text), value_(url)
+{
+}
+
+InlineKeyboardButton::InlineKeyboardButton(const std::string& text, const CallbackData& callbackData)
+	: actionType_(ActionType::CallbackData), text_(text), value_(callbackData)
+{
+}
+
+InlineKeyboardButton::InlineKeyboardButton(const std::string& text, const SwitchInlineQuery& switchInlineQuery)
+	: actionType_(ActionType::SwitchInlineQuery), text_(text), value_(switchInlineQuery)
+{
+}
+
+InlineKeyboardButton::InlineKeyboardButton(const std::string& text,
+										   const SwitchInlineQueryCurrentChat& switchInlineQueryCurrentChat)
+	: actionType_(ActionType::SwitchInlineQueryCurrentChat), text_(text), value_(switchInlineQueryCurrentChat)
+{
+}
+
+InlineKeyboardButton::InlineKeyboardButton(const InlineKeyboardButton& other) = default;
+
+InlineKeyboardButton::InlineKeyboardButton(InlineKeyboardButton&& other) = default;
+
+InlineKeyboardButton::~InlineKeyboardButton() = default;
+
+InlineKeyboardButton::ActionType InlineKeyboardButton::getActionType() const
+{
+	return actionType_;
+}
+
+const std::string& InlineKeyboardButton::getText() const
+{
+	return text_;
+}
+
+const Url& InlineKeyboardButton::getUrl() const
+{
+	return boost::get<Url>(value_);;
+}
+
+const CallbackData& InlineKeyboardButton::getCallbackData() const
+{
+	return boost::get<CallbackData>(value_);
+}
+
+const SwitchInlineQuery& InlineKeyboardButton::getSwitchInlineQuery() const
+{
+	return boost::get<SwitchInlineQuery>(value_);
+}
+
+const SwitchInlineQueryCurrentChat& InlineKeyboardButton::getSwitchInlineQueryCurrentChat() const
+{
+	return boost::get<SwitchInlineQueryCurrentChat>(value_);
+}
+
+////////////////////////////////////////////////////////////////
+
+void InlineKeyboardMarkup::addRow(const InlineKeyboardButtonRow& row)
+{
+	rows_.push_back(row);
+}
+
+const std::vector<InlineKeyboardButtonRow>& InlineKeyboardMarkup::getRows() const
+{
+	return rows_;
+}
+
+////////////////////////////////////////////////////////////////
+
+ReplyMarkup::ReplyMarkup(const InlineKeyboardMarkup& keyboard)
+	: type_(Type::InlineKeyboardMarkup), value_(keyboard)
+{
+}
+
+ReplyMarkup::ReplyMarkup(const ReplyKeyboardMarkup& keyboard)
+	: type_(Type::ReplyKeyboardMarkup), value_(keyboard)
+{
+}
+
+ReplyMarkup::ReplyMarkup(const ReplyMarkup&) = default;
+ReplyMarkup::ReplyMarkup(ReplyMarkup&&) = default;
+ReplyMarkup::~ReplyMarkup() = default;
+
+ReplyMarkup::Type ReplyMarkup::getType() const
+{
+	return type_;
+}
+
+const InlineKeyboardMarkup& ReplyMarkup::getInlineKeyboardMarkup() const
+{
+	return boost::get<InlineKeyboardMarkup>(value_);
+}
+
+void ReplyMarkup::swap(ReplyMarkup& other)
+{
+	using std::swap;
+	swap(type_, other.type_);
+	swap(value_, other.value_);
+}
+
+const ReplyMarkup& ReplyMarkup::operator=(ReplyMarkup other)
+{
+	swap(other);
+	return *this;
 }
 
 }

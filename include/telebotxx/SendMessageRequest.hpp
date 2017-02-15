@@ -19,11 +19,13 @@ public:
 	void setDisableWebPagePreview(const DisableWebPagePreview& disableWebPagePreview);
 	void setDisableNotification(const DisableNotification& disableNotification);
 	void setReplyToMessageId(const ReplyTo& replyToMessageId);
+	void setReplyMarkup(const ReplyMarkup& replyMarkup);
 
 	void setOption(ParseMode mode);
 	void setOption(const DisableWebPagePreview& disableWebPagePreview);
 	void setOption(const DisableNotification& disableNotification);
 	void setOption(const ReplyTo& replyToMessageId);
+	void setOption(const ReplyMarkup& replyMarkup);
 
 	Message execute();
 
