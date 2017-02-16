@@ -135,6 +135,9 @@ public:
 	const SwitchInlineQuery& getSwitchInlineQuery() const;
 	const SwitchInlineQueryCurrentChat& getSwitchInlineQueryCurrentChat() const;
 
+	void swap(InlineKeyboardButton&);
+	const InlineKeyboardButton& operator=(InlineKeyboardButton);
+
 private:
 	ActionType actionType_;
 	std::string text_;

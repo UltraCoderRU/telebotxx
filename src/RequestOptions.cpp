@@ -228,6 +228,20 @@ const SwitchInlineQueryCurrentChat& InlineKeyboardButton::getSwitchInlineQueryCu
 	return boost::get<SwitchInlineQueryCurrentChat>(value_);
 }
 
+void InlineKeyboardButton::swap(InlineKeyboardButton& other)
+{
+	using std::swap;
+	swap(text_, other.text_);
+	swap(actionType_, other.actionType_);
+	swap(value_, other.value_);
+}
+
+const InlineKeyboardButton& InlineKeyboardButton::operator=(InlineKeyboardButton other)
+{
+	swap(other);
+	return *this;
+}
+
 ////////////////////////////////////////////////////////////////
 
 void InlineKeyboardMarkup::addRow(const InlineKeyboardButtonRow& row)
