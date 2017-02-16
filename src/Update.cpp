@@ -31,15 +31,19 @@ void Update::swap(Update& other) noexcept
 
 ////////////////////////////////////////////////////////////////
 
-MessageUpdate::MessageUpdate(int id, const Message& message)
-	: Update(id, Type::Message),
-	  message_(message)
+MessageUpdate::MessageUpdate(int id, MessageType type, const Message& message)
+	: Update(id, Type::Message), type_(type), message_(message)
 {
 }
 
 MessageUpdate::MessageUpdate(const MessageUpdate&) = default;
 MessageUpdate::MessageUpdate(MessageUpdate&&) = default;
 MessageUpdate::~MessageUpdate() = default;
+
+MessageUpdate::MessageType MessageUpdate::getMessageType() const
+{
+	return type_;
+}
 
 const Message& MessageUpdate::getMessage() const
 {
@@ -54,28 +58,6 @@ void MessageUpdate::swap(MessageUpdate& other) noexcept
 }
 
 const MessageUpdate& MessageUpdate::operator=(MessageUpdate other)
-{
-	swap(other);
-	return *this;
-}
-
-////////////////////////////////////////////////////////////////
-
-EditedMessageUpdate::EditedMessageUpdate(int id, const Message& message)
-	: MessageUpdate(id, message)
-{
-}
-
-EditedMessageUpdate::EditedMessageUpdate(const EditedMessageUpdate&) = default;
-EditedMessageUpdate::EditedMessageUpdate(EditedMessageUpdate&&) = default;
-EditedMessageUpdate::~EditedMessageUpdate() = default;
-
-void EditedMessageUpdate::swap(EditedMessageUpdate& other) noexcept
-{
-	MessageUpdate::swap(other);
-}
-
-const EditedMessageUpdate& EditedMessageUpdate::operator=(EditedMessageUpdate other)
 {
 	swap(other);
 	return *this;

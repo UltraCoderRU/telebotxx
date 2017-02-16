@@ -206,12 +206,16 @@ BOOST_AUTO_TEST_SUITE(TestBotApi)
 		BOOST_REQUIRE_NO_THROW(updates = bot->getUpdates());
 		for (auto update : updates)
 		{
-			if (update->getType() == Update::Type::Message)
+			switch (update->getType())
 			{
-				auto& message = std::dynamic_pointer_cast<MessageUpdate>(update)->getMessage();
-				if (message.getFrom())
-					std::cout << *message.getFrom() << ": ";
-				std::cout << message.getText() << std::endl;
+				case Update::Type::Message:
+				{
+					auto& message = std::dynamic_pointer_cast<MessageUpdate>(update)->getMessage();
+					if (message.getFrom())
+						std::cout << *message.getFrom() << ": ";
+					std::cout << message.getText() << std::endl;
+					break;
+				}
 			}
 		}
 	}

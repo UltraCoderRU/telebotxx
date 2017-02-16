@@ -14,7 +14,6 @@ public:
 	enum class Type
 	{
 		Message,
-		EditedMessage,
 		InlineQuery,
 		ChosenInlineResult,
 		CallbackQuery
@@ -41,32 +40,28 @@ using Updates = std::vector<UpdatePtr>;
 class MessageUpdate : public Update
 {
 public:
-	MessageUpdate(int id, const Message& message);
+	enum class MessageType
+	{
+		Message,
+		EditedMessage,
+		ChannelPost,
+		EditedChannelPost
+	};
+
+	MessageUpdate(int id, MessageType type, const Message& message);
 	MessageUpdate(const MessageUpdate&);
 	MessageUpdate(MessageUpdate&&);
 	~MessageUpdate();
 
+	MessageType getMessageType() const;
 	const Message& getMessage() const;
 
 	void swap(MessageUpdate& other) noexcept;
-
 	const MessageUpdate& operator=(MessageUpdate other);
 
 private:
+	MessageType type_;
 	Message message_;
-};
-
-class EditedMessageUpdate : public MessageUpdate
-{
-public:
-	EditedMessageUpdate(int id, const Message& message);
-	EditedMessageUpdate(const EditedMessageUpdate&);
-	EditedMessageUpdate(EditedMessageUpdate&&);
-	~EditedMessageUpdate();
-
-	void swap(EditedMessageUpdate& other) noexcept;
-
-	const EditedMessageUpdate& operator=(EditedMessageUpdate other);
 };
 
 }

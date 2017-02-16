@@ -81,6 +81,7 @@ public:
 	/// \param limit maximum number of updates to be retrieved
 	/// \param timeout timeout in seconds for long polling
 	/// \return Updates (vector of Update)
+	/// \todo allowed_updates
 	Updates getUpdates(int offset = 0, unsigned short limit = 0, unsigned timeout = 0);
 
 private:
