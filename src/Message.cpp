@@ -9,12 +9,6 @@ MessageEntity::MessageEntity()
 {
 }
 
-MessageEntity::MessageEntity(const MessageEntity&) = default;
-
-MessageEntity::MessageEntity(MessageEntity&&) = default;
-
-MessageEntity::~MessageEntity() = default;
-
 MessageEntity::Type MessageEntity::getType() const
 {
 	return type_;
@@ -45,40 +39,24 @@ void MessageEntity::setLength(size_t length)
 	length_ = length;
 }
 
-const std::string& MessageEntity::getUrl() const
+const optional<std::string>& MessageEntity::getUrl() const
 {
 	return url_;
 }
 
-void MessageEntity::setUrl(const std::string& url)
+void MessageEntity::setUrl(std::string url)
 {
-	url_ = url;
+	url_ = std::move(url);
 }
 
-const User& MessageEntity::getUser() const
+const optional<User>& MessageEntity::getUser() const
 {
 	return user_;
 }
 
-void MessageEntity::setUser(const User& user)
+void MessageEntity::setUser(User user)
 {
-	user_ = user;
-}
-
-void MessageEntity::swap(MessageEntity& other) noexcept
-{
-	using std::swap;
-	swap(type_, other.type_);
-	swap(offset_, other.offset_);
-	swap(length_, other.length_);
-	swap(url_, other.url_);
-	swap(user_, other.user_);
-}
-
-const MessageEntity& MessageEntity::operator=(MessageEntity other)
-{
-	swap(other);
-	return *this;
+	user_ = std::move(user);
 }
 
 MessageEntity::Type messageEntityTypeFromString(const std::string& str)
@@ -109,16 +87,16 @@ MessageEntity::Type messageEntityTypeFromString(const std::string& str)
 		throw std::invalid_argument("Unknown message entity type");
 }
 
+////////////////////////////////////////////////////////////////
+
 Message::Message()
-	: id_(-1)
+	: id_(-1),
+	  deleteChatPhoto_(false),
+	  groupChatCreated_(false),
+	  superGroupChatCreated_(false),
+	  channelChatCreated_(false)
 {
 }
-
-Message::Message(const Message&) = default;
-
-Message::Message(Message&&) = default;
-
-Message::~Message() = default;
 
 int Message::getId() const
 {
@@ -130,14 +108,14 @@ void Message::setId(int id)
 	id_ = id;
 }
 
-const UserPtr Message::getFrom() const
+const boost::optional<User>& Message::getFrom() const
 {
 	return from_;
 }
 
-void Message::setFrom(UserPtr from)
+void Message::setFrom(optional<User> from)
 {
-	from_ = from;
+	from_ = std::move(from);
 }
 
 time_t Message::getDate() const
@@ -155,42 +133,42 @@ const Chat& Message::getChat() const
 	return chat_;
 }
 
-void Message::setChat(const Chat& chat)
+void Message::setChat(Chat chat)
 {
-	chat_ = chat;
+	chat_ = std::move(chat);
 }
 
-const UserPtr Message::getForwardFrom() const
+const optional<User>& Message::getForwardFrom() const
 {
 	return forwardFrom_;
 }
 
-void Message::setForwardFrom(UserPtr forwardFrom)
+void Message::setForwardFrom(optional<User> forwardFrom)
 {
-	forwardFrom_ = forwardFrom;
+	forwardFrom_ = std::move(forwardFrom);
 }
 
-const ChatPtr Message::getForwardFromChat() const
+const optional<Chat>& Message::getForwardFromChat() const
 {
 	return forwardFromChat_;
 }
 
-void Message::setForwardFromChat(ChatPtr forwardFromChat)
+void Message::setForwardFromChat(optional<Chat> forwardFromChat)
 {
-	forwardFromChat_ = forwardFromChat;
+	forwardFromChat_ = std::move(forwardFromChat);
 }
 
-time_t Message::getForwardDate() const
+const optional<time_t>& Message::getForwardDate() const
 {
 	return forwardDate_;
 }
 
-void Message::setForwardDate(time_t forwardDate)
+void Message::setForwardDate(optional<time_t> forwardDate)
 {
 	forwardDate_ = forwardDate;
 }
 
-const MessagePtr Message::getReplyToMessage() const
+MessagePtr Message::getReplyToMessage() const
 {
 	return replyToMessage_;
 }
@@ -200,94 +178,94 @@ void Message::setReplyToMessage(MessagePtr replyToMessage)
 	replyToMessage_ = replyToMessage;
 }
 
-time_t Message::getEditDate() const
+const optional<time_t>& Message::getEditDate() const
 {
 	return editDate_;
 }
 
-void Message::setEditDate(time_t editDate)
+void Message::setEditDate(optional<time_t> editDate)
 {
 	editDate_ = editDate;
 }
 
-const std::string& Message::getText() const
+const optional<std::string>& Message::getText() const
 {
 	return text_;
 }
 
-void Message::setText(const std::string& text)
+void Message::setText(optional<std::string> text)
 {
-	text_ = text;
+	text_ = std::move(text);
 }
 
-const MessageEntities& Message::getEntities() const
+const optional<MessageEntities>& Message::getEntities() const
 {
 	return entities_;
 }
 
-void Message::setEntities(MessageEntities&& entities)
+void Message::setEntities(optional<MessageEntities> entities)
 {
-	entities_ = entities;
+	entities_ = std::move(entities);
 }
 
-const AttachmentPtr Message::getAttachment() const
+const optional<Attachment>& Message::getAttachment() const
 {
 	return attachment_;
 }
 
-void Message::setAttachment(AttachmentPtr attachment)
+void Message::setAttachment(optional<Attachment> attachment)
 {
-	attachment_ = attachment;
+	attachment_ = std::move(attachment);
 }
 
-const std::string& Message::getCaption() const
+const optional<std::string>& Message::getCaption() const
 {
 	return caption_;
 }
 
-void Message::setCaption(const std::string& caption)
+void Message::setCaption(optional<std::string> caption)
 {
-	caption_ = caption;
+	caption_ = std::move(caption);
 }
 
-const UserPtr Message::getNewChatMember() const
+const optional<User>& Message::getNewChatMember() const
 {
 	return newChatMember_;
 }
 
-void Message::setNewChatMember(UserPtr newChatMember)
+void Message::setNewChatMember(optional<User> newChatMember)
 {
-	newChatMember_ = newChatMember;
+	newChatMember_ = std::move(newChatMember);
 }
 
-const UserPtr Message::getLeftChatMember() const
+const optional<User>& Message::getLeftChatMember() const
 {
 	return leftChatMember_;
 }
 
-void Message::setLeftChatMember(UserPtr leftChatMember)
+void Message::setLeftChatMember(optional<User> leftChatMember)
 {
-	leftChatMember_ = leftChatMember;
+	leftChatMember_ = std::move(leftChatMember);
 }
 
-const std::string& Message::getNewChatTitle() const
+const optional<std::string>& Message::getNewChatTitle() const
 {
 	return newChatTitle_;
 }
 
-void Message::setNewChatTitle(const std::string& newChatTitle)
+void Message::setNewChatTitle(optional<std::string> newChatTitle)
 {
-	newChatTitle_ = newChatTitle;
+	newChatTitle_ = std::move(newChatTitle);
 }
 
-const PhotoSizeArrayPtr Message::getNewChatPhoto() const
+const optional<PhotoSizeArray> Message::getNewChatPhoto() const
 {
 	return newChatPhoto_;
 }
 
-void Message::setNewChatPhoto(PhotoSizeArrayPtr newChatPhoto)
+void Message::setNewChatPhoto(optional<PhotoSizeArray> newChatPhoto)
 {
-	newChatPhoto_ = newChatPhoto;
+	newChatPhoto_ = std::move(newChatPhoto);
 }
 
 bool Message::isDeleteChatPhoto() const
@@ -330,27 +308,27 @@ void Message::setChannelChatCreated(bool channelChatCreated)
 	channelChatCreated_ = channelChatCreated;
 }
 
-std::int64_t Message::getMigrateToChatId() const
+const optional<std::int64_t>& Message::getMigrateToChatId() const
 {
 	return migrateToChatId_;
 }
 
-void Message::setMigrateToChatId(std::int64_t migrateToChatId)
+void Message::setMigrateToChatId(optional<std::int64_t> migrateToChatId)
 {
 	migrateToChatId_ = migrateToChatId;
 }
 
-std::int64_t Message::getMigrateFromChatId() const
+const optional<std::int64_t>& Message::getMigrateFromChatId() const
 {
 	return migrateFromChatId_;
 }
 
-void Message::setMigrateFromChatId(std::int64_t migrateFromChatId)
+void Message::setMigrateFromChatId(optional<std::int64_t> migrateFromChatId)
 {
 	migrateFromChatId_ = migrateFromChatId;
 }
 
-const MessagePtr Message::getPinnedMessage() const
+MessagePtr Message::getPinnedMessage() const
 {
 	return pinnedMessage_;
 }
@@ -358,46 +336,6 @@ const MessagePtr Message::getPinnedMessage() const
 void Message::setPinnedMessage(MessagePtr pinnedMessage)
 {
 	pinnedMessage_ = pinnedMessage;
-}
-
-void Message::swap(Message& other) noexcept
-{
-	using std::swap;
-	swap(id_, other.id_);
-	swap(from_, other.from_);
-	swap(date_, other.date_);
-	swap(chat_, other.chat_);
-	swap(forwardFrom_, other.forwardFrom_);
-	swap(forwardFromChat_, other.forwardFromChat_);
-	swap(forwardDate_, other.forwardDate_);
-	swap(replyToMessage_, other.replyToMessage_);
-	swap(editDate_, other.editDate_);
-	swap(text_, other.text_);
-	swap(entities_, other.entities_);
-	swap(attachment_, other.attachment_);
-	swap(caption_, other.caption_);
-	swap(newChatMember_, other.newChatMember_);
-	swap(leftChatMember_, other.leftChatMember_);
-	swap(newChatTitle_, other.newChatTitle_);
-	swap(newChatPhoto_, other.newChatPhoto_);
-	swap(deleteChatPhoto_, other.deleteChatPhoto_);
-	swap(groupChatCreated_, other.groupChatCreated_);
-	swap(superGroupChatCreated_, other.superGroupChatCreated_);
-	swap(channelChatCreated_, other.channelChatCreated_);
-	swap(migrateToChatId_, other.migrateToChatId_);
-	swap(migrateFromChatId_, other.migrateFromChatId_);
-	swap(pinnedMessage_, other.pinnedMessage_);
-}
-
-const Message& Message::operator=(Message other) noexcept
-{
-	swap(other);
-	return *this;
-}
-
-void swap(Message& lhs, Message& rhs)
-{
-	lhs.swap(rhs);
 }
 
 }

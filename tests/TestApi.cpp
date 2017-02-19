@@ -86,7 +86,7 @@ struct TestConfig
 
 BOOST_GLOBAL_FIXTURE(TestConfig);
 
-BOOST_AUTO_TEST_SUITE(TestBotApi)
+BOOST_AUTO_TEST_SUITE(TestSend)
 
 	BOOST_AUTO_TEST_CASE(DefaultConstructor)
 	{
@@ -214,6 +214,10 @@ BOOST_AUTO_TEST_SUITE(TestBotApi)
 		));
 	}
 
+BOOST_AUTO_TEST_SUITE_END()
+
+BOOST_AUTO_TEST_SUITE(TestParse)
+
 	BOOST_AUTO_TEST_CASE(GetUpdates)
 	{
 		PRINT_TESTNAME;
@@ -222,15 +226,22 @@ BOOST_AUTO_TEST_SUITE(TestBotApi)
 		BOOST_REQUIRE_NO_THROW(updates = bot->getUpdates());
 		for (auto update : updates)
 		{
-			if (update->getType() == Update::Type::Message)
+			switch (update.getType())
 			{
-				auto& message = std::dynamic_pointer_cast<MessageUpdate>(update)->getMessage();
-				if (message.getFrom())
-					std::cout << *message.getFrom() << ": ";
-				std::cout << message.getText() << std::endl;
+				case Update::Type::Message:
+				case Update::Type::EditedMessage:
+				case Update::Type::ChannelPost:
+				case Update::Type::EditedChannelPost:
+				{
+					auto message = update.getMessage();
+					if (message->getFrom())
+						std::cout << *message->getFrom() << ": ";
+					if (message->getText())
+						std::cout << *message->getText() << std::endl;
+					break;
+				}
 			}
 		}
 	}
-
 
 BOOST_AUTO_TEST_SUITE_END()

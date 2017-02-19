@@ -5,6 +5,8 @@
 #include <telebotxx/Message.hpp>
 #include <telebotxx/Update.hpp>
 #include <telebotxx/User.hpp>
+#include <telebotxx/Optional.hpp>
+#include <telebotxx/Exception.hpp>
 
 #include <memory>
 
@@ -15,19 +17,58 @@ namespace telebotxx {
 const bool REQUIRED = true;
 const bool OPTIONAL = false;
 
-/// \brief Parse JSON object to Chat
-/// \param parent reference to parent JSON object
-/// \param name field with Chat object
-/// \param required REQUIRED or OPTIONAL
-/// \return pointer to Chat
-std::unique_ptr<Chat> parseChat(const rapidjson::Value& parent, const char* name, bool required);
+namespace impl {
+
+template<typename T> bool is(const rapidjson::Value& obj);
+template<> bool is<int>(const rapidjson::Value& obj);
+template<> bool is<std::int64_t>(const rapidjson::Value& obj);
+template<> bool is<bool>(const rapidjson::Value& obj);
+template<> bool is<std::string>(const rapidjson::Value& obj);
+
+template<typename T> const T get(const rapidjson::Value& obj);
+template<> const int get(const rapidjson::Value& obj);
+template<> const std::int64_t get(const rapidjson::Value& obj);
+template<> const bool get(const rapidjson::Value& obj);
+template<> const std::string get(const rapidjson::Value& obj);
+
+}
+
+template<typename T>
+optional<T> parse(const rapidjson::Value& obj, const char* name, bool required)
+{
+	if (obj.HasMember(name))
+	{
+		if (impl::is<T>(obj[name]))
+			return impl::get<T>(obj[name]);
+		else
+			throw ParseError(std::string("Field '") + name + "' has invalid type");
+	}
+	else if (required)
+		throw ParseError(std::string("Field '") + name + "' not found");
+	else
+		return boost::none;
+}
+
+template <typename T>
+T require(const rapidjson::Value& obj, const char* name)
+{
+	return *parse<T>(obj, name, REQUIRED);
+}
+
+template <typename T>
+optional<T> allow(const rapidjson::Value& obj, const char* name)
+{
+	return parse<T>(obj, name, OPTIONAL);
+}
+
+bool check(const rapidjson::Value& obj, const char* name);
 
 /// \brief Parse JSON object to User
 /// \param parent reference to parent JSON object
 /// \param name field with Document object
 /// \param required REQUIRED or OPTIONAL
 /// \return pointer to User
-std::unique_ptr<User> parseUser(const rapidjson::Value& parent, const char* name, bool required);
+template<> optional<User> parse<User>(const rapidjson::Value& parent, const char* name, bool required);
 
 /// \brief Parse JSON object to Message
 /// \param parent reference to parent JSON object
@@ -39,9 +80,8 @@ std::unique_ptr<Message> parseMessage(const rapidjson::Value& parent, const char
 /// \brief Parse JSON array of Update
 /// \param parent reference to parent JSON object
 /// \param name field with array of Update objects
-/// \param required REQUIRED or OPTIONAL
 /// \return Updates (vector of UpdatePtr>
-std::unique_ptr<Updates> parseUpdates(const rapidjson::Value& parent, const char* name, bool required);
+Updates parseUpdates(const rapidjson::Value& parent, const char* name);
 
 /// \brief Check JSON response
 ///

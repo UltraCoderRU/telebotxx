@@ -20,12 +20,6 @@ ChatId::ChatId(const std::string& str)
 {
 }
 
-ChatId::ChatId(const ChatId& other) = default;
-
-ChatId::ChatId(ChatId&& other) = default;
-
-ChatId::~ChatId() = default;
-
 ChatId::Type ChatId::getType() const
 {
 	return type_;
@@ -125,12 +119,6 @@ Photo::Photo(const Url& url)
 	: type_(Type::Url), value_(url)
 {
 }
-
-Photo::Photo(const Photo& other) = default;
-
-Photo::Photo(Photo&& other) = default;
-
-Photo::~Photo() = default;
 
 Photo::Type Photo::getType() const
 {

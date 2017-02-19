@@ -31,9 +31,6 @@ class ChatId
 public:
 	ChatId(int);
 	ChatId(const std::string&);
-	ChatId(const ChatId&);
-	ChatId(ChatId&&);
-	~ChatId();
 
 	enum class Type { Id, Username };
 	Type getType() const;
@@ -92,9 +89,6 @@ public:
 	explicit Photo(const Buffer&);
 	explicit Photo(const File&);
 	explicit Photo(const Url&);
-	Photo(const Photo&);
-	Photo(Photo&&);
-	~Photo();
 
 	enum class Type	{ Id, Buffer, File, Url };
 	Type getType() const;

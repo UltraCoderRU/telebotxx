@@ -1,29 +1,8 @@
 #include <telebotxx/Attachment.hpp>
 
+#include <boost/variant.hpp>
+
 namespace telebotxx {
-
-Attachment::Attachment(Type type)
-	: attachmentType_(type)
-{
-}
-
-Attachment::Attachment(const Attachment&) = default;
-
-Attachment::Attachment(Attachment&&) = default;
-
-Attachment::~Attachment() = default;
-
-Attachment::Type Attachment::getType() const
-{
-	return attachmentType_;
-}
-
-void Attachment::swap(Attachment& other) noexcept
-{
-	std::swap(attachmentType_, other.attachmentType_);
-}
-
-////////////////////////////////////////////////////////////////
 
 PhotoSize::PhotoSize()
 	: width_(-1),
@@ -31,12 +10,6 @@ PhotoSize::PhotoSize()
 	  fileSize_(-1)
 {
 }
-
-PhotoSize::PhotoSize(const PhotoSize&) = default;
-
-PhotoSize::PhotoSize(PhotoSize&&) = default;
-
-PhotoSize::~PhotoSize() = default;
 
 const std::string& PhotoSize::getFileId() const
 {
@@ -68,80 +41,23 @@ void PhotoSize::setHeight(int height)
 	height_ = height;
 }
 
-int PhotoSize::getFileSize() const
+const optional<int>& PhotoSize::getFileSize() const
 {
 	return fileSize_;
 }
 
-void PhotoSize::setFileSize(int fileSize)
+void PhotoSize::setFileSize(optional<int> fileSize)
 {
 	fileSize_ = fileSize;
-}
-
-void PhotoSize::swap(PhotoSize& other) noexcept
-{
-	using std::swap;
-	swap(fileId_, other.fileId_);
-	swap(width_, other.width_);
-	swap(height_, other.height_);
-	swap(fileSize_, other.fileSize_);
-}
-
-const PhotoSize& PhotoSize::operator=(PhotoSize other) noexcept
-{
-	swap(other);
-	return *this;
-}
-
-////////////////////////////////////////////////////////////////
-
-PhotoSizeArray::PhotoSizeArray()
-	: Attachment(Attachment::Type::PhotoSizeArray)
-{
-}
-
-PhotoSizeArray::PhotoSizeArray(const PhotoSizeArray&) = default;
-
-PhotoSizeArray::PhotoSizeArray(PhotoSizeArray&&) = default;
-
-PhotoSizeArray::~PhotoSizeArray() = default;
-
-const std::vector<PhotoSize>& PhotoSizeArray::getArray() const
-{
-	return array_;
-}
-
-void PhotoSizeArray::setArray(const std::vector<PhotoSize>& array)
-{
-	array_ = array;
-}
-
-void PhotoSizeArray::swap(PhotoSizeArray& other) noexcept
-{
-	using std::swap;
-	swap(array_, other.array_);
-}
-
-const PhotoSizeArray& PhotoSizeArray::operator=(PhotoSizeArray other) noexcept
-{
-	swap(other);
-	return *this;
 }
 
 ////////////////////////////////////////////////////////////////
 
 Audio::Audio()
-	: Attachment(Type::Audio),
-	  duration_(-1),
+	: duration_(-1),
 	  fileSize_(-1)
 {
 }
-
-Audio::Audio(const Audio&) = default;
-
-Audio::Audio(Audio&&) = default;
-
-Audio::~Audio() = default;
 
 const std::string& Audio::getFileId() const
 {
@@ -163,158 +79,109 @@ void Audio::setDuration(int duration)
 	duration_ = duration;
 }
 
-const std::string& Audio::getPerformer() const
+const optional<std::string>& Audio::getPerformer() const
 {
 	return performer_;
 }
 
-void Audio::setPerformer(const std::string& performer)
+void Audio::setPerformer(optional<std::string> performer)
 {
-	performer_ = performer;
+	performer_ = std::move(performer);
 }
 
-const std::string& Audio::getTitle() const
+const optional<std::string>& Audio::getTitle() const
 {
 	return title_;
 }
 
-void Audio::setTitle(const std::string& title)
+void Audio::setTitle(optional<std::string> title)
 {
 	title_ = title;
 }
 
-const std::string& Audio::getMimeType() const
+const optional<std::string>& Audio::getMimeType() const
 {
 	return mimeType_;
 }
 
-void Audio::setMimeType(const std::string& mimeType)
+void Audio::setMimeType(optional<std::string> mimeType)
 {
 	mimeType_ = mimeType;
 }
 
-int Audio::getFileSize() const
+const optional<int>& Audio::getFileSize() const
 {
 	return fileSize_;
 }
 
-void Audio::setFileSize(int fileSize)
+void Audio::setFileSize(optional<int> fileSize)
 {
 	fileSize_ = fileSize;
-}
-
-void Audio::swap(Audio& other) noexcept
-{
-	Attachment::swap(other);
-	using std::swap;
-	swap(fileId_, other.fileId_);
-	swap(duration_, other.duration_);
-	swap(performer_, other.performer_);
-	swap(title_, other.title_);
-	swap(mimeType_, other.mimeType_);
-	swap(fileSize_, other.fileSize_);
-}
-
-const Audio& Audio::operator=(Audio other) noexcept
-{
-	swap(other);
-	return *this;
 }
 
 ////////////////////////////////////////////////////////////////
 
 Document::Document()
-	: Attachment(Type::Document),
-	  fileSize_(-1)
+	: fileSize_(-1)
 {
 }
-
-Document::Document(const Document&) = default;
-
-Document::Document(Document&&) = default;
-
-Document::~Document() = default;
 
 const std::string& Document::getFileId() const
 {
 	return fileId_;
 }
 
-void Document::setFileId(const std::string& fileId)
+void Document::setFileId(std::string fileId)
 {
 	fileId_ = fileId;
 }
 
-const PhotoSizePtr Document::getThumb() const
+const optional<PhotoSize>& Document::getThumb() const
 {
 	return thumb_;
 }
 
-void Document::setThumb(const PhotoSizePtr& thumb)
+void Document::setThumb(optional<PhotoSize> thumb)
 {
 	thumb_ = thumb;
 }
 
-const std::string& Document::getFileName() const
+const optional<std::string>& Document::getFileName() const
 {
 	return fileName_;
 }
 
-void Document::setFileName(const std::string& fileName)
+void Document::setFileName(optional<std::string> fileName)
 {
 	fileName_ = fileName;
 }
 
-const std::string& Document::getMimeType() const
+const optional<std::string>& Document::getMimeType() const
 {
 	return mimeType_;
 }
 
-void Document::setMimeType(const std::string& mimeType)
+void Document::setMimeType(optional<std::string> mimeType)
 {
 	mimeType_ = mimeType;
 }
 
-int Document::getFileSize() const
+const optional<int>& Document::getFileSize() const
 {
 	return fileSize_;
 }
 
-void Document::setFileSize(int fileSize)
+void Document::setFileSize(optional<int> fileSize)
 {
 	fileSize_ = fileSize;
-}
-
-void Document::swap(Document& other) noexcept
-{
-	Attachment::swap(other);
-	using std::swap;
-	swap(fileId_, other.fileId_);
-	swap(thumb_, other.thumb_);
-	swap(fileName_, other.fileName_);
-	swap(mimeType_, other.mimeType_);
-	swap(fileSize_, other.fileSize_);
-}
-
-const Document& Document::operator=(Document other) noexcept
-{
-	swap(other);
-	return *this;
 }
 
 ////////////////////////////////////////////////////////////////
 
 Sticker::Sticker()
-	: Attachment(Type::Sticker),
-	  fileSize_(-1)
+	: fileSize_(-1)
 {
 }
-
-Sticker::Sticker(const Sticker&) = default;
-
-Sticker::Sticker(Sticker&&) = default;
-
-Sticker::~Sticker() = default;
 
 const std::string& Sticker::getFileId() const
 {
@@ -346,79 +213,81 @@ void Sticker::setHeight(int height)
 	height_ = height;
 }
 
-const PhotoSizePtr Sticker::getThumb() const
+const optional<PhotoSize>& Sticker::getThumb() const
 {
 	return thumb_;
 }
 
-void Sticker::setThumb(const PhotoSizePtr& thumb)
+void Sticker::setThumb(optional<PhotoSize> thumb)
 {
 	thumb_ = thumb;
 }
 
-const std::string& Sticker::getEmoji() const
+const optional<std::string>& Sticker::getEmoji() const
 {
 	return emoji_;
 }
 
-void Sticker::setEmoji(const std::string& emoji)
+void Sticker::setEmoji(optional<std::string> emoji)
 {
 	emoji_ = emoji;
 }
 
-int Sticker::getFileSize() const
+const optional<int>& Sticker::getFileSize() const
 {
 	return fileSize_;
 }
 
-void Sticker::setFileSize(int fileSize)
+void Sticker::setFileSize(optional<int> fileSize)
 {
 	fileSize_ = fileSize;
 }
 
-void Sticker::swap(Sticker& other) noexcept
-{
-	Attachment::swap(other);
-	using std::swap;
-	swap(fileId_, other.fileId_);
-	swap(width_, other.width_);
-	swap(height_, other.height_);
-	swap(thumb_, other.thumb_);
-	swap(emoji_, other.emoji_);
-	swap(fileSize_, other.fileSize_);
-}
-
-const Sticker& Sticker::operator=(Sticker other) noexcept
-{
-	swap(other);
-	return *this;
-}
-
 ////////////////////////////////////////////////////////////////
 
-void swap(PhotoSize& lhs, PhotoSize& rhs)
+Attachment::Attachment(PhotoSizeArray photos)
+	: type_(Type::PhotoSizeArray), value_(std::move(photos))
 {
-	lhs.swap(rhs);
 }
 
-void swap(PhotoSizeArray& lhs, PhotoSizeArray& rhs)
+Attachment::Attachment(Audio audio)
+	: type_(Type::Audio), value_(std::move(audio))
 {
-	lhs.swap(rhs);
 }
 
-void swap(Audio& lhs, Audio& rhs)
+Attachment::Attachment(Document document)
+	: type_(Type::Document), value_(std::move(document))
 {
-	lhs.swap(rhs);
 }
 
-void swap(Document& lhs, Document& rhs)
+Attachment::Attachment(Sticker sticker)
+	: type_(Type::Sticker), value_(std::move(sticker))
 {
-	lhs.swap(rhs);
 }
 
-void swap(Sticker& lhs, Sticker& rhs)
+Attachment::Type Attachment::getType() const
 {
-	lhs.swap(rhs);
+	return type_;
+}
+
+const PhotoSizeArray& Attachment::getPhotoSizeArray() const
+{
+	return boost::get<PhotoSizeArray>(value_);
+}
+
+const Audio& Attachment::getAudio() const
+{
+	return boost::get<Audio>(value_);;
+}
+
+const Document& Attachment::getDocument() const
+{
+	return boost::get<Document>(value_);
+}
+
+const Sticker& Attachment::getSticker() const
+{
+	return boost::get<Sticker>(value_);;
 }
 
 }
