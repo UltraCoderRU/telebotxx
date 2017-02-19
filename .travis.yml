@@ -1,5 +1,5 @@
 sudo: required
-dist: precise
+dist: trusty
 language: cpp
 
 matrix:
@@ -44,8 +44,17 @@ env:
     - TELEBOTXX_BUILD_TESTS=ON
     - TELEBOTXX_GENERATE_DOC=OFF
 
+addons:
+  apt:
+    sources:
+      - sourceline: 'ppa:kzemek/boost'
+    packages:
+      - libboost1.58-dev
+      - libboost-test1.58-dev
+      - libboost-system1.58-dev
+      - libcurl4-openssl-dev
+
 before_script:
-  - sudo apt-get install -y libboost-test-dev libboost-system-dev libcurl4-openssl-dev
   - export CXX=$COMPILER
   - mkdir build
   - cd build
