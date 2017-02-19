@@ -14,55 +14,27 @@ public:
 	enum class Type
 	{
 		Message,
+		EditedMessage,
+		ChannelPost,
+		EditedChannelPost,
 		InlineQuery,
 		ChosenInlineResult,
 		CallbackQuery
 	};
 
-	Update(int id, Type type);
-	Update(const Update&);
-	Update(Update&&);
-	virtual ~Update() = 0;
+	Update(int id, Type type, std::unique_ptr<Message>);
 
 	int getId() const;
 	Type getType() const;
-
-	void swap(Update& other) noexcept;
+	MessagePtr getMessage() const;
 
 private:
 	int id_;
-	Type updateType_;
+	Type type_;
+	boost::variant<MessagePtr> value_;
 };
 
-using UpdatePtr = std::shared_ptr<Update>;
-using Updates = std::vector<UpdatePtr>;
-
-class MessageUpdate : public Update
-{
-public:
-	enum class MessageType
-	{
-		Message,
-		EditedMessage,
-		ChannelPost,
-		EditedChannelPost
-	};
-
-	MessageUpdate(int id, MessageType type, const Message& message);
-	MessageUpdate(const MessageUpdate&);
-	MessageUpdate(MessageUpdate&&);
-	~MessageUpdate();
-
-	MessageType getMessageType() const;
-	const Message& getMessage() const;
-
-	void swap(MessageUpdate& other) noexcept;
-	const MessageUpdate& operator=(MessageUpdate other);
-
-private:
-	MessageType type_;
-	Message message_;
-};
+using Updates = std::vector<Update>;
 
 }
 

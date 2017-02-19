@@ -10,12 +10,6 @@ Chat::Chat()
 {
 }
 
-Chat::Chat(const Chat&) = default;
-
-Chat::Chat(Chat&&) = default;
-
-Chat::~Chat() = default;
-
 std::int64_t Chat::getId() const
 {
 	return id_;
@@ -36,42 +30,42 @@ void Chat::setType(Chat::Type type)
 	type_ = type;
 }
 
-const std::string& Chat::getTitle() const
+const optional<std::string>& Chat::getTitle() const
 {
 	return title_;
 }
 
-void Chat::setTitle(const std::string& title)
+void Chat::setTitle(optional<std::string> title)
 {
 	title_ = title;
 }
 
-const std::string& Chat::getUsername() const
+const optional<std::string>& Chat::getUsername() const
 {
 	return username_;
 }
 
-void Chat::setUsername(const std::string& username)
+void Chat::setUsername(optional<std::string> username)
 {
 	username_ = username;
 }
 
-const std::string& Chat::getFirstName() const
+const optional<std::string>& Chat::getFirstName() const
 {
 	return firstName_;
 }
 
-void Chat::setFirstName(const std::string& firstName)
+void Chat::setFirstName(optional<std::string> firstName)
 {
 	firstName_ = firstName;
 }
 
-const std::string& Chat::getLastName() const
+const optional<std::string>& Chat::getLastName() const
 {
 	return lastName_;
 }
 
-void Chat::setLastName(const std::string& lastName)
+void Chat::setLastName(optional<std::string> lastName)
 {
 	lastName_ = lastName;
 }
@@ -84,29 +78,6 @@ bool Chat::isAllAdmins() const
 void Chat::setAllAdmins(bool allAdmins)
 {
 	allAdmins_ = allAdmins;
-}
-
-void Chat::swap(Chat& other) noexcept
-{
-	using std::swap;
-	swap(id_, other.id_);
-	swap(type_, other.type_);
-	swap(title_, other.title_);
-	swap(username_, other.username_);
-	swap(firstName_, other.firstName_);
-	swap(lastName_, other.lastName_);
-	swap(allAdmins_, other.allAdmins_);
-}
-
-const Chat& Chat::operator=(Chat other) noexcept
-{
-	swap(other);
-	return *this;
-}
-
-void swap(Chat& lhs, Chat& rhs)
-{
-	lhs.swap(rhs);
 }
 
 Chat::Type chatTypeFromString(const std::string& str)

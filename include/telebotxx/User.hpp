@@ -1,6 +1,7 @@
 #ifndef TELEBOTXX_USER_H
 #define TELEBOTXX_USER_H
 
+#include "Optional.hpp"
 #include <string>
 #include <memory>
 
@@ -10,9 +11,6 @@ class User
 {
 public:
 	User();
-	User(const User&);
-	User(User&&);
-	~User();
 
 	/// \brief Get id
 	int getId() const;
@@ -24,35 +22,29 @@ public:
 	const std::string& getFirstName() const;
 
 	/// \brief Set first name
-	void setFirstName(const std::string& firstName);
+	void setFirstName(std::string firstName);
 
 	/// \brief Get last name
-	const std::string& getLastName() const;
+	const optional<std::string>& getLastName() const;
 
 	/// \brief Set last name
-	void setLastName(const std::string& lastName);
+	void setLastName(optional<std::string> lastName);
 
 	/// \brief Get username
-	const std::string& getUsername() const;
+	const optional<std::string>& getUsername() const;
 
 	/// \brief Set username
-	void setUsername(const std::string& username);
+	void setUsername(optional<std::string> username);
 
 	/// \brief Get string representation of user
 	const std::string toString() const;
 
-	void swap(User&) noexcept;
-
-	const User& operator=(User other);
-
 private:
 	int id_;
 	std::string firstName_;
-	std::string lastName_;
-	std::string username_;
+	optional<std::string> lastName_;
+	optional<std::string> username_;
 };
-
-using UserPtr = std::shared_ptr<User>;
 
 std::ostream& operator<<(std::ostream& os, const User& user);
 

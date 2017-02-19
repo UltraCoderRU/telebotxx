@@ -34,7 +34,7 @@ public:
 		doc.Parse(response.c_str());
 
 		checkResponse(doc);
-		return *parseUser(doc, "result", REQUIRED);
+		return require<User>(doc, "result");
 	}
 
 	inline Message sendPhoto(const std::string& chat, const std::string& filename, const std::string& caption)
@@ -133,7 +133,7 @@ public:
 		doc.Parse(response.c_str());
 
 		checkResponse(doc);
-		return *parseUpdates(doc, "result", REQUIRED);
+		return parseUpdates(doc, "result");
 	}
 
 	std::string getTelegramMainUrl() const

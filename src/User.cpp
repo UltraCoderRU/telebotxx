@@ -8,12 +8,6 @@ User::User()
 {
 }
 
-User::User(const User&) = default;
-
-User::User(User&&) = default;
-
-User::~User() = default;
-
 int User::getId() const
 {
 	return id_;
@@ -29,50 +23,40 @@ const std::string& User::getFirstName() const
 	return firstName_;
 }
 
-void User::setFirstName(const std::string& firstName)
+void User::setFirstName(std::string firstName)
 {
-	firstName_ = firstName;
+	firstName_ = std::move(firstName);
 }
 
-const std::string& User::getLastName() const
+const optional<std::string>& User::getLastName() const
 {
 	return lastName_;
 }
 
-void User::setLastName(const std::string& lastName)
+void User::setLastName(optional<std::string> lastName)
 {
-	lastName_ = lastName;
+	lastName_ = std::move(lastName);
 }
 
-const std::string& User::getUsername() const
+const optional<std::string>& User::getUsername() const
 {
 	return username_;
 }
 
-void User::setUsername(const std::string& username)
+void User::setUsername(optional<std::string> username)
 {
-	username_ = username;
+	username_ = std::move(username);
 }
 
 const std::string User::toString() const
 {
 	std::stringstream ss;
-	ss << firstName_ << " " << lastName_ << " (@" << username_ << ")";
+	ss << firstName_;
+	if (lastName_)
+		ss << " " << *lastName_;
+	if (username_)
+		ss << " (@" << *username_ << ")";
 	return ss.str();
-}
-
-void User::swap(User& other) noexcept
-{
-	std::swap(id_, other.id_);
-	firstName_.swap(other.firstName_);
-	lastName_.swap(other.lastName_);
-	username_.swap(other.username_);
-}
-
-const User& User::operator=(User other)
-{
-	swap(other);
-	return *this;
 }
 
 std::ostream& operator<<(std::ostream& os, const User& user)

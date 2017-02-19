@@ -1,45 +1,27 @@
 #include "JsonObjects.hpp"
-#include <telebotxx/Exception.hpp>
 
 #include <cstdint>
 
 namespace telebotxx {
 namespace impl {
-
-template<typename T> bool is(const rapidjson::Value& obj);
 template<> bool is<int>(const rapidjson::Value& obj) { return obj.IsInt(); }
 template<> bool is<std::int64_t>(const rapidjson::Value& obj) { return obj.IsInt64(); }
 template<> bool is<bool>(const rapidjson::Value& obj) { return obj.IsBool(); }
 template<> bool is<std::string>(const rapidjson::Value& obj) { return obj.IsString(); }
 
-template<typename T> const T get(const rapidjson::Value& obj);
 template<> const int get(const rapidjson::Value& obj) { return obj.GetInt(); }
 template<> const std::int64_t get(const rapidjson::Value& obj) { return obj.GetInt64(); }
 template<> const bool get(const rapidjson::Value& obj) { return obj.GetBool(); }
 template<> const std::string get(const rapidjson::Value& obj) { return obj.GetString(); }
 
-template<typename T> const T null();
-template<> const int null() { return 0; }
-template<> const std::int64_t null() { return 0; }
-template<> const bool null() { return false; }
-template<> const std::string null() { return ""; }
-
 }
 
-template<typename T>
-const T parse(const rapidjson::Value& obj, const char* name, bool required)
+bool check(const rapidjson::Value& obj, const char* name)
 {
-	if (obj.HasMember(name))
-	{
-		if (impl::is<T>(obj[name]))
-			return impl::get<T>(obj[name]);
-		else
-			throw ParseError(std::string("Field '") + name + "' has invalid type");
-	}
-	else if (required)
-		throw ParseError(std::string("Field '") + name + "' not found");
+	if (auto value = parse<bool>(obj, name, OPTIONAL))
+		return *value;
 	else
-		return impl::null<T>();
+		return false;
 }
 
 const rapidjson::Value& parseObject(const rapidjson::Value& parent, const char* name, bool required, bool& found)
@@ -84,220 +66,218 @@ const rapidjson::Value& parseArray(const rapidjson::Value& parent, const char* n
 	}
 }
 
-std::unique_ptr<PhotoSize> parsePhotoSize(const rapidjson::Value& obj)
+template <>
+optional<Chat> parse<Chat>(const rapidjson::Value& parent, const char* name, bool required)
 {
-	auto photo = std::make_unique<PhotoSize>();
-	photo->setFileId(parse<std::string>(obj, "file_id", REQUIRED));
-	photo->setWidth(parse<int>(obj, "width", REQUIRED));
-	photo->setHeight(parse<int>(obj, "height", REQUIRED));
-	photo->setFileSize(parse<int>(obj, "file_size", OPTIONAL));
-	return photo;
-}
-
-std::unique_ptr<PhotoSize> parsePhotoSize(const rapidjson::Value& parent, const char* name, bool required)
-{
+	optional<Chat> chat;
 	bool found;
 	auto& obj = parseObject(parent, name, required, found);
 	if (found)
 	{
-		return parsePhotoSize(obj);
+		chat.emplace();
+		chat->setId(require<std::int64_t>(obj, "id"));
+		chat->setType(chatTypeFromString(require<std::string>(obj, "type")));
+		chat->setTitle(allow<std::string>(obj, "title"));
+		chat->setUsername(parse<std::string>(obj, "username", OPTIONAL));
+		chat->setFirstName(parse<std::string>(obj, "first_name", OPTIONAL));
+		chat->setLastName(parse<std::string>(obj, "last_name", OPTIONAL));
+		chat->setAllAdmins(check(obj, "all_members_are_administrators"));
 	}
-	else
-		return nullptr;
+	return chat;
 }
 
-std::unique_ptr<PhotoSizeArray> parsePhotoSizeArray(const rapidjson::Value& parent, const char* name, bool required)
+template <>
+optional<User> parse<User>(const rapidjson::Value& parent, const char* name, bool required)
 {
+	optional<User> user;
+	bool found;
+	auto& obj = parseObject(parent, name, required, found);
+	if (found)
+	{
+		user.emplace();
+		user->setId(require<int>(obj, "id"));
+		user->setFirstName(require<std::string>(obj, "first_name"));
+		user->setLastName(allow<std::string>(obj, "last_name"));
+	}
+	return user;
+}
+
+PhotoSize parsePhotoSize(const rapidjson::Value& obj)
+{
+	PhotoSize photo;
+	photo.setFileId(require<std::string>(obj, "file_id"));
+	photo.setWidth(require<int>(obj, "width"));
+	photo.setHeight(require<int>(obj, "height"));
+	photo.setFileSize(allow<int>(obj, "file_size"));
+	return photo;
+}
+
+template <>
+optional<PhotoSize> parse<PhotoSize>(const rapidjson::Value& parent, const char* name, bool required)
+{
+	optional<PhotoSize> photo;
+	bool found;
+	auto& obj = parseObject(parent, name, required, found);
+	if (found)
+	{
+		photo.emplace(parsePhotoSize(obj));
+	}
+	return photo;
+}
+
+template <>
+optional<PhotoSizeArray> parse<PhotoSizeArray>(const rapidjson::Value& parent, const char* name, bool required)
+{
+	optional<PhotoSizeArray> photos;
 	bool found;
 	auto& obj = parseArray(parent, name, required, found);
 	if (found)
 	{
-		std::vector<PhotoSize> photos;
+		photos.emplace();
+		photos->reserve(obj.GetArray().Size());
 		for (auto& elem : obj.GetArray())
-		{
-			auto photo = parsePhotoSize(elem);
-			photos.push_back(std::move(*photo));
-		}
-		auto result = std::make_unique<PhotoSizeArray>();
-		result->setArray(photos);
-		return result;
+			photos->emplace_back(parsePhotoSize(elem));
 	}
-	else
-		return nullptr;
+	return photos;
 }
 
-std::unique_ptr<Audio> parseAudio(const rapidjson::Value& parent, const char* name, bool required)
+template <>
+optional<Audio> parse<Audio>(const rapidjson::Value& parent, const char* name, bool required)
 {
+	optional<Audio> audio;
 	bool found;
 	auto& obj = parseObject(parent, name, required, found);
 	if (found)
 	{
-		auto audio = std::make_unique<Audio>();
-		audio->setFileId(parse<std::string>(obj, "file_id", REQUIRED));
-		audio->setDuration(parse<int>(obj, "duration", REQUIRED));
-		audio->setPerformer(parse<std::string>(obj, "performer", OPTIONAL));
-		audio->setTitle(parse<std::string>(obj, "title", OPTIONAL));
-		audio->setMimeType(parse<std::string>(obj, "mime_type", OPTIONAL));
-		audio->setFileSize(parse<int>(obj, "file_size", OPTIONAL));
-		return audio;
+		audio->setFileId(require<std::string>(obj, "file_id"));
+		audio->setDuration(require<int>(obj, "duration"));
+		audio->setPerformer(allow<std::string>(obj, "performer"));
+		audio->setTitle(allow<std::string>(obj, "title"));
+		audio->setMimeType(allow<std::string>(obj, "mime_type"));
+		audio->setFileSize(allow<int>(obj, "file_size"));
 	}
-	else
-		return nullptr;
+	return audio;
 }
 
-std::unique_ptr<Document> parseDocument(const rapidjson::Value& parent, const char* name, bool required)
+template <>
+optional<Document> parse<Document>(const rapidjson::Value& parent, const char* name, bool required)
 {
+	optional<Document> document;
 	bool found;
 	auto& obj = parseObject(parent, name, required, found);
 	if (found)
 	{
-		auto document = std::make_unique<Document>();
-		document->setFileId(parse<std::string>(obj, "file_id", REQUIRED));
-		document->setThumb(parsePhotoSize(obj, "thumb", OPTIONAL));
-		document->setFileName(parse<std::string>(obj, "file_name", OPTIONAL));
-		document->setMimeType(parse<std::string>(obj, "mime_type", OPTIONAL));
-		document->setFileSize(parse<int>(obj, "file_size", OPTIONAL));
-		return document;
+		document.emplace();
+		document->setFileId(require<std::string>(obj, "file_id"));
+		document->setThumb(allow<PhotoSize>(obj, "thumb"));
+		document->setFileName(allow<std::string>(obj, "file_name"));
+		document->setMimeType(allow<std::string>(obj, "mime_type"));
+		document->setFileSize(allow<int>(obj, "file_size"));
 	}
-	else
-		return nullptr;
+	return document;
 }
 
-std::unique_ptr<Sticker> parseSticker(const rapidjson::Value& parent, const char* name, bool required)
+template <>
+optional<Sticker> parse<Sticker>(const rapidjson::Value& parent, const char* name, bool required)
 {
+	optional<Sticker> sticker;
 	bool found;
 	auto& obj = parseObject(parent, name, required, found);
 	if (found)
 	{
-		auto sticker = std::make_unique<Sticker>();
-		sticker->setFileId(parse<std::string>(obj, "file_id", REQUIRED));
-		sticker->setWidth(parse<int>(obj, "width", REQUIRED));
-		sticker->setHeight(parse<int>(obj, "height", REQUIRED));
-		sticker->setThumb(parsePhotoSize(obj, "thumb", OPTIONAL));
-		sticker->setEmoji(parse<std::string>(obj, "emoji", OPTIONAL));
-		sticker->setFileSize(parse<int>(obj, "file_size", OPTIONAL));
-		return sticker;
+		sticker.emplace();
+		sticker->setFileId(require<std::string>(obj, "file_id"));
+		sticker->setWidth(require<int>(obj, "width"));
+		sticker->setHeight(require<int>(obj, "height"));
+		sticker->setThumb(allow<PhotoSize>(obj, "thumb"));
+		sticker->setEmoji(allow<std::string>(obj, "emoji"));
+		sticker->setFileSize(allow<int>(obj, "file_size"));
 	}
-	else
-		return nullptr;
+	return sticker;
+}
+
+template <>
+optional<Attachment> parse<Attachment>(const rapidjson::Value& parent, const char* name, bool required)
+{
+	optional<Attachment> attachment;
+	if (auto photo = allow<PhotoSizeArray>(parent, "photo"))
+		attachment.emplace(std::move(*photo));
+	else if (auto audio = allow<Audio>(parent, "audio"))
+		attachment.emplace(std::move(*audio));
+	else if (auto document = allow<Document>(parent, "document"))
+		attachment.emplace(std::move(*document));
+	else if (auto sticker = allow<Sticker>(parent, "sticker"))
+		attachment.emplace(std::move(*sticker));
+	/// \todo Other attachments
+	return attachment;
 }
 
 std::unique_ptr<Message> parseMessage(const rapidjson::Value& parent, const char* name, bool required)
 {
+	std::unique_ptr<Message> message;
 	bool found;
 	auto& obj = parseObject(parent, name, required, found);
 	if (found)
 	{
-		auto message = std::make_unique<Message>();
-
-		message->setId(parse<int>(obj, "message_id", REQUIRED));
-		message->setFrom(parseUser(obj, "from", OPTIONAL));
-		message->setDate(parse<int>(obj, "date", REQUIRED));
-		message->setChat(*parseChat(obj, "chat", REQUIRED));
-		message->setForwardFrom(parseUser(obj, "forward_from", OPTIONAL));
-		message->setForwardFromChat(parseChat(obj, "forward_from_chat", OPTIONAL));
-		message->setForwardDate(parse<int>(obj, "forward_date", OPTIONAL));
+		message = std::make_unique<Message>();
+		message->setId(require<int>(obj, "message_id"));
+		message->setFrom(allow<User>(obj, "from"));
+		message->setDate(require<int>(obj, "date"));
+		message->setChat(require<Chat>(obj, "chat"));
+		message->setForwardFrom(allow<User>(obj, "forward_from"));
+		message->setForwardFromChat(allow<Chat>(obj, "forward_from_chat"));
+		message->setForwardDate(allow<std::int64_t>(obj, "forward_date"));
 		message->setReplyToMessage(parseMessage(obj, "reply_to_message", OPTIONAL));
-		message->setEditDate(parse<int>(obj, "edit_date", OPTIONAL));
+		message->setEditDate(allow<std::int64_t>(obj, "edit_date"));
 		message->setText(parse<std::string>(obj, "text", OPTIONAL));
 		//message->setEntities(parseEntities(obj, "entities", OPTIONAL));
-
-		/// \todo: Parse one of the possible attachments
-		std::shared_ptr<Attachment> attachment;
-		if (!(attachment = parsePhotoSizeArray(obj, "photo", OPTIONAL)))
-			if (!(attachment = parseAudio(obj, "audio", OPTIONAL)))
-				if (!(attachment = parseDocument(obj, "document", OPTIONAL)))
-					attachment = parseSticker(obj, "sticker", OPTIONAL);
-		message->setAttachment(attachment);
-
-		message->setCaption(parse<std::string>(obj, "caption", OPTIONAL));
-		message->setNewChatMember(parseUser(obj, "new_chat_member", OPTIONAL));
-		message->setLeftChatMember(parseUser(obj, "left_chat_member", OPTIONAL));
-		message->setNewChatTitle(parse<std::string>(obj, "new_chat_title", OPTIONAL));
-		message->setNewChatPhoto(parsePhotoSizeArray(obj, "new_chat_photo", OPTIONAL));
-		message->setDeleteChatPhoto(parse<bool>(obj, "delete_chat_photo", OPTIONAL));
-		message->setGroupChatCreated(parse<bool>(obj, "group_chat_created", OPTIONAL));
-		message->setSuperGroupChatCreated(parse<bool>(obj, "supergroup_chat_created", OPTIONAL));
-		message->setChannelChatCreated(parse<bool>(obj, "channel_chat_created", OPTIONAL));
-		message->setMigrateToChatId(parse<std::int64_t>(obj, "migrate_to_chat_id", OPTIONAL));
-		message->setMigrateFromChatId(parse<std::int64_t>(obj, "migrate_from_chat_id", OPTIONAL));
+		message->setAttachment(allow<Attachment>(obj, ""));
+		message->setCaption(allow<std::string>(obj, "caption"));
+		message->setNewChatMember(allow<User>(obj, "new_chat_member"));
+		message->setLeftChatMember(allow<User>(obj, "left_chat_member"));
+		message->setNewChatTitle(allow<std::string>(obj, "new_chat_title"));
+		message->setNewChatPhoto(allow<PhotoSizeArray>(obj, "new_chat_photo"));
+		message->setDeleteChatPhoto(check(obj, "delete_chat_photo"));
+		message->setGroupChatCreated(check(obj, "group_chat_created"));
+		message->setSuperGroupChatCreated(check(obj, "supergroup_chat_created"));
+		message->setChannelChatCreated(check(obj, "channel_chat_created"));
+		message->setMigrateToChatId(allow<std::int64_t>(obj, "migrate_to_chat_id"));
+		message->setMigrateFromChatId(allow<std::int64_t>(obj, "migrate_from_chat_id"));
 		message->setPinnedMessage(parseMessage(obj, "pinned_message", OPTIONAL));
-
-		return message;
 	}
-	else
-		return nullptr;
-}
-
-std::unique_ptr<Chat> parseChat(const rapidjson::Value& parent, const char* name, bool required)
-{
-	bool found;
-	auto& obj = parseObject(parent, name, required, found);
-	if (found)
-	{
-		auto chat = std::make_unique<Chat>();
-		chat->setId(parse<std::int64_t>(obj, "id", REQUIRED));
-		chat->setType(chatTypeFromString(parse<std::string>(obj, "type", REQUIRED)));
-		chat->setTitle(parse<std::string>(obj, "title", OPTIONAL));
-		chat->setUsername(parse<std::string>(obj, "username", OPTIONAL));
-		chat->setFirstName(parse<std::string>(obj, "first_name", OPTIONAL));
-		chat->setLastName(parse<std::string>(obj, "last_name", OPTIONAL));
-		chat->setAllAdmins(parse<bool>(obj, "all_members_are_administrators", OPTIONAL));
-		return chat;
-	}
-	else
-		return nullptr;
+	return message;
 }
 
 /// \todo Other updates
-std::unique_ptr<Update> parseUpdate(const rapidjson::Value& obj)
+Update parseUpdate(const rapidjson::Value& obj)
 {
-	int id = parse<int>(obj, "update_id", REQUIRED);
+	int id = require<int>(obj, "update_id");
 
 	std::unique_ptr<Message> message;
 	if ((message = parseMessage(obj, "message", OPTIONAL)))
-		return std::make_unique<MessageUpdate>(id, MessageUpdate::MessageType::Message, *message);
+		return Update(id, Update::Type::Message, std::move(message));
 	else if ((message = parseMessage(obj, "edited_message", OPTIONAL)))
-		return std::make_unique<MessageUpdate>(id, MessageUpdate::MessageType::EditedMessage, *message);
+		return Update(id, Update::Type::EditedMessage, std::move(message));
 	else if ((message = parseMessage(obj, "channel_post", OPTIONAL)))
-		return std::make_unique<MessageUpdate>(id, MessageUpdate::MessageType::ChannelPost, *message);
+		return Update(id, Update::Type::ChannelPost, std::move(message));
 	else if ((message = parseMessage(obj, "edited_channel_post", OPTIONAL)))
-		return std::make_unique<MessageUpdate>(id, MessageUpdate::MessageType::EditedChannelPost, *message);
+		return Update(id, Update::Type::EditedChannelPost, std::move(message));
 	else
-		///throw ParseError("Unknown update type");
-		return nullptr;
+		throw ParseError("Unknown update type");
 }
 
-std::unique_ptr<Updates> parseUpdates(const rapidjson::Value& parent, const char* name, bool required)
+Updates parseUpdates(const rapidjson::Value& parent, const char* name)
 {
+	Updates updates;
 	bool found;
-	auto& obj = parseArray(parent, name, required, found);
+	auto& obj = parseArray(parent, name, REQUIRED, found);
 	if (found)
 	{
-		Updates updates;
+		updates.reserve(obj.GetArray().Size());
 		for (auto& elem : obj.GetArray())
 			updates.emplace_back(parseUpdate(elem));
-		return std::make_unique<Updates>(std::move(updates));
 	}
-	else
-		return nullptr;
-}
-
-std::unique_ptr<User> parseUser(const rapidjson::Value& parent, const char* name, bool required)
-{
-	bool found;
-	auto& obj = parseObject(parent, name, required, found);
-	if (found)
-	{
-		auto user = std::make_unique<User>();
-		user->setId(parse<int>(obj, "id", REQUIRED));
-		user->setFirstName(parse<std::string>(obj, "first_name", REQUIRED));
-		user->setLastName(parse<std::string>(obj, "last_name", OPTIONAL));
-		user->setUsername(parse<std::string>(obj, "username", OPTIONAL));
-		return user;
-	}
-	else
-		return nullptr;
+	return updates;
 }
 
 void checkResponse(const rapidjson::Document& doc)
@@ -306,11 +286,11 @@ void checkResponse(const rapidjson::Document& doc)
 		throw ParseError("Object expected");
 
 	// Get status
-	bool ok = parse<bool>(doc, "ok", REQUIRED);
+	bool ok = require<bool>(doc, "ok");
 	if (!ok)
 	{
-		int code = parse<int>(doc, "error_code", REQUIRED);
-		std::string description(parse<std::string>(doc, "description", REQUIRED));
+		int code = require<int>(doc, "error_code");
+		std::string description(require<std::string>(doc, "description"));
 		throw ApiError(code, description);
 	}
 }

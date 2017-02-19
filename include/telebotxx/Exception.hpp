@@ -17,8 +17,8 @@ public:
 class ApiError : public std::runtime_error
 {
 public:
-	ApiError(int code, const std::string& message)
-		: std::runtime_error(message), code_(code)
+	ApiError(int code, std::string message)
+		: std::runtime_error(std::move(message)), code_(code)
 	{
 	}
 
