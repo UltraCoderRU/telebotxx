@@ -9,7 +9,7 @@ include(${CMAKE_SOURCE_DIR}/cmake/RequireCXX14.cmake)
 RequireCXX14()
 
 add_definitions(-DBOOST_TEST_DYN_LINK)
-find_package(Boost REQUIRED COMPONENTS unit_test_framework system)
+find_package(Boost 1.56 REQUIRED COMPONENTS unit_test_framework system)
 include_directories(${Boost_INCLUDE_DIRS})
 
 # Add required compiler flags
