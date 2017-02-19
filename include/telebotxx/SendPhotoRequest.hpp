@@ -18,10 +18,12 @@ public:
 	void setCaption(const Caption& caption);
 	void setDisableNotification(const DisableNotification& disableNotification);
 	void setReplyToMessageId(const ReplyTo& replyToMessageId);
+	void setReplyMarkup(const ReplyMarkup& replyMarkup);
 
 	void setOption(const Caption& caption);
 	void setOption(const DisableNotification& disableNotification);
 	void setOption(const ReplyTo& replyToMessageId);
+	void setOption(const ReplyMarkup& replyMarkup);
 
 	Message execute();
 

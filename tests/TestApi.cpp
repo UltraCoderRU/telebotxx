@@ -214,6 +214,21 @@ BOOST_AUTO_TEST_SUITE(TestSend)
 		));
 	}
 
+	BOOST_AUTO_TEST_CASE(SendPhotoWithInlineKeyboard)
+	{
+		PRINT_TESTNAME;
+		BOOST_REQUIRE(bot);
+		InlineKeyboardMarkup markup;
+		markup.addRow(InlineKeyboardButtonRow{
+			InlineKeyboardButton("Google", Url{"http://google.com/"})
+		});
+		BOOST_REQUIRE_NO_THROW(bot->sendPhoto(chat,
+											  Photo{File{photoFile}},
+											  Caption{"Photo with inline keyboard"},
+											  ReplyMarkup{markup}
+		));
+	}
+
 BOOST_AUTO_TEST_SUITE_END()
 
 BOOST_AUTO_TEST_SUITE(TestParse)

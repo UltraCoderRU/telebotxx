@@ -1,6 +1,7 @@
 #include <telebotxx/SendMessageRequest.hpp>
 #include <telebotxx/Logging.hpp>
 #include "JsonObjects.hpp"
+#include "ReplyMarkup.hpp"
 
 #include <cpr/cpr.h>
 #include <rapidjson/document.h>
@@ -10,44 +11,6 @@
 #include <boost/optional.hpp>
 
 namespace telebotxx {
-
-void writeInlineKeyboardButton(rapidjson::Writer<rapidjson::StringBuffer>& writer, const InlineKeyboardButton& button)
-{
-	writer.StartObject();
-
-	writer.String("text");
-	writer.String(button.getText().c_str());
-
-	switch (button.getActionType())
-	{
-		case InlineKeyboardButton::ActionType::Url:
-		{
-			writer.String("url");
-			writer.String(button.getUrl().getValue().c_str());
-			break;
-		}
-		case InlineKeyboardButton::ActionType::CallbackData:
-		{
-			writer.String("callback_data");
-			writer.String(button.getCallbackData().getValue().c_str());
-			break;
-		}
-		case InlineKeyboardButton::ActionType::SwitchInlineQuery:
-		{
-			writer.String("switch_inline_query");
-			writer.String(button.getSwitchInlineQuery().getValue().c_str());
-			break;
-		}
-		case InlineKeyboardButton::ActionType::SwitchInlineQueryCurrentChat:
-		{
-			writer.String("switch_inline_query_current_chat");
-			writer.String(button.getSwitchInlineQueryCurrentChat().getValue().c_str());
-			break;
-		}
-	}
-
-	writer.EndObject();
-}
 
 class SendMessageRequest::Impl
 {
@@ -134,26 +97,7 @@ public:
 		if (replyMarkup_)
 		{
 			writer.String("reply_markup");
-			writer.StartObject();
-			writer.String("inline_keyboard");
-			if (replyMarkup_->getType() == ReplyMarkup::Type::InlineKeyboardMarkup)
-			{
-				writer.StartArray();
-				auto rows = replyMarkup_->getInlineKeyboardMarkup().getRows();
-				for (auto& row : rows)
-				{
-					writer.StartArray();
-					for (auto& button : row)
-					{
-						writeInlineKeyboardButton(writer, button);
-					}
-					writer.EndArray();
-				}
-				writer.EndArray();
-			}
-			else
-				writer.String(chatId_.getUsername().c_str());
-			writer.EndObject();
+			writeReplyMarkup(writer, *replyMarkup_);
 		}
 
 		writer.EndObject();

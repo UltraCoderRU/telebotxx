@@ -19,6 +19,7 @@ set(SOURCE_FILES Attachment.cpp
                  Message.cpp
                  Update.cpp
                  User.cpp
+                 ReplyMarkup.cpp
                  RequestOptions.cpp
                  SendMessageRequest.cpp
                  SendPhotoRequest.cpp
