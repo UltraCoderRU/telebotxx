@@ -1,9 +1,4 @@
-build
-build-tests
-cmake_install.cmake
-CMakeCache.txt
-CMakeFiles
-doc/html
-lib
-Makefile
-tests/telebotxx-test
+.idea
+build*
+cmake-build-*
+tests/config.json

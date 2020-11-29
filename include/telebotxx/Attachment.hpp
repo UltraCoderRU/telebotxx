@@ -1,12 +1,11 @@
 #ifndef TELEBOTXX_ATTACHMENT_HPP
 #define TELEBOTXX_ATTACHMENT_HPP
 
-#include "Optional.hpp"
-
 #include <string>
 #include <vector>
 #include <memory>
-#include <boost/variant/variant.hpp>
+#include <variant>
+#include <optional>
 
 namespace telebotxx {
 
@@ -24,14 +23,14 @@ public:
 	int getHeight() const;
 	void setHeight(int height);
 
-	const optional<int>& getFileSize() const;
-	void setFileSize(optional<int> fileSize);
+	const std::optional<int>& getFileSize() const;
+	void setFileSize(std::optional<int> fileSize);
 
 private:
 	std::string fileId_;
 	int width_;
 	int height_;
-	optional<int> fileSize_;
+	std::optional<int> fileSize_;
 };
 
 using PhotoSizeArray = std::vector<PhotoSize>;
@@ -47,25 +46,25 @@ public:
 	int getDuration() const;
 	void setDuration(int duration);
 
-	const optional<std::string>& getPerformer() const;
-	void setPerformer(optional<std::string> performer);
+	const std::optional<std::string>& getPerformer() const;
+	void setPerformer(std::optional<std::string> performer);
 
-	const optional<std::string>& getTitle() const;
-	void setTitle(optional<std::string> title);
+	const std::optional<std::string>& getTitle() const;
+	void setTitle(std::optional<std::string> title);
 
-	const optional<std::string>& getMimeType() const;
-	void setMimeType(optional<std::string> mimeType);
+	const std::optional<std::string>& getMimeType() const;
+	void setMimeType(std::optional<std::string> mimeType);
 
-	const optional<int>& getFileSize() const;
-	void setFileSize(optional<int> fileSize);
+	const std::optional<int>& getFileSize() const;
+	void setFileSize(std::optional<int> fileSize);
 
 private:
 	std::string fileId_;
 	int duration_;
-	optional<std::string> performer_;
-	optional<std::string> title_;
-	optional<std::string> mimeType_;
-	optional<int> fileSize_;
+	std::optional<std::string> performer_;
+	std::optional<std::string> title_;
+	std::optional<std::string> mimeType_;
+	std::optional<int> fileSize_;
 };
 
 class Document
@@ -76,24 +75,24 @@ public:
 	const std::string& getFileId() const;
 	void setFileId(std::string fileId);
 
-	const optional<PhotoSize>& getThumb() const;
-	void setThumb(optional<PhotoSize> thumb);
+	const std::optional<PhotoSize>& getThumb() const;
+	void setThumb(std::optional<PhotoSize> thumb);
 
-	const optional<std::string>& getFileName() const;
-	void setFileName(optional<std::string> fileName);
+	const std::optional<std::string>& getFileName() const;
+	void setFileName(std::optional<std::string> fileName);
 
-	const optional<std::string>& getMimeType() const;
-	void setMimeType(optional<std::string> mimeType);
+	const std::optional<std::string>& getMimeType() const;
+	void setMimeType(std::optional<std::string> mimeType);
 
-	const optional<int>& getFileSize() const;
-	void setFileSize(optional<int> fileSize);
+	const std::optional<int>& getFileSize() const;
+	void setFileSize(std::optional<int> fileSize);
 
 private:
 	std::string fileId_;
-	optional<PhotoSize> thumb_;
-	optional<std::string> fileName_;
-	optional<std::string> mimeType_;
-	optional<int> fileSize_;
+	std::optional<PhotoSize> thumb_;
+	std::optional<std::string> fileName_;
+	std::optional<std::string> mimeType_;
+	std::optional<int> fileSize_;
 };
 
 class Sticker
@@ -110,22 +109,22 @@ public:
 	int getHeight() const;
 	void setHeight(int height);
 
-	const optional<PhotoSize>& getThumb() const;
-	void setThumb(optional<PhotoSize> thumb);
+	const std::optional<PhotoSize>& getThumb() const;
+	void setThumb(std::optional<PhotoSize> thumb);
 
-	const optional<std::string>& getEmoji() const;
-	void setEmoji(optional<std::string> emoji);
+	const std::optional<std::string>& getEmoji() const;
+	void setEmoji(std::optional<std::string> emoji);
 
-	const optional<int>& getFileSize() const;
-	void setFileSize(optional<int> fileSize);
+	const std::optional<int>& getFileSize() const;
+	void setFileSize(std::optional<int> fileSize);
 
 private:
 	std::string fileId_;
 	int width_;
 	int height_;
-	optional<PhotoSize> thumb_;
-	optional<std::string> emoji_;
-	optional<int> fileSize_;
+	std::optional<PhotoSize> thumb_;
+	std::optional<std::string> emoji_;
+	std::optional<int> fileSize_;
 };
 
 class Attachment
@@ -159,7 +158,7 @@ public:
 
 private:
 	Type type_;
-	boost::variant<PhotoSizeArray, Audio, Document, Sticker> value_;
+	std::variant<PhotoSizeArray, Audio, Document, Sticker> value_;
 };
 
 }

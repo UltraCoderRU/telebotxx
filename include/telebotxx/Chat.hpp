@@ -1,11 +1,10 @@
 #ifndef TELEBOTXX_CHAT_HPP
 #define TELEBOTXX_CHAT_HPP
 
-#include "Optional.hpp"
-
 #include <string>
 #include <memory>
 #include <cstdint>
+#include <optional>
 
 namespace telebotxx {
 
@@ -28,17 +27,17 @@ public:
 	Type getType() const;
 	void setType(Type type);
 
-	const optional<std::string>& getTitle() const;
-	void setTitle(optional<std::string> title);
+	const std::optional<std::string>& getTitle() const;
+	void setTitle(std::optional<std::string> title);
 
-	const optional<std::string>& getUsername() const;
-	void setUsername(optional<std::string> username);
+	const std::optional<std::string>& getUsername() const;
+	void setUsername(std::optional<std::string> username);
 
-	const optional<std::string>& getFirstName() const;
-	void setFirstName(optional<std::string> firstName);
+	const std::optional<std::string>& getFirstName() const;
+	void setFirstName(std::optional<std::string> firstName);
 
-	const optional<std::string>& getLastName() const;
-	void setLastName(optional<std::string> lastName);
+	const std::optional<std::string>& getLastName() const;
+	void setLastName(std::optional<std::string> lastName);
 
 	bool isAllAdmins() const;
 	void setAllAdmins(bool allAdmins);
@@ -46,10 +45,10 @@ public:
 private:
 	std::int64_t id_;
 	Type type_;
-	optional<std::string> title_;
-	optional<std::string> username_;
-	optional<std::string> firstName_;
-	optional<std::string> lastName_;
+	std::optional<std::string> title_;
+	std::optional<std::string> username_;
+	std::optional<std::string> firstName_;
+	std::optional<std::string> lastName_;
 	bool allAdmins_;
 };
 

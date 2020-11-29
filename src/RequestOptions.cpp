@@ -1,7 +1,5 @@
 #include <telebotxx/RequestOptions.hpp>
 
-#include <boost/variant.hpp>
-
 #define TELEBOTXX_DEFINE_BOOL_PARAM_CLASS(Name) Name::Name(bool value) : value_(value) { } \
 bool Name::getValue() const { return value_; }
 
@@ -27,12 +25,12 @@ ChatId::Type ChatId::getType() const
 
 const int ChatId::getId() const
 {
-	return boost::get<int>(value_);
+	return std::get<int>(value_);
 }
 
 const std::string ChatId::getUsername() const
 {
-	return boost::get<std::string>(value_);
+	return std::get<std::string>(value_);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -127,22 +125,22 @@ Photo::Type Photo::getType() const
 
 int Photo::getId() const
 {
-	return boost::get<int>(value_);
+	return std::get<int>(value_);
 }
 
 const Buffer& Photo::getBuffer() const
 {
-	return boost::get<Buffer>(value_);
+	return std::get<Buffer>(value_);
 }
 
 const File& Photo::getFile() const
 {
-	return boost::get<File>(value_);
+	return std::get<File>(value_);
 }
 
 const Url& Photo::getUrl() const
 {
-	return boost::get<Url>(value_);
+	return std::get<Url>(value_);
 }
 
 }

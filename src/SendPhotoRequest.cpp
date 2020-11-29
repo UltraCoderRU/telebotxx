@@ -7,7 +7,7 @@
 #include <rapidjson/writer.h>
 
 #include <iostream>
-#include <boost/optional.hpp>
+#include <optional>
 
 namespace telebotxx {
 
@@ -51,8 +51,8 @@ public:
 		{
 			const char* data = photo_.getBuffer().data();
 			std::size_t size = photo_.getBuffer().size();
-			const std::string filename = photo_.getBuffer().filename();
-			multipart.parts.push_back({"photo", cpr::Buffer(data, data + size, filename)});
+			std::string filename = photo_.getBuffer().filename();
+			multipart.parts.push_back({"photo", cpr::Buffer(data, data + size, std::move(filename))});
 		}
 		else if (photo_.getType() == Photo::Type::File)
 			multipart.parts.push_back({"photo", cpr::File(photo_.getFile().getValue())});
@@ -89,9 +89,9 @@ private:
 	std::string telegramMainUrl_;
 	ChatId chatId_;
 	Photo photo_;
-	boost::optional<Caption> caption_;
-	boost::optional<DisableNotification> disableNotification_;
-	boost::optional<ReplyTo> replyToMessageId_;
+	std::optional<Caption> caption_;
+	std::optional<DisableNotification> disableNotification_;
+	std::optional<ReplyTo> replyToMessageId_;
 };
 
 SendPhotoRequest::SendPhotoRequest(const std::string& telegramMainUrl, const ChatId& chat, const Photo& photo)

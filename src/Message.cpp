@@ -1,5 +1,7 @@
 #include <telebotxx/Message.hpp>
 
+#include <stdexcept>
+
 namespace telebotxx {
 
 MessageEntity::MessageEntity()
@@ -39,7 +41,7 @@ void MessageEntity::setLength(size_t length)
 	length_ = length;
 }
 
-const optional<std::string>& MessageEntity::getUrl() const
+const std::optional<std::string>& MessageEntity::getUrl() const
 {
 	return url_;
 }
@@ -49,7 +51,7 @@ void MessageEntity::setUrl(std::string url)
 	url_ = std::move(url);
 }
 
-const optional<User>& MessageEntity::getUser() const
+const std::optional<User>& MessageEntity::getUser() const
 {
 	return user_;
 }
@@ -108,12 +110,12 @@ void Message::setId(int id)
 	id_ = id;
 }
 
-const boost::optional<User>& Message::getFrom() const
+const std::optional<User>& Message::getFrom() const
 {
 	return from_;
 }
 
-void Message::setFrom(optional<User> from)
+void Message::setFrom(std::optional<User> from)
 {
 	from_ = std::move(from);
 }
@@ -138,32 +140,32 @@ void Message::setChat(Chat chat)
 	chat_ = std::move(chat);
 }
 
-const optional<User>& Message::getForwardFrom() const
+const std::optional<User>& Message::getForwardFrom() const
 {
 	return forwardFrom_;
 }
 
-void Message::setForwardFrom(optional<User> forwardFrom)
+void Message::setForwardFrom(std::optional<User> forwardFrom)
 {
 	forwardFrom_ = std::move(forwardFrom);
 }
 
-const optional<Chat>& Message::getForwardFromChat() const
+const std::optional<Chat>& Message::getForwardFromChat() const
 {
 	return forwardFromChat_;
 }
 
-void Message::setForwardFromChat(optional<Chat> forwardFromChat)
+void Message::setForwardFromChat(std::optional<Chat> forwardFromChat)
 {
 	forwardFromChat_ = std::move(forwardFromChat);
 }
 
-const optional<time_t>& Message::getForwardDate() const
+const std::optional<time_t>& Message::getForwardDate() const
 {
 	return forwardDate_;
 }
 
-void Message::setForwardDate(optional<time_t> forwardDate)
+void Message::setForwardDate(std::optional<time_t> forwardDate)
 {
 	forwardDate_ = forwardDate;
 }
@@ -178,92 +180,92 @@ void Message::setReplyToMessage(MessagePtr replyToMessage)
 	replyToMessage_ = replyToMessage;
 }
 
-const optional<time_t>& Message::getEditDate() const
+const std::optional<time_t>& Message::getEditDate() const
 {
 	return editDate_;
 }
 
-void Message::setEditDate(optional<time_t> editDate)
+void Message::setEditDate(std::optional<time_t> editDate)
 {
 	editDate_ = editDate;
 }
 
-const optional<std::string>& Message::getText() const
+const std::optional<std::string>& Message::getText() const
 {
 	return text_;
 }
 
-void Message::setText(optional<std::string> text)
+void Message::setText(std::optional<std::string> text)
 {
 	text_ = std::move(text);
 }
 
-const optional<MessageEntities>& Message::getEntities() const
+const std::optional<MessageEntities>& Message::getEntities() const
 {
 	return entities_;
 }
 
-void Message::setEntities(optional<MessageEntities> entities)
+void Message::setEntities(std::optional<MessageEntities> entities)
 {
 	entities_ = std::move(entities);
 }
 
-const optional<Attachment>& Message::getAttachment() const
+const std::optional<Attachment>& Message::getAttachment() const
 {
 	return attachment_;
 }
 
-void Message::setAttachment(optional<Attachment> attachment)
+void Message::setAttachment(std::optional<Attachment> attachment)
 {
 	attachment_ = std::move(attachment);
 }
 
-const optional<std::string>& Message::getCaption() const
+const std::optional<std::string>& Message::getCaption() const
 {
 	return caption_;
 }
 
-void Message::setCaption(optional<std::string> caption)
+void Message::setCaption(std::optional<std::string> caption)
 {
 	caption_ = std::move(caption);
 }
 
-const optional<User>& Message::getNewChatMember() const
+const std::optional<User>& Message::getNewChatMember() const
 {
 	return newChatMember_;
 }
 
-void Message::setNewChatMember(optional<User> newChatMember)
+void Message::setNewChatMember(std::optional<User> newChatMember)
 {
 	newChatMember_ = std::move(newChatMember);
 }
 
-const optional<User>& Message::getLeftChatMember() const
+const std::optional<User>& Message::getLeftChatMember() const
 {
 	return leftChatMember_;
 }
 
-void Message::setLeftChatMember(optional<User> leftChatMember)
+void Message::setLeftChatMember(std::optional<User> leftChatMember)
 {
 	leftChatMember_ = std::move(leftChatMember);
 }
 
-const optional<std::string>& Message::getNewChatTitle() const
+const std::optional<std::string>& Message::getNewChatTitle() const
 {
 	return newChatTitle_;
 }
 
-void Message::setNewChatTitle(optional<std::string> newChatTitle)
+void Message::setNewChatTitle(std::optional<std::string> newChatTitle)
 {
 	newChatTitle_ = std::move(newChatTitle);
 }
 
-const optional<PhotoSizeArray> Message::getNewChatPhoto() const
+const std::optional<PhotoSizeArray> Message::getNewChatPhoto() const
 {
 	return newChatPhoto_;
 }
 
-void Message::setNewChatPhoto(optional<PhotoSizeArray> newChatPhoto)
+void Message::setNewChatPhoto(std::optional<PhotoSizeArray> newChatPhoto)
 {
 	newChatPhoto_ = std::move(newChatPhoto);
 }
@@ -308,22 +310,22 @@ void Message::setChannelChatCreated(bool channelChatCreated)
 	channelChatCreated_ = channelChatCreated;
 }
 
-const optional<std::int64_t>& Message::getMigrateToChatId() const
+const std::optional<std::int64_t>& Message::getMigrateToChatId() const
 {
 	return migrateToChatId_;
 }
 
-void Message::setMigrateToChatId(optional<std::int64_t> migrateToChatId)
+void Message::setMigrateToChatId(std::optional<std::int64_t> migrateToChatId)
 {
 	migrateToChatId_ = migrateToChatId;
 }
 
-const optional<std::int64_t>& Message::getMigrateFromChatId() const
+const std::optional<std::int64_t>& Message::getMigrateFromChatId() const
 {
 	return migrateFromChatId_;
 }
 
-void Message::setMigrateFromChatId(optional<std::int64_t> migrateFromChatId)
+void Message::setMigrateFromChatId(std::optional<std::int64_t> migrateFromChatId)
 {
 	migrateFromChatId_ = migrateFromChatId;
 }

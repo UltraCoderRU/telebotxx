@@ -85,7 +85,7 @@ public:
 	Updates getUpdates(int offset = 0, unsigned short limit = 0, unsigned timeout = 0);
 
 private:
-	std::string getTelegramMainUrl() const;
+	[[nodiscard]] std::string getTelegramMainUrl() const;
 
 	class Impl;
 	std::unique_ptr<Impl> impl_;

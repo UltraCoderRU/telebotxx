@@ -7,7 +7,7 @@
 #include <rapidjson/writer.h>
 
 #include <iostream>
-#include <boost/optional.hpp>
+#include <optional>
 
 namespace telebotxx {
 
@@ -116,10 +116,10 @@ private:
 	std::string telegramMainUrl_;
 	ChatId chatId_;
 	Text text_;
-	boost::optional<ParseMode> parseMode_;
-	boost::optional<DisableWebPagePreview> disableWebPagePreview_;
-	boost::optional<DisableNotification> disableNotification_;
-	boost::optional<ReplyTo> replyToMessageId_;
+	std::optional<ParseMode> parseMode_;
+	std::optional<DisableWebPagePreview> disableWebPagePreview_;
+	std::optional<DisableNotification> disableNotification_;
+	std::optional<ReplyTo> replyToMessageId_;
 };
 
 SendMessageRequest::SendMessageRequest(const std::string& telegramMainUrl, const ChatId& chat, const Text& text)

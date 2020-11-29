@@ -5,12 +5,12 @@
 #include <telebotxx/Message.hpp>
 #include <telebotxx/Update.hpp>
 #include <telebotxx/User.hpp>
-#include <telebotxx/Optional.hpp>
 #include <telebotxx/Exception.hpp>
 
-#include <memory>
-
 #include <rapidjson/document.h>
+
+#include <memory>
+#include <optional>
 
 namespace telebotxx {
 
@@ -34,7 +34,7 @@ template<> const std::string get(const rapidjson::Value& obj);
 }
 
 template<typename T>
-optional<T> parse(const rapidjson::Value& obj, const char* name, bool required)
+std::optional<T> parse(const rapidjson::Value& obj, const char* name, bool required)
 {
 	if (obj.HasMember(name))
 	{
@@ -46,7 +46,7 @@ optional<T> parse(const rapidjson::Value& obj, const char* name, bool required)
 	else if (required)
 		throw ParseError(std::string("Field '") + name + "' not found");
 	else
-		return boost::none;
+		return std::nullopt;
 }
 
 template <typename T>
@@ -56,7 +56,7 @@ T require(const rapidjson::Value& obj, const char* name)
 }
 
 template <typename T>
-optional<T> allow(const rapidjson::Value& obj, const char* name)
+std::optional<T> allow(const rapidjson::Value& obj, const char* name)
 {
 	return parse<T>(obj, name, OPTIONAL);
 }
@@ -68,7 +68,7 @@ bool check(const rapidjson::Value& obj, const char* name);
 /// \param name field with Document object
 /// \param required REQUIRED or OPTIONAL
 /// \return pointer to User
-template<> optional<User> parse<User>(const rapidjson::Value& parent, const char* name, bool required);
+template<> std::optional<User> parse<User>(const rapidjson::Value& parent, const char* name, bool required);
 
 /// \brief Parse JSON object to Message
 /// \param parent reference to parent JSON object

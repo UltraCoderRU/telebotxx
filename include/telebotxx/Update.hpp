@@ -5,6 +5,7 @@
 
 #include <vector>
 #include <memory>
+#include <variant>
 
 namespace telebotxx {
 
@@ -31,7 +32,7 @@ public:
 private:
 	int id_;
 	Type type_;
-	boost::variant<MessagePtr> value_;
+	std::variant<MessagePtr> value_;
 };
 
 using Updates = std::vector<Update>;

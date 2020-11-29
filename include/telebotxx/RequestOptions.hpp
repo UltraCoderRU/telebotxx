@@ -3,8 +3,7 @@
 
 #include <string>
 #include <vector>
-
-#include <boost/variant/variant.hpp>
+#include <variant>
 
 #define TELEBOTXX_DECLARE_BOOL_PARAM_CLASS(Name, DEFAULT) class Name \
 { \
@@ -38,7 +37,7 @@ public:
 	const std::string getUsername() const;
 private:
 	Type type_;
-	boost::variant<int, std::string> value_;
+	std::variant<int, std::string> value_;
 };
 
 TELEBOTXX_DECLARE_STRING_PARAM_CLASS(Text);
@@ -100,7 +99,7 @@ public:
 
 private:
 	Type type_;
-	boost::variant<int, Buffer, File, Url> value_;
+	std::variant<int, Buffer, File, Url> value_;
 };
 
 }

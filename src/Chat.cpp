@@ -30,42 +30,42 @@ void Chat::setType(Chat::Type type)
 	type_ = type;
 }
 
-const optional<std::string>& Chat::getTitle() const
+const std::optional<std::string>& Chat::getTitle() const
 {
 	return title_;
 }
 
-void Chat::setTitle(optional<std::string> title)
+void Chat::setTitle(std::optional<std::string> title)
 {
 	title_ = title;
 }
 
-const optional<std::string>& Chat::getUsername() const
+const std::optional<std::string>& Chat::getUsername() const
 {
 	return username_;
 }
 
-void Chat::setUsername(optional<std::string> username)
+void Chat::setUsername(std::optional<std::string> username)
 {
 	username_ = username;
 }
 
-const optional<std::string>& Chat::getFirstName() const
+const std::optional<std::string>& Chat::getFirstName() const
 {
 	return firstName_;
 }
 
-void Chat::setFirstName(optional<std::string> firstName)
+void Chat::setFirstName(std::optional<std::string> firstName)
 {
 	firstName_ = firstName;
 }
 
-const optional<std::string>& Chat::getLastName() const
+const std::optional<std::string>& Chat::getLastName() const
 {
 	return lastName_;
 }
 
-void Chat::setLastName(optional<std::string> lastName)
+void Chat::setLastName(std::optional<std::string> lastName)
 {
 	lastName_ = lastName;
 }
