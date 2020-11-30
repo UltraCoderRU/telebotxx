@@ -1,22 +1,20 @@
-#include <telebotxx/RequestOptions.hpp>
+#include "RequestOptions.hpp"
 
-#include <boost/variant.hpp>
+#define TELEBOTXX_DEFINE_BOOL_PARAM_CLASS(Name) \
+	Name::Name(bool value) : value_(value) {} \
+	bool Name::getValue() const { return value_; }
 
-#define TELEBOTXX_DEFINE_BOOL_PARAM_CLASS(Name) Name::Name(bool value) : value_(value) { } \
-bool Name::getValue() const { return value_; }
-
-#define TELEBOTXX_DEFINE_STRING_PARAM_CLASS(Name) Name::Name(const std::string& value) : value_(value) { } \
-const std::string& Name::getValue() const { return value_; }
+#define TELEBOTXX_DEFINE_STRING_PARAM_CLASS(Name) \
+	Name::Name(const std::string& value) : value_(value) {} \
+	const std::string& Name::getValue() const { return value_; }
 
 namespace telebotxx {
 
-ChatId::ChatId(int id)
-	: type_(Type::Id), value_(id)
+ChatId::ChatId(int id) : type_(Type::Id), value_(id)
 {
 }
 
-ChatId::ChatId(const std::string& str)
-	: type_(Type::Username), value_(str)
+ChatId::ChatId(const std::string& str) : type_(Type::Username), value_(str)
 {
 }
 
@@ -27,12 +25,12 @@ ChatId::Type ChatId::getType() const
 
 const int ChatId::getId() const
 {
-	return boost::get<int>(value_);
+	return std::get<int>(value_);
 }
 
 const std::string ChatId::getUsername() const
 {
-	return boost::get<std::string>(value_);
+	return std::get<std::string>(value_);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -53,8 +51,7 @@ TELEBOTXX_DEFINE_BOOL_PARAM_CLASS(DisableNotification)
 
 ////////////////////////////////////////////////////////////////
 
-ReplyTo::ReplyTo(int id)
-	: id_(id)
+ReplyTo::ReplyTo(int id) : id_(id)
 {
 }
 
@@ -66,12 +63,12 @@ int ReplyTo::value() const
 ////////////////////////////////////////////////////////////////
 
 Buffer::Buffer(const char* buffer, std::size_t size, const std::string& filename)
-	: data_(buffer), size_(size), filename_(filename)
+    : data_(buffer), size_(size), filename_(filename)
 {
 }
 
 Buffer::Buffer(const std::vector<char>& data, const std::string& filename)
-	: data_(data.data()), size_(data.size()), filename_(filename)
+    : data_(data.data()), size_(data.size()), filename_(filename)
 {
 }
 
@@ -100,23 +97,19 @@ TELEBOTXX_DEFINE_STRING_PARAM_CLASS(Url)
 
 ////////////////////////////////////////////////////////////////
 
-Photo::Photo(int id)
-	: type_(Type::Id), value_(id)
+Photo::Photo(int id) : type_(Type::Id), value_(id)
 {
 }
 
-Photo::Photo(const Buffer& buffer)
-	: type_(Type::Buffer), value_(buffer)
+Photo::Photo(const Buffer& buffer) : type_(Type::Buffer), value_(buffer)
 {
 }
 
-Photo::Photo(const File& file)
-	: type_(Type::File), value_(file)
+Photo::Photo(const File& file) : type_(Type::File), value_(file)
 {
 }
 
-Photo::Photo(const Url& url)
-	: type_(Type::Url), value_(url)
+Photo::Photo(const Url& url) : type_(Type::Url), value_(url)
 {
 }
 
@@ -127,22 +120,22 @@ Photo::Type Photo::getType() const
 
 int Photo::getId() const
 {
-	return boost::get<int>(value_);
+	return std::get<int>(value_);
 }
 
 const Buffer& Photo::getBuffer() const
 {
-	return boost::get<Buffer>(value_);
+	return std::get<Buffer>(value_);
 }
 
 const File& Photo::getFile() const
 {
-	return boost::get<File>(value_);
+	return std::get<File>(value_);
 }
 
 const Url& Photo::getUrl() const
 {
-	return boost::get<Url>(value_);
+	return std::get<Url>(value_);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -160,23 +153,26 @@ TELEBOTXX_DEFINE_STRING_PARAM_CLASS(SwitchInlineQueryCurrentChat)
 ////////////////////////////////////////////////////////////////
 
 InlineKeyboardButton::InlineKeyboardButton(const std::string& text, const Url& url)
-	: actionType_(ActionType::Url), text_(text), value_(url)
+    : actionType_(ActionType::Url), text_(text), value_(url)
 {
 }
 
 InlineKeyboardButton::InlineKeyboardButton(const std::string& text, const CallbackData& callbackData)
-	: actionType_(ActionType::CallbackData), text_(text), value_(callbackData)
-{
-}
-
-InlineKeyboardButton::InlineKeyboardButton(const std::string& text, const SwitchInlineQuery& switchInlineQuery)
-	: actionType_(ActionType::SwitchInlineQuery), text_(text), value_(switchInlineQuery)
+    : actionType_(ActionType::CallbackData), text_(text), value_(callbackData)
 {
 }
 
 InlineKeyboardButton::InlineKeyboardButton(const std::string& text,
-										   const SwitchInlineQueryCurrentChat& switchInlineQueryCurrentChat)
-	: actionType_(ActionType::SwitchInlineQueryCurrentChat), text_(text), value_(switchInlineQueryCurrentChat)
+                                           const SwitchInlineQuery& switchInlineQuery)
+    : actionType_(ActionType::SwitchInlineQuery), text_(text), value_(switchInlineQuery)
+{
+}
+
+InlineKeyboardButton::InlineKeyboardButton(const std::string& text,
+                                           const SwitchInlineQueryCurrentChat& switchInlineQueryCurrentChat)
+    : actionType_(ActionType::SwitchInlineQueryCurrentChat),
+      text_(text),
+      value_(switchInlineQueryCurrentChat)
 {
 }
 
@@ -198,22 +194,22 @@ const std::string& InlineKeyboardButton::getText() const
 
 const Url& InlineKeyboardButton::getUrl() const
 {
-	return boost::get<Url>(value_);;
+	return std::get<Url>(value_);
 }
 
 const CallbackData& InlineKeyboardButton::getCallbackData() const
 {
-	return boost::get<CallbackData>(value_);
+	return std::get<CallbackData>(value_);
 }
 
 const SwitchInlineQuery& InlineKeyboardButton::getSwitchInlineQuery() const
 {
-	return boost::get<SwitchInlineQuery>(value_);
+	return std::get<SwitchInlineQuery>(value_);
 }
 
 const SwitchInlineQueryCurrentChat& InlineKeyboardButton::getSwitchInlineQueryCurrentChat() const
 {
-	return boost::get<SwitchInlineQueryCurrentChat>(value_);
+	return std::get<SwitchInlineQueryCurrentChat>(value_);
 }
 
 void InlineKeyboardButton::swap(InlineKeyboardButton& other)
@@ -245,12 +241,12 @@ const std::vector<InlineKeyboardButtonRow>& InlineKeyboardMarkup::getRows() cons
 ////////////////////////////////////////////////////////////////
 
 ReplyMarkup::ReplyMarkup(const InlineKeyboardMarkup& keyboard)
-	: type_(Type::InlineKeyboardMarkup), value_(keyboard)
+    : type_(Type::InlineKeyboardMarkup), value_(keyboard)
 {
 }
 
 ReplyMarkup::ReplyMarkup(const ReplyKeyboardMarkup& keyboard)
-	: type_(Type::ReplyKeyboardMarkup), value_(keyboard)
+    : type_(Type::ReplyKeyboardMarkup), value_(keyboard)
 {
 }
 
@@ -265,7 +261,7 @@ ReplyMarkup::Type ReplyMarkup::getType() const
 
 const InlineKeyboardMarkup& ReplyMarkup::getInlineKeyboardMarkup() const
 {
-	return boost::get<InlineKeyboardMarkup>(value_);
+	return std::get<InlineKeyboardMarkup>(value_);
 }
 
 void ReplyMarkup::swap(ReplyMarkup& other)
@@ -281,4 +277,4 @@ const ReplyMarkup& ReplyMarkup::operator=(ReplyMarkup other)
 	return *this;
 }
 
-}
+} // namespace telebotxx

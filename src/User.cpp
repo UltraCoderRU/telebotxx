@@ -1,10 +1,10 @@
-#include <telebotxx/User.hpp>
+#include "User.hpp"
+
 #include <sstream>
 
 namespace telebotxx {
 
-User::User()
-	: id_(-1)
+User::User() : id_(-1)
 {
 }
 
@@ -28,22 +28,22 @@ void User::setFirstName(std::string firstName)
 	firstName_ = std::move(firstName);
 }
 
-const optional<std::string>& User::getLastName() const
+const std::optional<std::string>& User::getLastName() const
 {
 	return lastName_;
 }
 
-void User::setLastName(optional<std::string> lastName)
+void User::setLastName(std::optional<std::string> lastName)
 {
 	lastName_ = std::move(lastName);
 }
 
-const optional<std::string>& User::getUsername() const
+const std::optional<std::string>& User::getUsername() const
 {
 	return username_;
 }
 
-void User::setUsername(optional<std::string> username)
+void User::setUsername(std::optional<std::string> username)
 {
 	username_ = std::move(username);
 }
@@ -65,4 +65,4 @@ std::ostream& operator<<(std::ostream& os, const User& user)
 	return os;
 }
 
-}
+} // namespace telebotxx

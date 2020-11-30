@@ -1,6 +1,7 @@
-#include <telebotxx/SendPhotoRequest.hpp>
-#include <telebotxx/Logging.hpp>
+#include "SendPhotoRequest.hpp"
+
 #include "JsonObjects.hpp"
+#include "Logging.hpp"
 #include "ReplyMarkup.hpp"
 
 #include <cpr/cpr.h>
@@ -8,7 +9,7 @@
 #include <rapidjson/writer.h>
 
 #include <iostream>
-#include <boost/optional.hpp>
+#include <optional>
 
 namespace telebotxx {
 
@@ -16,14 +17,11 @@ class SendPhotoRequest::Impl
 {
 public:
 	Impl(const std::string& telegramMainUrl, const ChatId& chat, const Photo& photo)
-		: telegramMainUrl_(telegramMainUrl), chatId_(chat), photo_(photo)
+	    : telegramMainUrl_(telegramMainUrl), chatId_(chat), photo_(photo)
 	{
 	}
 
-	void setCaption(const Caption& caption)
-	{
-		caption_ = caption;
-	}
+	void setCaption(const Caption& caption) { caption_ = caption; }
 
 	void setDisableNotification(const DisableNotification& disableNotification)
 	{
@@ -35,10 +33,7 @@ public:
 		replyToMessageId_ = replyToMessageId;
 	}
 
-	void setReplyMarkup(const ReplyMarkup& replyMarkup)
-	{
-		replyMarkup_ = replyMarkup;
-	}
+	void setReplyMarkup(const ReplyMarkup& replyMarkup) { replyMarkup_ = replyMarkup; }
 
 	Message execute()
 	{
@@ -57,8 +52,8 @@ public:
 		{
 			const char* data = photo_.getBuffer().data();
 			std::size_t size = photo_.getBuffer().size();
-			const std::string filename = photo_.getBuffer().filename();
-			multipart.parts.push_back({"photo", cpr::Buffer(data, data + size, filename)});
+			std::string filename = photo_.getBuffer().filename();
+			multipart.parts.push_back({"photo", cpr::Buffer(data, data + size, std::move(filename))});
 		}
 		else if (photo_.getType() == Photo::Type::File)
 			multipart.parts.push_back({"photo", cpr::File(photo_.getFile().getValue())});
@@ -106,14 +101,16 @@ private:
 	std::string telegramMainUrl_;
 	ChatId chatId_;
 	Photo photo_;
-	boost::optional<Caption> caption_;
-	boost::optional<DisableNotification> disableNotification_;
-	boost::optional<ReplyTo> replyToMessageId_;
-	boost::optional<ReplyMarkup> replyMarkup_;
+	std::optional<Caption> caption_;
+	std::optional<DisableNotification> disableNotification_;
+	std::optional<ReplyTo> replyToMessageId_;
+	std::optional<ReplyMarkup> replyMarkup_;
 };
 
-SendPhotoRequest::SendPhotoRequest(const std::string& telegramMainUrl, const ChatId& chat, const Photo& photo)
-	: impl_(std::make_unique<Impl>(telegramMainUrl, chat, photo))
+SendPhotoRequest::SendPhotoRequest(const std::string& telegramMainUrl,
+                                   const ChatId& chat,
+                                   const Photo& photo)
+    : impl_(std::make_unique<Impl>(telegramMainUrl, chat, photo))
 {
 }
 
@@ -166,4 +163,4 @@ Message SendPhotoRequest::execute()
 	return impl_->execute();
 }
 
-}
+} // namespace telebotxx

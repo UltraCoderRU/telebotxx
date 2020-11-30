@@ -1,11 +1,11 @@
 #ifndef TELEBOTXX_SEND_MESSAGE_REQUEST_HPP
 #define TELEBOTXX_SEND_MESSAGE_REQUEST_HPP
 
-#include <telebotxx/RequestOptions.hpp>
-#include <telebotxx/Message.hpp>
+#include "Message.hpp"
+#include "RequestOptions.hpp"
 
-#include <string>
 #include <memory>
+#include <string>
 
 namespace telebotxx {
 
@@ -34,6 +34,6 @@ private:
 	std::unique_ptr<Impl> impl_;
 };
 
-}
+} // namespace telebotxx
 
 #endif // TELEBOTXX_SEND_MESSAGE_REQUEST_HPP

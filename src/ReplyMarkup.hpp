@@ -1,7 +1,7 @@
 #ifndef TELEBOTXX_REPLY_MARKUP_HPP
 #define TELEBOTXX_REPLY_MARKUP_HPP
 
-#include <telebotxx/RequestOptions.hpp>
+#include "RequestOptions.hpp"
 
 #include <rapidjson/writer.h>
 

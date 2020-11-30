@@ -1,40 +1,30 @@
 sudo: required
-dist: trusty
+dist: bionic
 language: cpp
 
 matrix:
   include:
     - compiler: gcc
-      addons:
-        apt:
-          sources:
-            - sourceline: 'ppa:kzemek/boost'
-            - ubuntu-toolchain-r-test
-          packages:
-            - g++-4.9
-      env: COMPILER=g++-4.9
+      env: COMPILER=g++
     - compiler: clang
-      addons:
-        apt:
-          sources:
-            - sourceline: 'ppa:kzemek/boost'
-            - ubuntu-toolchain-r-test
-            - llvm-toolchain-precise-3.6
-          packages:
-            - clang-3.6
-      env: COMPILER=clang++-3.6
+      env: COMPILER=clang++
 
-env:
-  global:
-    - TELEBOTXX_BUILD_TESTS=ON
-    - TELEBOTXX_GENERATE_DOC=OFF
+install:
+  # Install CMake 3.15.0
+  - DEPS_DIR="${TRAVIS_BUILD_DIR}/deps"
+  - mkdir ${DEPS_DIR} && cd ${DEPS_DIR}
+  - travis_retry wget --no-check-certificate https://cmake.org/files/v3.15/cmake-3.15.0-Linux-x86_64.tar.gz
+  - tar -xvf cmake-3.15.0-Linux-x86_64.tar.gz > /dev/null
+  - mv cmake-3.15.0-Linux-x86_64 cmake-install
+  - PATH=${DEPS_DIR}/cmake-install:${DEPS_DIR}/cmake-install/bin:${PATH}
+  - cd ${TRAVIS_BUILD_DIR}
 
 before_script:
-  - sudo apt-get install -y libboost1.58-dev libboost-test1.58-dev libboost-system1.58-dev libcurl4-openssl-dev
+  - sudo apt-get install -y libcurl4-openssl-dev
   - export CXX=$COMPILER
   - mkdir build
   - cd build
-  - cmake ..
+  - cmake -DCMAKE_BUILD_TYPE=Release -DTELEBOTXX_BUILD_TESTS=ON -DTELEBOTXX_GENERATE_DOC=OFF ..
 
 script:
-  - make VERBOSE=1
+  - cmake --build .

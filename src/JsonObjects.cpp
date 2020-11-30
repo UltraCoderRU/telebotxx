@@ -4,17 +4,49 @@
 
 namespace telebotxx {
 namespace impl {
-template<> bool is<int>(const rapidjson::Value& obj) { return obj.IsInt(); }
-template<> bool is<std::int64_t>(const rapidjson::Value& obj) { return obj.IsInt64(); }
-template<> bool is<bool>(const rapidjson::Value& obj) { return obj.IsBool(); }
-template<> bool is<std::string>(const rapidjson::Value& obj) { return obj.IsString(); }
-
-template<> const int get(const rapidjson::Value& obj) { return obj.GetInt(); }
-template<> const std::int64_t get(const rapidjson::Value& obj) { return obj.GetInt64(); }
-template<> const bool get(const rapidjson::Value& obj) { return obj.GetBool(); }
-template<> const std::string get(const rapidjson::Value& obj) { return obj.GetString(); }
-
+template <>
+bool is<int>(const rapidjson::Value& obj)
+{
+	return obj.IsInt();
 }
+template <>
+bool is<std::int64_t>(const rapidjson::Value& obj)
+{
+	return obj.IsInt64();
+}
+template <>
+bool is<bool>(const rapidjson::Value& obj)
+{
+	return obj.IsBool();
+}
+template <>
+bool is<std::string>(const rapidjson::Value& obj)
+{
+	return obj.IsString();
+}
+
+template <>
+const int get(const rapidjson::Value& obj)
+{
+	return obj.GetInt();
+}
+template <>
+const std::int64_t get(const rapidjson::Value& obj)
+{
+	return obj.GetInt64();
+}
+template <>
+const bool get(const rapidjson::Value& obj)
+{
+	return obj.GetBool();
+}
+template <>
+const std::string get(const rapidjson::Value& obj)
+{
+	return obj.GetString();
+}
+
+} // namespace impl
 
 bool check(const rapidjson::Value& obj, const char* name)
 {
@@ -24,7 +56,8 @@ bool check(const rapidjson::Value& obj, const char* name)
 		return false;
 }
 
-const rapidjson::Value& parseObject(const rapidjson::Value& parent, const char* name, bool required, bool& found)
+const rapidjson::Value&
+parseObject(const rapidjson::Value& parent, const char* name, bool required, bool& found)
 {
 	if (parent.HasMember(name))
 	{
@@ -45,7 +78,8 @@ const rapidjson::Value& parseObject(const rapidjson::Value& parent, const char* 
 	}
 }
 
-const rapidjson::Value& parseArray(const rapidjson::Value& parent, const char* name, bool required, bool& found)
+const rapidjson::Value&
+parseArray(const rapidjson::Value& parent, const char* name, bool required, bool& found)
 {
 	if (parent.HasMember(name))
 	{
@@ -67,9 +101,9 @@ const rapidjson::Value& parseArray(const rapidjson::Value& parent, const char* n
 }
 
 template <>
-optional<Chat> parse<Chat>(const rapidjson::Value& parent, const char* name, bool required)
+std::optional<Chat> parse<Chat>(const rapidjson::Value& parent, const char* name, bool required)
 {
-	optional<Chat> chat;
+	std::optional<Chat> chat;
 	bool found;
 	auto& obj = parseObject(parent, name, required, found);
 	if (found)
@@ -87,9 +121,9 @@ optional<Chat> parse<Chat>(const rapidjson::Value& parent, const char* name, boo
 }
 
 template <>
-optional<User> parse<User>(const rapidjson::Value& parent, const char* name, bool required)
+std::optional<User> parse<User>(const rapidjson::Value& parent, const char* name, bool required)
 {
-	optional<User> user;
+	std::optional<User> user;
 	bool found;
 	auto& obj = parseObject(parent, name, required, found);
 	if (found)
@@ -113,9 +147,10 @@ PhotoSize parsePhotoSize(const rapidjson::Value& obj)
 }
 
 template <>
-optional<PhotoSize> parse<PhotoSize>(const rapidjson::Value& parent, const char* name, bool required)
+std::optional<PhotoSize>
+parse<PhotoSize>(const rapidjson::Value& parent, const char* name, bool required)
 {
-	optional<PhotoSize> photo;
+	std::optional<PhotoSize> photo;
 	bool found;
 	auto& obj = parseObject(parent, name, required, found);
 	if (found)
@@ -126,9 +161,10 @@ optional<PhotoSize> parse<PhotoSize>(const rapidjson::Value& parent, const char*
 }
 
 template <>
-optional<PhotoSizeArray> parse<PhotoSizeArray>(const rapidjson::Value& parent, const char* name, bool required)
+std::optional<PhotoSizeArray>
+parse<PhotoSizeArray>(const rapidjson::Value& parent, const char* name, bool required)
 {
-	optional<PhotoSizeArray> photos;
+	std::optional<PhotoSizeArray> photos;
 	bool found;
 	auto& obj = parseArray(parent, name, required, found);
 	if (found)
@@ -142,9 +178,9 @@ optional<PhotoSizeArray> parse<PhotoSizeArray>(const rapidjson::Value& parent, c
 }
 
 template <>
-optional<Audio> parse<Audio>(const rapidjson::Value& parent, const char* name, bool required)
+std::optional<Audio> parse<Audio>(const rapidjson::Value& parent, const char* name, bool required)
 {
-	optional<Audio> audio;
+	std::optional<Audio> audio;
 	bool found;
 	auto& obj = parseObject(parent, name, required, found);
 	if (found)
@@ -160,9 +196,9 @@ optional<Audio> parse<Audio>(const rapidjson::Value& parent, const char* name, b
 }
 
 template <>
-optional<Document> parse<Document>(const rapidjson::Value& parent, const char* name, bool required)
+std::optional<Document> parse<Document>(const rapidjson::Value& parent, const char* name, bool required)
 {
-	optional<Document> document;
+	std::optional<Document> document;
 	bool found;
 	auto& obj = parseObject(parent, name, required, found);
 	if (found)
@@ -178,9 +214,9 @@ optional<Document> parse<Document>(const rapidjson::Value& parent, const char* n
 }
 
 template <>
-optional<Sticker> parse<Sticker>(const rapidjson::Value& parent, const char* name, bool required)
+std::optional<Sticker> parse<Sticker>(const rapidjson::Value& parent, const char* name, bool required)
 {
-	optional<Sticker> sticker;
+	std::optional<Sticker> sticker;
 	bool found;
 	auto& obj = parseObject(parent, name, required, found);
 	if (found)
@@ -197,9 +233,10 @@ optional<Sticker> parse<Sticker>(const rapidjson::Value& parent, const char* nam
 }
 
 template <>
-optional<Attachment> parse<Attachment>(const rapidjson::Value& parent, const char* name, bool required)
+std::optional<Attachment>
+parse<Attachment>(const rapidjson::Value& parent, const char* name, bool required)
 {
-	optional<Attachment> attachment;
+	std::optional<Attachment> attachment;
 	if (auto photo = allow<PhotoSizeArray>(parent, "photo"))
 		attachment.emplace(std::move(*photo));
 	else if (auto audio = allow<Audio>(parent, "audio"))
@@ -230,7 +267,7 @@ std::unique_ptr<Message> parseMessage(const rapidjson::Value& parent, const char
 		message->setReplyToMessage(parseMessage(obj, "reply_to_message", OPTIONAL));
 		message->setEditDate(allow<std::int64_t>(obj, "edit_date"));
 		message->setText(parse<std::string>(obj, "text", OPTIONAL));
-		//message->setEntities(parseEntities(obj, "entities", OPTIONAL));
+		// message->setEntities(parseEntities(obj, "entities", OPTIONAL));
 		message->setAttachment(allow<Attachment>(obj, ""));
 		message->setCaption(allow<std::string>(obj, "caption"));
 		message->setNewChatMember(allow<User>(obj, "new_chat_member"));
@@ -295,4 +332,4 @@ void checkResponse(const rapidjson::Document& doc)
 	}
 }
 
-}
+} // namespace telebotxx

@@ -1,13 +1,8 @@
 #include <telebotxx/Attachment.hpp>
 
-#include <boost/variant.hpp>
-
 namespace telebotxx {
 
-PhotoSize::PhotoSize()
-	: width_(-1),
-	  height_(-1),
-	  fileSize_(-1)
+PhotoSize::PhotoSize() : width_(-1), height_(-1), fileSize_(-1)
 {
 }
 
@@ -41,21 +36,19 @@ void PhotoSize::setHeight(int height)
 	height_ = height;
 }
 
-const optional<int>& PhotoSize::getFileSize() const
+const std::optional<int>& PhotoSize::getFileSize() const
 {
 	return fileSize_;
 }
 
-void PhotoSize::setFileSize(optional<int> fileSize)
+void PhotoSize::setFileSize(std::optional<int> fileSize)
 {
 	fileSize_ = fileSize;
 }
 
 ////////////////////////////////////////////////////////////////
 
-Audio::Audio()
-	: duration_(-1),
-	  fileSize_(-1)
+Audio::Audio() : duration_(-1), fileSize_(-1)
 {
 }
 
@@ -79,50 +72,49 @@ void Audio::setDuration(int duration)
 	duration_ = duration;
 }
 
-const optional<std::string>& Audio::getPerformer() const
+const std::optional<std::string>& Audio::getPerformer() const
 {
 	return performer_;
 }
 
-void Audio::setPerformer(optional<std::string> performer)
+void Audio::setPerformer(std::optional<std::string> performer)
 {
 	performer_ = std::move(performer);
 }
 
-const optional<std::string>& Audio::getTitle() const
+const std::optional<std::string>& Audio::getTitle() const
 {
 	return title_;
 }
 
-void Audio::setTitle(optional<std::string> title)
+void Audio::setTitle(std::optional<std::string> title)
 {
 	title_ = title;
 }
 
-const optional<std::string>& Audio::getMimeType() const
+const std::optional<std::string>& Audio::getMimeType() const
 {
 	return mimeType_;
 }
 
-void Audio::setMimeType(optional<std::string> mimeType)
+void Audio::setMimeType(std::optional<std::string> mimeType)
 {
 	mimeType_ = mimeType;
 }
 
-const optional<int>& Audio::getFileSize() const
+const std::optional<int>& Audio::getFileSize() const
 {
 	return fileSize_;
 }
 
-void Audio::setFileSize(optional<int> fileSize)
+void Audio::setFileSize(std::optional<int> fileSize)
 {
 	fileSize_ = fileSize;
 }
 
 ////////////////////////////////////////////////////////////////
 
-Document::Document()
-	: fileSize_(-1)
+Document::Document() : fileSize_(-1)
 {
 }
 
@@ -136,50 +128,49 @@ void Document::setFileId(std::string fileId)
 	fileId_ = fileId;
 }
 
-const optional<PhotoSize>& Document::getThumb() const
+const std::optional<PhotoSize>& Document::getThumb() const
 {
 	return thumb_;
 }
 
-void Document::setThumb(optional<PhotoSize> thumb)
+void Document::setThumb(std::optional<PhotoSize> thumb)
 {
 	thumb_ = thumb;
 }
 
-const optional<std::string>& Document::getFileName() const
+const std::optional<std::string>& Document::getFileName() const
 {
 	return fileName_;
 }
 
-void Document::setFileName(optional<std::string> fileName)
+void Document::setFileName(std::optional<std::string> fileName)
 {
 	fileName_ = fileName;
 }
 
-const optional<std::string>& Document::getMimeType() const
+const std::optional<std::string>& Document::getMimeType() const
 {
 	return mimeType_;
 }
 
-void Document::setMimeType(optional<std::string> mimeType)
+void Document::setMimeType(std::optional<std::string> mimeType)
 {
 	mimeType_ = mimeType;
 }
 
-const optional<int>& Document::getFileSize() const
+const std::optional<int>& Document::getFileSize() const
 {
 	return fileSize_;
 }
 
-void Document::setFileSize(optional<int> fileSize)
+void Document::setFileSize(std::optional<int> fileSize)
 {
 	fileSize_ = fileSize;
 }
 
 ////////////////////////////////////////////////////////////////
 
-Sticker::Sticker()
-	: fileSize_(-1)
+Sticker::Sticker() : fileSize_(-1)
 {
 }
 
@@ -213,32 +204,32 @@ void Sticker::setHeight(int height)
 	height_ = height;
 }
 
-const optional<PhotoSize>& Sticker::getThumb() const
+const std::optional<PhotoSize>& Sticker::getThumb() const
 {
 	return thumb_;
 }
 
-void Sticker::setThumb(optional<PhotoSize> thumb)
+void Sticker::setThumb(std::optional<PhotoSize> thumb)
 {
 	thumb_ = thumb;
 }
 
-const optional<std::string>& Sticker::getEmoji() const
+const std::optional<std::string>& Sticker::getEmoji() const
 {
 	return emoji_;
 }
 
-void Sticker::setEmoji(optional<std::string> emoji)
+void Sticker::setEmoji(std::optional<std::string> emoji)
 {
 	emoji_ = emoji;
 }
 
-const optional<int>& Sticker::getFileSize() const
+const std::optional<int>& Sticker::getFileSize() const
 {
 	return fileSize_;
 }
 
-void Sticker::setFileSize(optional<int> fileSize)
+void Sticker::setFileSize(std::optional<int> fileSize)
 {
 	fileSize_ = fileSize;
 }
@@ -246,22 +237,19 @@ void Sticker::setFileSize(optional<int> fileSize)
 ////////////////////////////////////////////////////////////////
 
 Attachment::Attachment(PhotoSizeArray photos)
-	: type_(Type::PhotoSizeArray), value_(std::move(photos))
+    : type_(Type::PhotoSizeArray), value_(std::move(photos))
 {
 }
 
-Attachment::Attachment(Audio audio)
-	: type_(Type::Audio), value_(std::move(audio))
+Attachment::Attachment(Audio audio) : type_(Type::Audio), value_(std::move(audio))
 {
 }
 
-Attachment::Attachment(Document document)
-	: type_(Type::Document), value_(std::move(document))
+Attachment::Attachment(Document document) : type_(Type::Document), value_(std::move(document))
 {
 }
 
-Attachment::Attachment(Sticker sticker)
-	: type_(Type::Sticker), value_(std::move(sticker))
+Attachment::Attachment(Sticker sticker) : type_(Type::Sticker), value_(std::move(sticker))
 {
 }
 
@@ -272,22 +260,24 @@ Attachment::Type Attachment::getType() const
 
 const PhotoSizeArray& Attachment::getPhotoSizeArray() const
 {
-	return boost::get<PhotoSizeArray>(value_);
+	return std::get<PhotoSizeArray>(value_);
 }
 
 const Audio& Attachment::getAudio() const
 {
-	return boost::get<Audio>(value_);;
+	return std::get<Audio>(value_);
+	;
 }
 
 const Document& Attachment::getDocument() const
 {
-	return boost::get<Document>(value_);
+	return std::get<Document>(value_);
 }
 
 const Sticker& Attachment::getSticker() const
 {
-	return boost::get<Sticker>(value_);;
+	return std::get<Sticker>(value_);
+	;
 }
 
-}
+} // namespace telebotxx

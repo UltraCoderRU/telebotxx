@@ -1,12 +1,9 @@
-#include <telebotxx/Update.hpp>
-#include <boost/variant.hpp>
+#include "Update.hpp"
 
 namespace telebotxx {
 
 Update::Update(int id, Type type, std::unique_ptr<Message> message)
-	: id_(id),
-	  type_(type),
-	  value_(std::move(message))
+    : id_(id), type_(type), value_(std::move(message))
 {
 }
 
@@ -22,7 +19,7 @@ Update::Type Update::getType() const
 
 MessagePtr Update::getMessage() const
 {
-	return boost::get<MessagePtr>(value_);
+	return std::get<MessagePtr>(value_);
 }
 
-}
+} // namespace telebotxx

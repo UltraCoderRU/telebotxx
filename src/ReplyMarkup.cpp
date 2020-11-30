@@ -2,7 +2,8 @@
 
 namespace telebotxx {
 
-void writeInlineKeyboardButton(rapidjson::Writer<rapidjson::StringBuffer>& writer, const InlineKeyboardButton& button)
+void writeInlineKeyboardButton(rapidjson::Writer<rapidjson::StringBuffer>& writer,
+                               const InlineKeyboardButton& button)
 {
 	writer.StartObject();
 
@@ -11,36 +12,37 @@ void writeInlineKeyboardButton(rapidjson::Writer<rapidjson::StringBuffer>& write
 
 	switch (button.getActionType())
 	{
-		case InlineKeyboardButton::ActionType::Url:
-		{
-			writer.String("url");
-			writer.String(button.getUrl().getValue().c_str());
-			break;
-		}
-		case InlineKeyboardButton::ActionType::CallbackData:
-		{
-			writer.String("callback_data");
-			writer.String(button.getCallbackData().getValue().c_str());
-			break;
-		}
-		case InlineKeyboardButton::ActionType::SwitchInlineQuery:
-		{
-			writer.String("switch_inline_query");
-			writer.String(button.getSwitchInlineQuery().getValue().c_str());
-			break;
-		}
-		case InlineKeyboardButton::ActionType::SwitchInlineQueryCurrentChat:
-		{
-			writer.String("switch_inline_query_current_chat");
-			writer.String(button.getSwitchInlineQueryCurrentChat().getValue().c_str());
-			break;
-		}
+	case InlineKeyboardButton::ActionType::Url:
+	{
+		writer.String("url");
+		writer.String(button.getUrl().getValue().c_str());
+		break;
+	}
+	case InlineKeyboardButton::ActionType::CallbackData:
+	{
+		writer.String("callback_data");
+		writer.String(button.getCallbackData().getValue().c_str());
+		break;
+	}
+	case InlineKeyboardButton::ActionType::SwitchInlineQuery:
+	{
+		writer.String("switch_inline_query");
+		writer.String(button.getSwitchInlineQuery().getValue().c_str());
+		break;
+	}
+	case InlineKeyboardButton::ActionType::SwitchInlineQueryCurrentChat:
+	{
+		writer.String("switch_inline_query_current_chat");
+		writer.String(button.getSwitchInlineQueryCurrentChat().getValue().c_str());
+		break;
+	}
 	}
 
 	writer.EndObject();
 }
 
-void writeInlineKeyboardMarkup(rapidjson::Writer<rapidjson::StringBuffer>& writer, const InlineKeyboardMarkup& markup)
+void writeInlineKeyboardMarkup(rapidjson::Writer<rapidjson::StringBuffer>& writer,
+                               const InlineKeyboardMarkup& markup)
 {
 	writer.StartObject();
 	writer.String("inline_keyboard");
@@ -63,4 +65,4 @@ void writeReplyMarkup(rapidjson::Writer<rapidjson::StringBuffer>& writer, const 
 		writeInlineKeyboardMarkup(writer, markup.getInlineKeyboardMarkup());
 }
 
-}
+} // namespace telebotxx
