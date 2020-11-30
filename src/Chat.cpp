@@ -1,12 +1,10 @@
-#include <telebotxx/Chat.hpp>
+#include "Chat.hpp"
+
 #include <stdexcept>
 
 namespace telebotxx {
 
-Chat::Chat()
-	: id_(-1),
-	  type_(Type::Private),
-	  allAdmins_(false)
+Chat::Chat() : id_(-1), type_(Type::Private), allAdmins_(false)
 {
 }
 
@@ -94,4 +92,4 @@ Chat::Type chatTypeFromString(const std::string& str)
 		throw std::invalid_argument("Unknown chat type");
 }
 
-}
+} // namespace telebotxx

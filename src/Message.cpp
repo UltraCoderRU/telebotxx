@@ -1,13 +1,10 @@
-#include <telebotxx/Message.hpp>
+#include "Message.hpp"
 
 #include <stdexcept>
 
 namespace telebotxx {
 
-MessageEntity::MessageEntity()
-	: type_(Type::Mention),
-	  offset_(-1),
-	  length_(0)
+MessageEntity::MessageEntity() : type_(Type::Mention), offset_(-1), length_(0)
 {
 }
 
@@ -92,11 +89,11 @@ MessageEntity::Type messageEntityTypeFromString(const std::string& str)
 ////////////////////////////////////////////////////////////////
 
 Message::Message()
-	: id_(-1),
-	  deleteChatPhoto_(false),
-	  groupChatCreated_(false),
-	  superGroupChatCreated_(false),
-	  channelChatCreated_(false)
+    : id_(-1),
+      deleteChatPhoto_(false),
+      groupChatCreated_(false),
+      superGroupChatCreated_(false),
+      channelChatCreated_(false)
 {
 }
 
@@ -340,4 +337,4 @@ void Message::setPinnedMessage(MessagePtr pinnedMessage)
 	pinnedMessage_ = pinnedMessage;
 }
 
-}
+} // namespace telebotxx

@@ -1,6 +1,7 @@
-#include <telebotxx/SendPhotoRequest.hpp>
-#include <telebotxx/Logging.hpp>
+#include "SendPhotoRequest.hpp"
+
 #include "JsonObjects.hpp"
+#include "Logging.hpp"
 
 #include <cpr/cpr.h>
 #include <rapidjson/document.h>
@@ -15,14 +16,11 @@ class SendPhotoRequest::Impl
 {
 public:
 	Impl(const std::string& telegramMainUrl, const ChatId& chat, const Photo& photo)
-		: telegramMainUrl_(telegramMainUrl), chatId_(chat), photo_(photo)
+	    : telegramMainUrl_(telegramMainUrl), chatId_(chat), photo_(photo)
 	{
 	}
 
-	void setCaption(const Caption& caption)
-	{
-		caption_ = caption;
-	}
+	void setCaption(const Caption& caption) { caption_ = caption; }
 
 	void setDisableNotification(const DisableNotification& disableNotification)
 	{
@@ -94,8 +92,10 @@ private:
 	std::optional<ReplyTo> replyToMessageId_;
 };
 
-SendPhotoRequest::SendPhotoRequest(const std::string& telegramMainUrl, const ChatId& chat, const Photo& photo)
-	: impl_(std::make_unique<Impl>(telegramMainUrl, chat, photo))
+SendPhotoRequest::SendPhotoRequest(const std::string& telegramMainUrl,
+                                   const ChatId& chat,
+                                   const Photo& photo)
+    : impl_(std::make_unique<Impl>(telegramMainUrl, chat, photo))
 {
 }
 
@@ -138,4 +138,4 @@ Message SendPhotoRequest::execute()
 	return impl_->execute();
 }
 
-}
+} // namespace telebotxx

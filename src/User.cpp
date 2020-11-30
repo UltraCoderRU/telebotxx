@@ -1,10 +1,10 @@
-#include <telebotxx/User.hpp>
+#include "User.hpp"
+
 #include <sstream>
 
 namespace telebotxx {
 
-User::User()
-	: id_(-1)
+User::User() : id_(-1)
 {
 }
 
@@ -65,4 +65,4 @@ std::ostream& operator<<(std::ostream& os, const User& user)
 	return os;
 }
 
-}
+} // namespace telebotxx

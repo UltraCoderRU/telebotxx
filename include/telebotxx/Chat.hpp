@@ -1,10 +1,10 @@
 #ifndef TELEBOTXX_CHAT_HPP
 #define TELEBOTXX_CHAT_HPP
 
-#include <string>
-#include <memory>
 #include <cstdint>
+#include <memory>
 #include <optional>
+#include <string>
 
 namespace telebotxx {
 
@@ -54,6 +54,6 @@ private:
 
 Chat::Type chatTypeFromString(const std::string& str);
 
-}
+} // namespace telebotxx
 
 #endif // TELEBOTXX_CHAT_HPP

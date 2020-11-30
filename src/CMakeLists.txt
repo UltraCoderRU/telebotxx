@@ -18,6 +18,7 @@ set(SOURCE_FILES Attachment.cpp
 
 add_library(telebotxx ${SOURCE_FILES})
 target_include_directories(telebotxx PUBLIC ${telebotxx_SOURCE_DIR}/include)
+target_include_directories(telebotxx PRIVATE ${telebotxx_SOURCE_DIR}/include/telebotxx)
 target_link_libraries(telebotxx
 PRIVATE
 	${CPR_LIBRARIES}

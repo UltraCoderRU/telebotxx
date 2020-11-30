@@ -1,11 +1,11 @@
 #ifndef TELEBOTXX_JSON_OBJECTS_HPP
 #define TELEBOTXX_JSON_OBJECTS_HPP
 
-#include <telebotxx/Attachment.hpp>
-#include <telebotxx/Message.hpp>
-#include <telebotxx/Update.hpp>
-#include <telebotxx/User.hpp>
-#include <telebotxx/Exception.hpp>
+#include "Attachment.hpp"
+#include "Exception.hpp"
+#include "Message.hpp"
+#include "Update.hpp"
+#include "User.hpp"
 
 #include <rapidjson/document.h>
 
@@ -19,21 +19,31 @@ const bool OPTIONAL = false;
 
 namespace impl {
 
-template<typename T> bool is(const rapidjson::Value& obj);
-template<> bool is<int>(const rapidjson::Value& obj);
-template<> bool is<std::int64_t>(const rapidjson::Value& obj);
-template<> bool is<bool>(const rapidjson::Value& obj);
-template<> bool is<std::string>(const rapidjson::Value& obj);
+template <typename T>
+bool is(const rapidjson::Value& obj);
+template <>
+bool is<int>(const rapidjson::Value& obj);
+template <>
+bool is<std::int64_t>(const rapidjson::Value& obj);
+template <>
+bool is<bool>(const rapidjson::Value& obj);
+template <>
+bool is<std::string>(const rapidjson::Value& obj);
 
-template<typename T> const T get(const rapidjson::Value& obj);
-template<> const int get(const rapidjson::Value& obj);
-template<> const std::int64_t get(const rapidjson::Value& obj);
-template<> const bool get(const rapidjson::Value& obj);
-template<> const std::string get(const rapidjson::Value& obj);
+template <typename T>
+const T get(const rapidjson::Value& obj);
+template <>
+const int get(const rapidjson::Value& obj);
+template <>
+const std::int64_t get(const rapidjson::Value& obj);
+template <>
+const bool get(const rapidjson::Value& obj);
+template <>
+const std::string get(const rapidjson::Value& obj);
 
-}
+} // namespace impl
 
-template<typename T>
+template <typename T>
 std::optional<T> parse(const rapidjson::Value& obj, const char* name, bool required)
 {
 	if (obj.HasMember(name))
@@ -68,7 +78,8 @@ bool check(const rapidjson::Value& obj, const char* name);
 /// \param name field with Document object
 /// \param required REQUIRED or OPTIONAL
 /// \return pointer to User
-template<> std::optional<User> parse<User>(const rapidjson::Value& parent, const char* name, bool required);
+template <>
+std::optional<User> parse<User>(const rapidjson::Value& parent, const char* name, bool required);
 
 /// \brief Parse JSON object to Message
 /// \param parent reference to parent JSON object
@@ -89,6 +100,6 @@ Updates parseUpdates(const rapidjson::Value& parent, const char* name);
 /// \param doc reference to JSON document
 void checkResponse(const rapidjson::Document& doc);
 
-}
+} // namespace telebotxx
 
 #endif // TELEBOTXX_JSON_OBJECTS_HPP

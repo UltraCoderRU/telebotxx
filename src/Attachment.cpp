@@ -2,10 +2,7 @@
 
 namespace telebotxx {
 
-PhotoSize::PhotoSize()
-	: width_(-1),
-	  height_(-1),
-	  fileSize_(-1)
+PhotoSize::PhotoSize() : width_(-1), height_(-1), fileSize_(-1)
 {
 }
 
@@ -51,9 +48,7 @@ void PhotoSize::setFileSize(std::optional<int> fileSize)
 
 ////////////////////////////////////////////////////////////////
 
-Audio::Audio()
-	: duration_(-1),
-	  fileSize_(-1)
+Audio::Audio() : duration_(-1), fileSize_(-1)
 {
 }
 
@@ -119,8 +114,7 @@ void Audio::setFileSize(std::optional<int> fileSize)
 
 ////////////////////////////////////////////////////////////////
 
-Document::Document()
-	: fileSize_(-1)
+Document::Document() : fileSize_(-1)
 {
 }
 
@@ -176,8 +170,7 @@ void Document::setFileSize(std::optional<int> fileSize)
 
 ////////////////////////////////////////////////////////////////
 
-Sticker::Sticker()
-	: fileSize_(-1)
+Sticker::Sticker() : fileSize_(-1)
 {
 }
 
@@ -244,22 +237,19 @@ void Sticker::setFileSize(std::optional<int> fileSize)
 ////////////////////////////////////////////////////////////////
 
 Attachment::Attachment(PhotoSizeArray photos)
-	: type_(Type::PhotoSizeArray), value_(std::move(photos))
+    : type_(Type::PhotoSizeArray), value_(std::move(photos))
 {
 }
 
-Attachment::Attachment(Audio audio)
-	: type_(Type::Audio), value_(std::move(audio))
+Attachment::Attachment(Audio audio) : type_(Type::Audio), value_(std::move(audio))
 {
 }
 
-Attachment::Attachment(Document document)
-	: type_(Type::Document), value_(std::move(document))
+Attachment::Attachment(Document document) : type_(Type::Document), value_(std::move(document))
 {
 }
 
-Attachment::Attachment(Sticker sticker)
-	: type_(Type::Sticker), value_(std::move(sticker))
+Attachment::Attachment(Sticker sticker) : type_(Type::Sticker), value_(std::move(sticker))
 {
 }
 
@@ -275,7 +265,8 @@ const PhotoSizeArray& Attachment::getPhotoSizeArray() const
 
 const Audio& Attachment::getAudio() const
 {
-	return std::get<Audio>(value_);;
+	return std::get<Audio>(value_);
+	;
 }
 
 const Document& Attachment::getDocument() const
@@ -285,7 +276,8 @@ const Document& Attachment::getDocument() const
 
 const Sticker& Attachment::getSticker() const
 {
-	return std::get<Sticker>(value_);;
+	return std::get<Sticker>(value_);
+	;
 }
 
-}
+} // namespace telebotxx

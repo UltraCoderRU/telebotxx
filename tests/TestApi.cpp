@@ -1,15 +1,13 @@
-#include <catch2/catch_all.hpp>
-
 #include <telebotxx/BotApi.hpp>
 #include <telebotxx/Logging.hpp>
 
-#include <memory>
-#include <fstream>
-
+#include <catch2/catch_all.hpp>
 #include <rapidjson/document.h>
 #include <rapidjson/istreamwrapper.h>
 
+#include <fstream>
 #include <iostream>
+#include <memory>
 
 const char* CONFIG_FILE_NAME = "config.json";
 
@@ -107,36 +105,29 @@ TEST_CASE("Send message with markdown", "[API]")
 	REQUIRE(bot);
 	REQUIRE_NOTHROW(bot->sendMessage(ChatId{config->chat},
 	                                 Text{"[Sample text in markdown](http://google.com/)"},
-	                                 ParseMode::Markdown
-	));
+	                                 ParseMode::Markdown));
 }
 
 TEST_CASE("Send message with HTML", "[API]")
 {
 	REQUIRE(bot);
 	REQUIRE_NOTHROW(bot->sendMessage(ChatId{config->chat},
-	                                 Text{
-	                                 "<a href=\"http://google.com/\">Sample text in HTML</a>"},
-	                                 ParseMode::Html
-	));
+	                                 Text{"<a href=\"http://google.com/\">Sample text in HTML</a>"},
+	                                 ParseMode::Html));
 }
 
 TEST_CASE("Send message without preview", "[API]")
 {
 	REQUIRE(bot);
-	REQUIRE_NOTHROW(bot->sendMessage(ChatId{config->chat},
-	                                 Text{"http://google.com/"},
-	                                 DisableWebPagePreview()
-	));
+	REQUIRE_NOTHROW(bot->sendMessage(ChatId{config->chat}, Text{"http://google.com/"},
+	                                 DisableWebPagePreview()));
 }
 
 TEST_CASE("Send message without notification", "[API]")
 {
 	REQUIRE(bot);
-	REQUIRE_NOTHROW(bot->sendMessage(ChatId{config->chat},
-	                                 Text{"Message without notification"},
-	                                 DisableNotification()
-	));
+	REQUIRE_NOTHROW(bot->sendMessage(ChatId{config->chat}, Text{"Message without notification"},
+	                                 DisableNotification()));
 }
 
 TEST_CASE("Send photo from file", "[API]")
@@ -147,12 +138,9 @@ TEST_CASE("Send photo from file", "[API]")
 
 TEST_CASE("Send photo from file with caption", "[API]")
 {
-
 	REQUIRE(bot);
-	REQUIRE_NOTHROW(bot->sendPhoto(config->chat,
-	                               Photo{File{config->photoFile}},
-	                               Caption{"Photo with caption"}
-	));
+	REQUIRE_NOTHROW(bot->sendPhoto(config->chat, Photo{File{config->photoFile}},
+	                               Caption{"Photo with caption"}));
 }
 
 TEST_CASE("Send photo from memory", "[API]")
@@ -163,29 +151,22 @@ TEST_CASE("Send photo from memory", "[API]")
 	file.seekg(0, std::ios::beg);
 	std::vector<char> buffer(size);
 	REQUIRE(file.read(buffer.data(), size));
-	REQUIRE_NOTHROW(bot->sendPhoto(config->chat,
-	                               Photo{Buffer{buffer.data(), size, config->photoFile}},
-	                               Caption{"Photo sent in-memory"}
-	));
+	REQUIRE_NOTHROW(bot->sendPhoto(config->chat, Photo{Buffer{buffer.data(), size, config->photoFile}},
+	                               Caption{"Photo sent in-memory"}));
 }
 
 TEST_CASE("Send photo by URL", "[API]")
 {
 	REQUIRE(bot);
-	REQUIRE_NOTHROW(bot->sendPhoto(config->chat,
-	                               Photo{Url{config->photoUrl}},
-	                               Caption{"Photo sent by URL"}
-	));
+	REQUIRE_NOTHROW(
+	    bot->sendPhoto(config->chat, Photo{Url{config->photoUrl}}, Caption{"Photo sent by URL"}));
 }
 
 TEST_CASE("Send photo without notification", "[API]")
 {
 	REQUIRE(bot);
-	REQUIRE_NOTHROW(bot->sendPhoto(config->chat,
-	                               Photo{File{config->photoFile}},
-	                               Caption{"Photo without notification"},
-	                               DisableNotification()
-	));
+	REQUIRE_NOTHROW(bot->sendPhoto(config->chat, Photo{File{config->photoFile}},
+	                               Caption{"Photo without notification"}, DisableNotification()));
 }
 
 TEST_CASE("Get updates", "[API]")
@@ -198,18 +179,18 @@ TEST_CASE("Get updates", "[API]")
 	{
 		switch (update.getType())
 		{
-			case Update::Type::Message:
-			case Update::Type::EditedMessage:
-			case Update::Type::ChannelPost:
-			case Update::Type::EditedChannelPost:
-			{
-				auto message = update.getMessage();
-				if (message->getFrom())
-					std::cout << *message->getFrom() << ": ";
-				if (message->getText())
-					std::cout << *message->getText() << std::endl;
-				break;
-			}
+		case Update::Type::Message:
+		case Update::Type::EditedMessage:
+		case Update::Type::ChannelPost:
+		case Update::Type::EditedChannelPost:
+		{
+			auto message = update.getMessage();
+			if (message->getFrom())
+				std::cout << *message->getFrom() << ": ";
+			if (message->getText())
+				std::cout << *message->getText() << std::endl;
+			break;
+		}
 		}
 	}
 }

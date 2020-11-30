@@ -1,11 +1,9 @@
-#include <telebotxx/Update.hpp>
+#include "Update.hpp"
 
 namespace telebotxx {
 
 Update::Update(int id, Type type, std::unique_ptr<Message> message)
-	: id_(id),
-	  type_(type),
-	  value_(std::move(message))
+    : id_(id), type_(type), value_(std::move(message))
 {
 }
 
@@ -24,4 +22,4 @@ MessagePtr Update::getMessage() const
 	return std::get<MessagePtr>(value_);
 }
 
-}
+} // namespace telebotxx

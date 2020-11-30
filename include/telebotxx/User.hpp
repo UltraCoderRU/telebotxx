@@ -1,9 +1,9 @@
 #ifndef TELEBOTXX_USER_H
 #define TELEBOTXX_USER_H
 
-#include <string>
 #include <memory>
 #include <optional>
+#include <string>
 
 namespace telebotxx {
 
@@ -48,6 +48,6 @@ private:
 
 std::ostream& operator<<(std::ostream& os, const User& user);
 
-}
+} // namespace telebotxx
 
 #endif // TELEBOTXX_USER_H

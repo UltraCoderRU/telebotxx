@@ -1,4 +1,4 @@
-#include <telebotxx/Logging.hpp>
+#include "Logging.hpp"
 
 namespace telebotxx {
 
@@ -9,4 +9,4 @@ void setDebugMode(bool enabled)
 	debugMode = enabled;
 }
 
-}
+} // namespace telebotxx

@@ -1,6 +1,7 @@
-#include <telebotxx/SendMessageRequest.hpp>
-#include <telebotxx/Logging.hpp>
+#include "SendMessageRequest.hpp"
+
 #include "JsonObjects.hpp"
+#include "Logging.hpp"
 
 #include <cpr/cpr.h>
 #include <rapidjson/document.h>
@@ -15,14 +16,11 @@ class SendMessageRequest::Impl
 {
 public:
 	Impl(const std::string& telegramMainUrl, const ChatId& chat, const Text& text)
-		: telegramMainUrl_(telegramMainUrl), chatId_(chat), text_(text)
+	    : telegramMainUrl_(telegramMainUrl), chatId_(chat), text_(text)
 	{
 	}
 
-	void setParseMode(ParseMode mode)
-	{
-		parseMode_ = mode;
-	}
+	void setParseMode(ParseMode mode) { parseMode_ = mode; }
 
 	void setDisableWebPagePreview(const DisableWebPagePreview& disableWebPagePreview)
 	{
@@ -62,8 +60,9 @@ public:
 		if (parseMode_)
 		{
 			writer.String("parse_mode");
-			writer.String(
-				(parseMode_ == ParseMode::Markdown) ? "Markdown" : (parseMode_ == ParseMode::Html) ? "HTML" : "Plain");
+			writer.String((parseMode_ == ParseMode::Markdown) ? "Markdown"
+			              : (parseMode_ == ParseMode::Html)   ? "HTML"
+			                                                  : "Plain");
 		}
 
 		// Add disable_web_page_preview
@@ -96,9 +95,7 @@ public:
 		if (debugMode)
 			std::cout << "Request: " << request << std::endl;
 		auto r = cpr::Post(cpr::Url{telegramMainUrl_ + "/sendMessage"},
-						   cpr::Header{{"Content-Type", "application/json"}},
-						   cpr::Body{request}
-		);
+		                   cpr::Header{{"Content-Type", "application/json"}}, cpr::Body{request});
 		auto& response = r.text;
 
 		if (debugMode)
@@ -122,8 +119,10 @@ private:
 	std::optional<ReplyTo> replyToMessageId_;
 };
 
-SendMessageRequest::SendMessageRequest(const std::string& telegramMainUrl, const ChatId& chat, const Text& text)
-	: impl_(std::make_unique<Impl>(telegramMainUrl, chat, text))
+SendMessageRequest::SendMessageRequest(const std::string& telegramMainUrl,
+                                       const ChatId& chat,
+                                       const Text& text)
+    : impl_(std::make_unique<Impl>(telegramMainUrl, chat, text))
 {
 }
 
@@ -176,4 +175,4 @@ Message SendMessageRequest::execute()
 	return impl_->execute();
 }
 
-}
+} // namespace telebotxx

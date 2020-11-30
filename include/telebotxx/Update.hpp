@@ -3,9 +3,9 @@
 
 #include "Message.hpp"
 
-#include <vector>
 #include <memory>
 #include <variant>
+#include <vector>
 
 namespace telebotxx {
 
@@ -37,6 +37,6 @@ private:
 
 using Updates = std::vector<Update>;
 
-}
+} // namespace telebotxx
 
 #endif // TELEBOTXX_UPDATE_HPP

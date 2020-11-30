@@ -1,14 +1,14 @@
 #ifndef TELEBOTXX_BOTAPI_HPP
 #define TELEBOTXX_BOTAPI_HPP
 
-#include "User.hpp"
 #include "Message.hpp"
-#include "Update.hpp"
 #include "SendMessageRequest.hpp"
 #include "SendPhotoRequest.hpp"
+#include "Update.hpp"
+#include "User.hpp"
 
-#include <string>
 #include <memory>
+#include <string>
 
 namespace telebotxx {
 
@@ -28,7 +28,6 @@ void setRequestOption(RequestType& request, T&& t, Ts&&... ts)
 class BotApi
 {
 public:
-
 	/// \param [in] token bot's secret token
 	BotApi(const std::string& token);
 
@@ -52,7 +51,8 @@ public:
 	template <typename... Ts>
 	Message sendMessage(ChatId&& chatId, Text&& text, Ts&&... args)
 	{
-		SendMessageRequest request(getTelegramMainUrl(), std::forward<ChatId>(chatId), std::forward<Text>(text));
+		SendMessageRequest request(getTelegramMainUrl(), std::forward<ChatId>(chatId),
+		                           std::forward<Text>(text));
 		setRequestOption(request, std::forward<Ts>(args)...);
 		return request.execute();
 	}
@@ -71,7 +71,8 @@ public:
 	template <typename... Ts>
 	Message sendPhoto(ChatId&& chatId, Photo&& photo, Ts&&... args)
 	{
-		SendPhotoRequest request(getTelegramMainUrl(), std::forward<ChatId>(chatId), std::forward<Photo>(photo));
+		SendPhotoRequest request(getTelegramMainUrl(), std::forward<ChatId>(chatId),
+		                         std::forward<Photo>(photo));
 		setRequestOption(request, std::forward<Ts>(args)...);
 		return request.execute();
 	}
@@ -91,6 +92,6 @@ private:
 	std::unique_ptr<Impl> impl_;
 };
 
-}
+} // namespace telebotxx
 
 #endif // TELEBOTXX_BOTAPI_HPP

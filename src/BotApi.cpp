@@ -1,22 +1,21 @@
-#include <telebotxx/BotApi.hpp>
-#include <telebotxx/Exception.hpp>
-#include <telebotxx/Logging.hpp>
+#include "BotApi.hpp"
+
+#include "Exception.hpp"
 #include "JsonObjects.hpp"
+#include "Logging.hpp"
+
+#include <cpr/cpr.h>
+#include <rapidjson/writer.h>
 
 #include <iostream>
 #include <sstream>
-
-#include <rapidjson/writer.h>
-
-#include <cpr/cpr.h>
 
 namespace telebotxx {
 
 class BotApi::Impl
 {
 public:
-	Impl(const std::string& token)
-		: token_(token)
+	Impl(const std::string& token) : token_(token)
 	{
 		telegramMainUrl_ = "https://api.telegram.org/bot" + token_;
 		botUser_ = getMe();
@@ -37,14 +36,12 @@ public:
 		return require<User>(doc, "result");
 	}
 
-	inline Message sendPhoto(const std::string& chat, const std::string& filename, const std::string& caption)
+	inline Message
+	sendPhoto(const std::string& chat, const std::string& filename, const std::string& caption)
 	{
-		auto r = cpr::Post(cpr::Url{telegramMainUrl_ + "/sendPhoto"},
-						   cpr::Multipart{{"chat_id", chat},
-										  {"photo",   cpr::File{filename}},
-										  {"caption", caption}
-						   }
-		);
+		auto r = cpr::Post(
+		    cpr::Url{telegramMainUrl_ + "/sendPhoto"},
+		    cpr::Multipart{{"chat_id", chat}, {"photo", cpr::File{filename}}, {"caption", caption}});
 		auto& response = r.text;
 
 		if (debugMode)
@@ -58,7 +55,8 @@ public:
 		return *parseMessage(doc, "result", REQUIRED);
 	}
 
-	inline Message sendPhotoUrl(const std::string& chat, const std::string& url, const std::string& caption)
+	inline Message
+	sendPhotoUrl(const std::string& chat, const std::string& url, const std::string& caption)
 	{
 		// Construct JSON body
 		using namespace rapidjson;
@@ -77,9 +75,7 @@ public:
 		std::string request = s.GetString();
 
 		auto r = cpr::Post(cpr::Url{telegramMainUrl_ + "/sendPhoto"},
-						   cpr::Header{{"Content-Type", "application/json"}},
-						   cpr::Body{request}
-		);
+		                   cpr::Header{{"Content-Type", "application/json"}}, cpr::Body{request});
 		auto& response = r.text;
 
 		if (debugMode)
@@ -121,9 +117,7 @@ public:
 		std::string request = s.GetString();
 
 		auto r = cpr::Post(cpr::Url{telegramMainUrl_ + "/getUpdates"},
-						   cpr::Header{{"Content-Type", "application/json"}},
-						   cpr::Body{request}
-		);
+		                   cpr::Header{{"Content-Type", "application/json"}}, cpr::Body{request});
 		auto& response = r.text;
 
 		if (debugMode)
@@ -136,20 +130,15 @@ public:
 		return parseUpdates(doc, "result");
 	}
 
-	std::string getTelegramMainUrl() const
-	{
-		return telegramMainUrl_;
-	}
+	std::string getTelegramMainUrl() const { return telegramMainUrl_; }
 
 private:
-
 	std::string token_;
 	std::string telegramMainUrl_;
 	User botUser_;
 };
 
-BotApi::BotApi(const std::string& token)
-	: impl_(std::make_unique<Impl>(token))
+BotApi::BotApi(const std::string& token) : impl_(std::make_unique<Impl>(token))
 {
 }
 
@@ -162,13 +151,15 @@ User BotApi::getMe()
 
 Message BotApi::sendMessage(ChatId&& chatId, Text&& text)
 {
-	SendMessageRequest request(getTelegramMainUrl(), std::forward<ChatId>(chatId), std::forward<Text>(text));
+	SendMessageRequest request(getTelegramMainUrl(), std::forward<ChatId>(chatId),
+	                           std::forward<Text>(text));
 	return request.execute();
 }
 
 Message BotApi::sendPhoto(ChatId&& chatId, Photo&& photo)
 {
-	SendPhotoRequest request(getTelegramMainUrl(), std::forward<ChatId>(chatId), std::forward<Photo>(photo));
+	SendPhotoRequest request(getTelegramMainUrl(), std::forward<ChatId>(chatId),
+	                         std::forward<Photo>(photo));
 	return request.execute();
 }
 
@@ -182,4 +173,4 @@ std::string BotApi::getTelegramMainUrl() const
 	return impl_->getTelegramMainUrl();
 }
 
-}
+} // namespace telebotxx

@@ -1,14 +1,14 @@
 #ifndef TELEBOTXX_MESSAGE_HPP
 #define TELEBOTXX_MESSAGE_HPP
 
-#include "User.hpp"
-#include "Chat.hpp"
 #include "Attachment.hpp"
+#include "Chat.hpp"
+#include "User.hpp"
 
-#include <vector>
 #include <ctime>
 #include <memory>
 #include <optional>
+#include <vector>
 
 namespace telebotxx {
 
@@ -167,6 +167,6 @@ private:
 	MessagePtr pinnedMessage_;
 };
 
-}
+} // namespace telebotxx
 
 #endif // TELEBOTXX_MESSAGE_HPP

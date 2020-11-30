@@ -1,11 +1,11 @@
 #ifndef TELEBOTXX_ATTACHMENT_HPP
 #define TELEBOTXX_ATTACHMENT_HPP
 
-#include <string>
-#include <vector>
 #include <memory>
-#include <variant>
 #include <optional>
+#include <string>
+#include <variant>
+#include <vector>
 
 namespace telebotxx {
 
@@ -161,6 +161,6 @@ private:
 	std::variant<PhotoSizeArray, Audio, Document, Sticker> value_;
 };
 
-}
+} // namespace telebotxx
 
 #endif // TELEBOTXX_ATTACHMENT_HPP
