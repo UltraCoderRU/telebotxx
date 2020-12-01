@@ -8,15 +8,40 @@ In development, so you are welcome to contribute.
 * C++17-compatible compiler
 * CMake 3.15 or newer
 
-## Building
-*You can set available options in CMakeLists.txt before running configure script.*
+## Integration
+
+### CMake (recommended)
+
+Assuming you have your third-party dependencies in `external` directory relative to project's root.
+You can add telebotxx to your Git repository as submodule.
 ```bash
+git submodule add https://github.com/UltraCoderRU/telebotxx.git external/telebotxx
 git submodule update --init --recursive
+```
+
+Then integrate telebotxx into your CMake project as subdirectory and link with `telebotxx` target.
+```cmake
+# You can configure available options by setting cached variables before add_subdirectory()
+# set(TELEBOTXX_USE_LIBCXX ON CACHE INTERNAL "")
+add_subdirectory(external/telebotxx)
+
+add_executable(myapp ...)
+target_link_libraries(myapp telebotxx)
+```
+
+### Separate building
+
+Of course, you can build and install library separately.
+```bash
+git clone https://github.com/UltraCoderRU/telebotxx.git
+cd telebotxx
 mkdir build
 cd build
-cmake -DCMAKE_BUILD_TYPE=Release ..
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr/local ..
 cmake --build .
+sudo cmake --build . --target install
 ```
+
 ## Usage
 
 ### Sending text message
